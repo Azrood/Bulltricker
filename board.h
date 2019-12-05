@@ -1,5 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
+#ifndef BOARD_H_INCLUDED
+#define BOARD_H_INCLUDED
 
 #define PION 'p'
 #define DAME 'd'
@@ -12,3 +12,8 @@ typedef struct {
     char *right;
     int roi;
 } carre;
+
+void initiale(carre **);
+void affichage(carre **);
+
+#endif
