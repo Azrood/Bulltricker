@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define ROI "k"
-#define PION "p"
-#define REINE "r"
+#define PION 'p'
+#define DAME 'd'
 #define N 7
 
 typedef struct {
