@@ -12,7 +12,7 @@ void initiale(carre **A){
             A[i][j].right=NULL;
             A[i][j].roi=0;
             if(i==0){
-                A[i][j].up=NULL;
+                // A[i][j].up=NULL;
                 A[i][j].down=PION;
                 A[i][j].left=DAME;
                 A[i][j].right=DAME;
@@ -21,13 +21,13 @@ void initiale(carre **A){
             }
             if(i==1){
                 A[i][j].up=PION;
-                A[i][j].down=NULL;
+                // A[i][j].down=NULL;
                 A[i][j].left=PION;
                 A[i][j].right=PION;
                 A[i][j].roi=0;
             }
             if(i==5){
-                A[i][j].up=NULL;
+                // A[i][j].up=NULL;
                 A[i][j].down=PION;
                 A[i][j].left=PION;
                 A[i][j].right=PION;
@@ -35,7 +35,7 @@ void initiale(carre **A){
             }
             if(i==6){
                 A[i][j].up=PION;
-                A[i][j].down=NULL;
+                // A[i][j].down=NULL;
                 A[i][j].left=DAME;
                 A[i][j].right=DAME;
                 A[i][j].roi=0;
