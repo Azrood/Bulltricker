@@ -6,14 +6,10 @@
 #define REINE "r"
 #define N 7
 
-typedef struct rect {
-    char piece;
-};
-
-typedef struct case {
-    rect *up;
-    rect *down;
-    rect *left;
-    rect *right;
+typedef struct {
+    char *up;
+    char *down;
+    char *left;
+    char *right;
     int roi;
-};
+} carre;
