@@ -49,13 +49,17 @@ void affichage(carre **A){
         }printf("\n");
         for(j=0;j<DIM_PLAT;j++){
             printf("%c ",A[i][j].left->type);
-            printf("%d ",A[i][j].roi->type);
+            printf("%c ",A[i][j].roi->type);
+            if (j==DIM_PLAT-1) {
             printf("%c",A[i][j].right->type);
+            }
 
         }printf("\n");
+        if (i==DIM_PLAT-1) {
         for(j=0;j<DIM_PLAT;j++){
             printf("  %c  ",A[i][j].down->type);
         }printf("\n");
+        }
     }
 }
 
