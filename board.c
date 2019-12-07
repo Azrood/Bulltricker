@@ -4,8 +4,8 @@
 
 void initiale(carre **A){
     int i,j;
-    for(i=0;i<N;i++){
-        for(j=0;j<N;j++){
+    for(i=0;i<DIM_PLAT;i++){
+        for(j=0;j<DIM_PLAT;j++){
             A[i][j].up->type=NULL;       A[i][j].up->color=NULL;
             A[i][j].down->type=NULL;     A[i][j].down->color=NULL;
             A[i][j].left->type=NULL;     A[i][j].left->color=NULL;
@@ -43,17 +43,17 @@ void initiale(carre **A){
 }
 void affichage(carre **A){
     int i,j;
-    for(i=0;i<N;i++){
-        for(j=0;j<N;j++){
+    for(i=0;i<DIM_PLAT;i++){
+        for(j=0;j<DIM_PLAT;j++){
             printf("  %c  ",A[i][j].up->type);
         }printf("\n");
-        for(j=0;j<N;j++){
+        for(j=0;j<DIM_PLAT;j++){
             printf("%c ",A[i][j].left->type);
             printf("%d ",A[i][j].roi->type);
             printf("%c",A[i][j].right->type);
 
         }printf("\n");
-        for(j=0;j<N;j++){
+        for(j=0;j<DIM_PLAT;j++){
             printf("  %c  ",A[i][j].down->type);
         }printf("\n");
     }

@@ -7,9 +7,9 @@
 #define ROI 'R'
 #define BLANCHE 'B'
 #define NOIRE 'N'
-#define N 7
+#define DIM_PLAT 7
 
-typedef struct {
+typedef struct piece{
     char *type;
     char *color;
 }piece;
