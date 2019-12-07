@@ -13,7 +13,7 @@ typedef struct piece{
     char *type;
     char *color;
 }piece;
-typedef struct {
+typedef struct carre{
     piece *up;
     piece *down;
     piece *left;
