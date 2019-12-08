@@ -1,19 +1,26 @@
 #ifndef BOARD_H_INCLUDED
 #define BOARD_H_INCLUDED
 
+
 #define PION 'p'
 #define DAME 'd'
-#define N 7
+#define ROI 'R'
+#define BLANCHE 'B'
+#define NOIRE 'N'
+#define DIM_PLAT 7
 
-typedef struct {
-    char *up;
-    char *down;
-    char *left;
-    char *right;
-    int roi;
+typedef struct piece{
+    char *type;
+    char *color;
+}piece;
+typedef struct carre{
+    piece *up;
+    piece *down;
+    piece *left;
+    piece *right;
+    piece *roi;
 } carre;
 
-void initiale(carre **);
+void initialplateau(carre **);
 void affichage(carre **);
-
-#endif
+#endif // BOARD_H_INCLUDED
