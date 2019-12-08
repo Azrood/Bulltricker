@@ -21,6 +21,6 @@ typedef struct carre{
     piece *roi;
 } carre;
 
-void initiale(carre **);
+void initialplateau(carre **);
 void affichage(carre **);
 #endif // BOARD_H_INCLUDED

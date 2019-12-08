@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 int main(){
 
 int i,j;
@@ -18,7 +19,9 @@ for (i=0;i<DIM_PLAT;i++){
         A[i][j].roi=(piece *)malloc(sizeof(piece));
     }
 }
-initiale(A);
+
+
+initialplateau(A);
 affichage(A);
 return 0;
 }
