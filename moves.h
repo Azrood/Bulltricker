@@ -1,5 +1,6 @@
 #ifndef MOVES_H_INCLUDED
 #define MOVES_H_INCLUDED
+#include "board.h"
 
 #define UP 'U'
 #define DOWN 'D'
@@ -17,6 +18,7 @@ typedef struct move {
     position final;
 }move;
 
-position convertlocation(char *);
+int islegalmove(move,piece *,carre **);
+position convertirlocation(char *);
 
 #endif

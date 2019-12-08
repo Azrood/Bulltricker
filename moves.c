@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "moves.h"
 
-position convertlocation(char positionstr[]) {
+
+position convertirlocation(char positionstr[]) {
     int param1,param2,param3; // Param1Param2 for example : A2
-    // or Param1Param2Param3 for example : H23 or GC3
+    // or Param1Param2Param3 for example : H23 or GV3
     position location;
     location.position_relative_to_carre='0';
     if (strlen(positionstr)==2) {
@@ -45,3 +47,10 @@ position convertlocation(char positionstr[]) {
     return location;
 }
 
+int islegalmove(move movement,piece *playedpiece,carre **A) {
+    if (playedpiece == ROI) {
+        if (fabs(movement.final.line - movement.initial.line) == 1 || fabs(movement.final.column - movement.initial.column == 1)) {
+            // TO BE CONTINUED
+        } 
+    }
+}
