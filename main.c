@@ -15,7 +15,8 @@ for(i=0;i<DIM_PLAT;i++){
 }
 for (i=0;i<DIM_PLAT;i++){
     for(j=0;j<DIM_PLAT;j++){
-        A[i][j]=(piece *)malloc(sizeof(piece));
+        A[i][j].type=(int *)malloc(sizeof(int));
+        A[i][j].color=(int *)malloc(sizeof(int));
     }
 }
 

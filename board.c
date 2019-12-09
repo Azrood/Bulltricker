@@ -9,6 +9,7 @@ void initialplateau(piece **A){
             A[i][j].type=VIDE;       A[i][j].color=VIDE;
             if (i%2 ==0 && j%2 == 0) {
                 A[i][j].type = INTERDIT;
+                A[i][j].color = INTERDIT;
             }
 
             if (i==1) { 
@@ -42,7 +43,7 @@ void affichage(piece **A) {
     int i,j;
     for (i=0;i<DIM_PLAT;i++){
         for (j=0;j<DIM_PLAT;j++){
-            printf("  %d%d  ",A[i][j].type,A[i][j].color);
+            printf("  |%d/%d|  ",A[i][j].type,A[i][j].color);
         }printf("\n");
     }
 }
