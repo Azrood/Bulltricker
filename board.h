@@ -8,7 +8,7 @@
 #define BLANCHE 'b'
 #define NOIRE 'n'
 #define DIM_PLAT 15
-#define INTERDIT 3
+#define INTERDIT '*'
 #define VIDE 0
 
 typedef struct piece {
