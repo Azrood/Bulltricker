@@ -13,13 +13,12 @@ typedef struct position {
     int column;
 }position;
 
-typedef struct move {
-    position initial;
-    position final;
-}move;
+typedef struct moves {
+    position initialmove;
+    position finalmove;
+}movement;
 
-int islegalmove(move,piece ,carre **);
+int islegalmove(movement,piece ,carre **);
 position convertirlocation(char *);
-carre getpiece(carre **,position,piece);
 
 #endif

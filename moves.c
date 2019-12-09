@@ -47,29 +47,13 @@ position convertirlocation(char positionstr[]) {
     return location;
 }
 
-carre getpiece(carre **A,position pos,piece piec) {
-    int i,j;
-    carre square;
-    i=pos.line;
-    j=pos.column;
-    if (piec.type == ROI) {
-        square=A[i][j];
-    }
-    else if (piec.type == PION) {
-        switch (pos.position_relative_to_carre){
-            case UP:
-                square=A[i][j];
-                break;
-        }
-        }
-    }
 
-int islegalmove(move movement,piece playedpiece,carre **A) {
+int isdefaultmove(movement moves,piece playedpiece,carre **A) {
     piece king;
     if (playedpiece.type == ROI) {
-        if ((fabs(movement.final.line - movement.initial.line) == 1 && movement.final.column == movement.initial.column)
+        if ((fabs(moves.finalmove.line - moves.initialmove.line) == 1 && moves.finalmove.column == moves.initialmove.column)
             || 
-            (fabs(movement.final.column - movement.initial.column == 1) && movement.final.line == movement.initial.line)
+            (fabs(moves.finalmove.column - moves.initialmove.column == 1) && moves.finalmove.line == moves.initialmove.line)
             ) {
             
         } 
