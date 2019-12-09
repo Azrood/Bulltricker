@@ -43,7 +43,7 @@ void affichage(piece **A) {
     int i,j;
     for (i=0;i<DIM_PLAT;i++){
         for (j=0;j<DIM_PLAT;j++){
-            printf("  |%d/%d|  ",A[i][j].type,A[i][j].color);
+            printf("  |%c/%c|  ",A[i][j].type,A[i][j].color);
         }printf("\n");
     }
 }

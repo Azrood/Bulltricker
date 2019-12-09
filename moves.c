@@ -30,3 +30,23 @@ position convertirlocation(char positionstr[]) {
     }
     return location;
 }
+
+int isvalidemove(piece **A,piece playedpiece,movement moves){
+   int i=moves.finalmove.line,j=moves.finalmove.column;
+   if (A[moves.initialmove.line][moves.initialmove.column].type == playedpiece.type && A[moves.initialmove.line][moves.initialmove.column].color == playedpiece.color) {
+       if  (playedpiece.type == ROI) { //check if moves in a + pattern.
+        if ((( (fabs(moves.initialmove.line - moves.finalmove.line)==2 && moves.initialmove.column == moves.finalmove.column) 
+        || (fabs(moves.initialmove.column - moves.finalmove.column)==2) && moves.initialmove.line == moves.finalmove.line ) )
+        &&  //check si ROI de couleur opposée est présent dans l'entourage de la position finale et ignore le ROI de la couleur jouée.
+            ((A[i+2][j].type!=ROI || A[i+2][j].color == playedpiece.color)
+            && (A[i-2][j].type!=ROI || A[i-2][j].color == playedpiece.color)
+            && (A[i][j+2].type!=ROI || A[i][j+2].color == playedpiece.color)
+            && (A[i][j-2].type!=ROI || A[i][j-2].color == playedpiece.color))
+        ){
+            return 1;
+        }    
+       }
+    }
+    else return 0;
+    }
+}
