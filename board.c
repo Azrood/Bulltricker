@@ -2,64 +2,48 @@
 #include <stdlib.h>
 #include "board.h"
 
-void initialplateau(carre **A){
+void initialplateau(piece **A){
     int i,j;
     for(i=0;i<DIM_PLAT;i++){
         for(j=0;j<DIM_PLAT;j++){
-            A[i][j].up->type=NULL;       A[i][j].up->color=NULL;
-            A[i][j].down->type=NULL;     A[i][j].down->color=NULL;
-            A[i][j].left->type=NULL;     A[i][j].left->color=NULL;
-            A[i][j].right->type=NULL;    A[i][j].right->color=NULL;
-            A[i][j].roi->type=NULL;      A[i][j].roi->color=NULL;
-            if(i==0){
-                A[i][j].down->type=PION;        A[i][j].down->color=BLANCHE;
-                A[i][j].left->type=DAME;        A[i][j].left->color=BLANCHE;
-                A[i][j].right->type=DAME;       A[i][j].right->color=BLANCHE;
-                if(j==3){
-                    A[i][j].roi->type=ROI;      A[i][j].roi->color=BLANCHE;
-                }
-            }
-            if(i==1){
-                A[i][j].up->type=PION;       A[i][j].up->color=BLANCHE;
-                A[i][j].left->type=PION;     A[i][j].left->color=BLANCHE;
-                A[i][j].right->type=PION;    A[i][j].right->color=BLANCHE;
-            }
-            if(i==5){
-                A[i][j].down->type=PION;     A[i][j].down->color=NOIRE;
-                A[i][j].left->type=PION;     A[i][j].left->color=NOIRE;
-                A[i][j].right->type=PION;    A[i][j].right->color=NOIRE;
-            }
-            if(i==6){
-                A[i][j].up->type=PION;           A[i][j].up->color=NOIRE;
-                A[i][j].left->type=DAME;         A[i][j].left->color=NOIRE;
-                A[i][j].right->type=DAME;        A[i][j].right->color=NOIRE;
-                if(j==3){
-                    A[i][j].roi->type=ROI;      A[i][j].roi->color=BLANCHE;
-                }
+            A[i][j].type=VIDE;       A[i][j].color=VIDE;
+            if (i%2 ==0 && j%2 == 0) {
+                A[i][j].type = INTERDIT;
             }
 
-        }
-    }
-}
-void affichage(carre **A){
-    int i,j;
-    for(i=0;i<DIM_PLAT;i++){
-        for(j=0;j<DIM_PLAT;j++){
-            printf("  %c  ",A[i][j].up->type);
-        }printf("\n");
-        for(j=0;j<DIM_PLAT;j++){
-            printf("%c ",A[i][j].left->type);
-            printf("%c ",A[i][j].roi->type);
-            if (j==DIM_PLAT-1) {
-            printf("%c",A[i][j].right->type);
+            if (i==1) { 
+                if (j==7) {
+                    A[i][j].type = ROI; A[i][j].color=NOIRE;
+                }
+                else if ( j%2==0) {
+                        A[i][j].type = DAME;    A[i][j].color=NOIRE;
+                    }
+            }
+            if ((i==2 && j%2==1) || (i==3 && j%2==0) ) {
+                A[i][j].type = PION;    A[i][j].color=NOIRE;
+            }
+            if ((i==11 && j%2==0) || (i==12 && j%2==1)) {
+                A[i][j].type = PION;    A[i][j].color=BLANCHE;
             }
 
-        }printf("\n");
-        if (i==DIM_PLAT-1) {
-        for(j=0;j<DIM_PLAT;j++){
-            printf("  %c  ",A[i][j].down->type);
-        }printf("\n");
+            if (i==13) {
+                if (j==7) {
+                A[i][j].type = ROI;    A[i][j].color=BLANCHE;
+                }
+                else if (j%2==0) {
+                    A[i][j].type = DAME;    A[i][j].color=BLANCHE;
+                }
+            }
         }
     }
 }
 
+void affichage(piece **A) {
+    int i,j;
+    for (i=0;i<DIM_PLAT;i++){
+        for (j=0;j<DIM_PLAT;j++){
+            printf("  %d%d  ",A[i][j].type,A[i][j].color);
+        }printf("\n");
+    }
+}
+                

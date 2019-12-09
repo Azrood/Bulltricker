@@ -7,21 +7,15 @@
 #define ROI 'R'
 #define BLANCHE 'b'
 #define NOIRE 'n'
-#define DIM_PLAT 7
+#define DIM_PLAT 15
+#define INTERDIT 3
+#define VIDE 0
 
 typedef struct piece {
-    char *type;
-    char *color;
+    int type;
+    int color;
 }piece;
 
-typedef struct carre{
-    piece *up;
-    piece *down;
-    piece *left;
-    piece *right;
-    piece *roi;
-} carre;
-
-void initialplateau(carre **);
-void affichage(carre **);
+void initialplateau(piece **);
+void affichage(piece **);
 #endif // BOARD_H_INCLUDED

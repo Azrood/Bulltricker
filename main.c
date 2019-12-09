@@ -2,24 +2,20 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "moves.h"
+#include "board.h"
 
 
 
 int main(){
 
 int i,j;
-carre **A=(carre **)malloc(DIM_PLAT*sizeof(carre *));
+piece **A=(piece **)malloc(DIM_PLAT*sizeof(piece *));
 for(i=0;i<DIM_PLAT;i++){
-    A[i]=(carre *)malloc(DIM_PLAT*sizeof(carre));
+    A[i]=(piece *)malloc(DIM_PLAT*sizeof(piece));
 }
 for (i=0;i<DIM_PLAT;i++){
     for(j=0;j<DIM_PLAT;j++){
-        A[i][j].down=(piece *)malloc(sizeof(piece));
-        A[i][j].up=(piece *)malloc(sizeof(piece));
-        A[i][j].left=(piece *)malloc(sizeof(piece));
-        A[i][j].right=(piece *)malloc(sizeof(piece));
-        A[i][j].roi=(piece *)malloc(sizeof(piece));
+        A[i][j]=(piece *)malloc(sizeof(piece));
     }
 }
 
