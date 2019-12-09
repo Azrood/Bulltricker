@@ -2,9 +2,9 @@
 #define MOVES_H_INCLUDED
 #include "board.h"
 
-#define UP 'U'
-#define DOWN 'D'
-#define LEFT 'L'
+#define UP 'u'
+#define DOWN 'd'
+#define LEFT 'l'
 #define RIGHT 'r'
 
 typedef struct position {
@@ -18,7 +18,8 @@ typedef struct move {
     position final;
 }move;
 
-int islegalmove(move,piece *,carre **);
+int islegalmove(move,piece ,carre **);
 position convertirlocation(char *);
+carre getpiece(carre **,position,piece);
 
 #endif

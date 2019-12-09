@@ -2,14 +2,14 @@
 #define BOARD_H_INCLUDED
 
 
-#define PION 'p'
-#define DAME 'd'
+#define PION 'P'
+#define DAME 'D'
 #define ROI 'R'
-#define BLANCHE 'B'
-#define NOIRE 'N'
+#define BLANCHE 'b'
+#define NOIRE 'n'
 #define DIM_PLAT 7
 
-typedef struct piece{
+typedef struct piece {
     char *type;
     char *color;
 }piece;
