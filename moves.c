@@ -49,13 +49,24 @@ position convertirlocation(char positionstr[]) {
 
 
 int isdefaultmove(movement moves,piece playedpiece,carre **A) {
-    piece king;
     if (playedpiece.type == ROI) {
         if ((fabs(moves.finalmove.line - moves.initialmove.line) == 1 && moves.finalmove.column == moves.initialmove.column)
             || 
             (fabs(moves.finalmove.column - moves.initialmove.column == 1) && moves.finalmove.line == moves.initialmove.line)
             ) {
-            
+            int i=moves.finalmove.line,j=moves.finalmove.column;
+            if (   (A[i+1][j].roi == ROI && A[i+1][j].roi->color != playedpiece.color) 
+                || (A[i][j+1].roi == ROI && A[i][j+1].roi->color != playedpiece.color) 
+                || (A[i][j-1].roi == ROI && A[i][j-1].roi->color != playedpiece.color)
+                || (A[i-1][j].roi == ROI && A[i-1][j].roi->color != playedpiece.color)){
+                    return 0;
+                }
+            else {
+                    return 1;
+                }
+        }
+        else {
+            return 0;
         } 
     }
 }
