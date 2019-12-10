@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "board.h"
-#include<string.h>
 
 void initialplateau(piece **A){
     int i,j;
@@ -90,7 +89,7 @@ void affichage(piece **A) {
                     }
 
                 }
-                /*affichage contenu des cases royales et les dames a coté*/
+                /*affichage contenu des cases royales et les dames a cotï¿½*/
                 if(i%2==1){
                     if(j==0){
                         if(j%2==0) printf("%c |%c%c|",(i+65)-(i+1)/2,A[i][j].type,A[i][j].color);

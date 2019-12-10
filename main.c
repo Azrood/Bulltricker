@@ -20,7 +20,6 @@ for (i=0;i<DIM_PLAT;i++){
     }
 }
 
-
 initialplateau(A);
 affichage(A);
 return 0;

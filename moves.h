@@ -13,7 +13,7 @@ typedef struct moves {
     position finalmove;
 }movement;
 
-position convertirlocation(char *);
-int isdefaultmove(piece ,movement);
+position ConvertirLocation(char *);
+int isDefaultMove(piece ,movement);
 
 #endif
