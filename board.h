@@ -12,8 +12,11 @@
 #define VIDE 0
 
 typedef struct piece {
-    int type;
-    int color;
+    int type; //ROI DAME or PION
+    int color; // BLANCHE or NOIRE
+    int firstmove; /*initialisé à 1 pour les pions en horizontal
+                0 pour les autres pièces 
+                et devient 0 après le 1er move d'une pièce PION*/
 }piece;
 
 void initialplateau(piece **);

@@ -14,6 +14,6 @@ typedef struct moves {
 }movement;
 
 position convertirlocation(char *);
-int isvalidmove(piece **,piece ,movement);
+int isdefaultmove(piece ,movement);
 
 #endif
