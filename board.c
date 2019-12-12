@@ -89,7 +89,7 @@ void affichage(piece **A) {
                     }
 
                 }
-                /*affichage contenu des cases royales et les dames a cot�*/
+                /*affichage contenu des cases royales et les dames a cote*/
                 if(i%2==1){
                     if(j==0){
                         if(j%2==0) printf("%c |%c%c|",(i+65)-(i+1)/2,A[i][j].type,A[i][j].color);
@@ -102,7 +102,7 @@ void affichage(piece **A) {
                 }
     }printf("\n");
     /*affichage des cases terminer*/
-    if(i%2==1){ /*juste pour grandir la case royale*/
+    if(i%2==1){ /*juste pour agrandir les cases royales*/
             for(j=0;j<DIM_PLAT;j++){
                 if(j==0){
                     if(j%2==0) printf("  |  |");

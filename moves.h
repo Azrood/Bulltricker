@@ -8,12 +8,14 @@ typedef struct position {
     int column;
 }position;
 
-typedef struct moves {
+typedef struct movement{
     position initialmove;
     position finalmove;
 }movement;
 
 position ConvertirLocation(char *);
-int isDefaultMove(piece ,movement);
-
+int isDefaultMove(piece ,movement); // si le mouvement est par default possible ou non.
+int checkPiece(movement,piece **); // verifie s'il y a une piece qui bloque le mouvement ou pas. 1 si pas de piece, 0 si piece.
+int checkKing(movement,piece,piece **); //return 1 if no king qui limite le mouvement, 0 if king
+void MoveKing(piece **,movement);
 #endif
