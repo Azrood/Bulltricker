@@ -236,9 +236,9 @@ void MoveKing(piece **A,movement moves,piece king)
 {
 
     int i=moves.finalmove.line,j=moves.finalmove.column;
-    if ((king.color = A[moves.initialmove.line][moves.initialmove.column].color) 
-        &&(king.type = A[moves.initialmove.line][moves.initialmove.column].type) 
-        &&(king.firstmove = A[moves.initialmove.line][moves.initialmove.column].firstmove))
+    if ((king.color == A[moves.initialmove.line][moves.initialmove.column].color) 
+        &&(king.type == A[moves.initialmove.line][moves.initialmove.column].type) 
+        &&(king.firstmove == A[moves.initialmove.line][moves.initialmove.column].firstmove))
     {
         if (isDefaultMove(king,moves) && checkKing(moves,king,A) && checkPiece(moves,A))
         {
@@ -257,18 +257,56 @@ int isDefaultMove(piece playedpiece,movement moves){
     int i=moves.finalmove.line,j=moves.finalmove.column;
     if  (playedpiece.type == ROI) { //check if moves in a + pattern. (horizontal et vertical seulement)
         if (( (fabs(moves.initialmove.line - moves.finalmove.line)==2 && moves.initialmove.column == moves.finalmove.column) 
-            ||(fabs(moves.initialmove.column - moves.finalmove.column)==2 && moves.initialmove.line == moves.finalmove.line ))
-        ){
+            ||(fabs(moves.initialmove.column - moves.finalmove.column)==2 && moves.initialmove.line == moves.finalmove.line )))
+        {
             return 1; //1 : Le mouvement est par défaut possible
         }
         else return 0; //0 : mouvement pas possible.
        }
-    /*else if (playedpiece.type == PION){
-        if (playedpiece.color == BLANCHE) {
+    else if (playedpiece.type == PION){
+        if (playedpiece.color == NOIRE) {
+            if (playedpiece.firstmove == 1) { 
+                if ( ((j == moves.initialmove.column) 
+                    && (i-moves.initialmove.line == 2 || i-moves.initialmove.line == 4))
+                    || (fabs(j-moves.initialmove.column)==1 && i-moves.initialmove.line==1))
+                    {
+                        return 1;
+                    }
+                else return 0;
+            }
+            else {
+                if ((j == moves.initialmove.column && i-moves.initialmove.line == 2) 
+                || (fabs(j-moves.initialmove.column) == 1 && i-moves.initialmove.line == 1))
+                {
+                    return 1;
+                }
+                else return 0;
+            }          
 
         }
-        else if (playedpiece.color == NOIRE) {
-
+        else if (playedpiece.color == BLANCHE) {
+            if (playedpiece.firstmove == 1) { 
+                if ( ((j == moves.initialmove.column) 
+                    && (i-moves.initialmove.line == -2 || i-moves.initialmove.line == -4))
+                    || (fabs(j-moves.initialmove.column)== 1 && i-moves.initialmove.line== -1))
+                    {
+                        return 1;
+                    }
+                else return 0;
+            }
+            else {
+                if ((j == moves.initialmove.column && i-moves.initialmove.line == -2) 
+                || (fabs(j-moves.initialmove.column) == 1 && i-moves.initialmove.line == -1))
+                {
+                    return 1;
+                }
+                else return 0;
+            }          
         }
-    }*/
+        else return 0;
+    }
+    else if (playedpiece.type == DAME)
+    {
+        
+    }
 }  
