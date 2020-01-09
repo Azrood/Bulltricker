@@ -21,11 +21,23 @@ for (i=0;i<DIM_PLAT;i++){
 
 initialplateau(A);
 affichage(A);
-/*while (1){
+printf("\n");
+int k=0;
+while (1){
     affichage(A);
     printf("\n");
     movement moves;
     position pos;
+    piece playedpiece;
+    playedpiece.firstmove = 0;
+    playedpiece.type = PION;
+    if (k%2==0) {
+    playedpiece.color = BLANCHE;
+    k=1;
+    }
+    else {
+        playedpiece.color = NOIRE; 
+        k=0;}
     char positionstr[10];
     printf("initiale ");
     gets(positionstr);
@@ -33,8 +45,8 @@ affichage(A);
     printf("finale ");
     gets(positionstr);
     moves.finalmove = ConvertirLocation(positionstr);
-    makemove(A,moves);
+    MovePion(A,moves,playedpiece);
 
-}*/
+}
 return 0;
 }
