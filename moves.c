@@ -252,8 +252,8 @@ void MoveKing(piece **A,movement moves,piece king)
 
 int isOptionalCapture(piece **A,movement moves, piece playedpiece) {
     int i=moves.initialmove.line,j=moves.initialmove.column;
-    if (playedpiece.type == PION) {
-        if (j%2==0) {
+    if (playedpiece.type == PION || playedpiece.type == DAME) {
+        if (j%2==0) { //si la colonne est paire, la piece est verticale, elle peut donc faire la capture verticale qui est optionnelle
             if (playedpiece.color == NOIRE) {
                 if (moves.finalmove.line - i == 2 && j==moves.finalmove.column 
                 && A[moves.finalmove.line][moves.finalmove.column].color == BLANCHE)
@@ -290,13 +290,30 @@ int isLegalMove(piece **A,movement moves, piece playedpiece) {
     int i=moves.finalmove.line,j=moves.finalmove.column;
     if (playedpiece.type == PION) {
         if (isDefaultMove(playedpiece,moves)) {
-            if (A[i][j].type != VIDE ) {
-                return 0;
+            if (A[i][j].type == VIDE ){
+                if (i-moves.initialmove.line == 2 || i-moves.initialmove.line == 4){ // vérifie si la case royale est vide pour ne pas passer au dessus du ROI
+                    if ((A[i-1][j].type != VIDE)) {
+                        return 0;
+                
+                    }
+                    else return 1;
+                }
+                return 1;
             }
-            else return 1;
-        } return 0;
+            else return 0;
+        }
+        else if (isEatingMove(A, moves, playedpiece)) 
+        {
+            return 1;
+        }
+        else return 0;
+    } 
+    else if (playedpiece.type == DAME) 
+    {
+        //TODO
+
     }
-    else if (playedpiece.type == DAME) {}
+
 }
 
 int isDefaultMove(piece playedpiece,movement moves){
