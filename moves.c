@@ -242,14 +242,61 @@ void MoveKing(piece **A,movement moves,piece king)
     {
         if (isDefaultMove(king,moves) && checkKing(moves,king,A) && checkPiece(moves,A))
         {
-            A[i][j].type = A[moves.initialmove.line][moves.initialmove.column].type;
-            A[i][j].color = A[moves.initialmove.line][moves.initialmove.column].color;
-            A[i][j].firstmove = A[moves.initialmove.line][moves.initialmove.column].firstmove;
+            A[i][j] = king;
             A[moves.initialmove.line][moves.initialmove.column].type = VIDE;
             A[moves.initialmove.line][moves.initialmove.column].color = VIDE;
             A[moves.initialmove.line][moves.initialmove.column].firstmove = VIDE;
         }
     }
+}
+
+int isOptionalCapture(piece **A,movement moves, piece playedpiece) {
+    int i=moves.initialmove.line,j=moves.initialmove.column;
+    if (playedpiece.type == PION) {
+        if (j%2==0) {
+            if (playedpiece.color == NOIRE) {
+                if (moves.finalmove.line - i == 2 && j==moves.finalmove.column 
+                && A[moves.finalmove.line][moves.finalmove.column].color == BLANCHE)
+                {
+                    return 1;
+                }
+                else return 0;
+            }
+            else {
+                if (moves.finalmove.line - i == -2 && j==moves.finalmove.column 
+                && A[moves.finalmove.line][moves.finalmove.column].color == NOIRE)
+                {
+                    return 1;
+                }
+                else return 0;
+            }
+        }
+    }
+}
+
+void MovePion(piece **A,movement moves, piece playedpiece) {
+    int i=moves.initialmove.line,j=moves.initialmove.column;
+    if (A[i][j].type == playedpiece.type && A[i][j].color == playedpiece.color && A[i][j].firstmove == playedpiece.firstmove){
+            if (isOptionalCapture(A,moves,playedpiece) || isLegalMove(A, moves, playedpiece) ) {
+            A[moves.finalmove.line][moves.finalmove.column] = playedpiece;
+            A[i][j].color = VIDE;
+            A[i][j].type = VIDE; 
+            A[i][j].firstmove = VIDE; 
+            }
+        }
+}
+
+int isLegalMove(piece **A,movement moves, piece playedpiece) {
+    int i=moves.finalmove.line,j=moves.finalmove.column;
+    if (playedpiece.type == PION) {
+        if (isDefaultMove(playedpiece,moves)) {
+            if (A[i][j].type != VIDE ) {
+                return 0;
+            }
+            else return 1;
+        } return 0;
+    }
+    else if (playedpiece.type == DAME) {}
 }
 
 int isDefaultMove(piece playedpiece,movement moves){
