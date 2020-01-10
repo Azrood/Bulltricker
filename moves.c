@@ -255,7 +255,7 @@ int isOptionalCapture(piece **A,movement moves, piece playedpiece) {
     if (playedpiece.type == PION || playedpiece.type == DAME) {
         if (j%2==0) { //si la colonne est paire, la piece est verticale, elle peut donc faire la capture verticale qui est optionnelle
             if (playedpiece.color == NOIRE) {
-                if (moves.finalmove.line - i == 2 && j==moves.finalmove.column
+                if (moves.finalmove.line - i == 2 && j == moves.finalmove.column
                 && A[moves.finalmove.line][moves.finalmove.column].color == BLANCHE)
                 {
                     return 1;
@@ -263,7 +263,7 @@ int isOptionalCapture(piece **A,movement moves, piece playedpiece) {
                 else return 0;
             }
             else {
-                if (moves.finalmove.line - i == -2 && j==moves.finalmove.column
+                if (moves.finalmove.line - i == -2 && j == moves.finalmove.column
                 && A[moves.finalmove.line][moves.finalmove.column].color == NOIRE)
                 {
                     return 1;
@@ -271,13 +271,15 @@ int isOptionalCapture(piece **A,movement moves, piece playedpiece) {
                 else return 0;
             }
         }
+        return 0;
     }
+    return 0;
 }
 
 void MovePion(piece **A,movement moves, piece playedpiece) {
     int i=moves.initialmove.line,j=moves.initialmove.column;
     if (A[i][j].type == playedpiece.type && A[i][j].color == playedpiece.color && A[i][j].firstmove == playedpiece.firstmove){
-            if (isOptionalCapture(A,moves,playedpiece) || isLegalMove(A, moves, playedpiece) ) {
+            if (isOptionalCapture(A,moves,playedpiece)) {
             A[moves.finalmove.line][moves.finalmove.column] = playedpiece;
             A[i][j].color = VIDE;
             A[i][j].type = VIDE;
@@ -288,6 +290,7 @@ void MovePion(piece **A,movement moves, piece playedpiece) {
 
 int isLegalMove(piece **A,movement moves, piece playedpiece) {
     int i=moves.finalmove.line,j=moves.finalmove.column;
+    if (playedpiece.type == PION){
         if (isDefaultMove(playedpiece,moves)) {
             if (A[i][j].type == VIDE ){
                 if (i-moves.initialmove.line == 2 || i-moves.initialmove.line == 4){ // vérifie si la case royale est vide pour ne pas passer au dessus du ROI
@@ -306,7 +309,7 @@ int isLegalMove(piece **A,movement moves, piece playedpiece) {
             return 1;
         }
         else return 0;
-    } 
+    }
     else if (playedpiece.type == DAME) 
     {
         //TODO
