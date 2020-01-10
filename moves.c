@@ -285,7 +285,6 @@ void MovePion(piece **A,movement moves, piece playedpiece) {
             A[i][j].type = VIDE;
             A[i][j].firstmove = VIDE;
             }
-            else printf("wahia\n");
         }
 }
 
@@ -297,20 +296,25 @@ int isLegalMove(piece **A,movement moves, piece playedpiece) {
             cas 1 sens trigo inverse     cas 3 sens trigo       cas 2 up and jump case king
             cas 4 sens trigo inverse     cas 6 sens trigo       cas 6 up jump butee
             */
-        if(isDefaultMove(playedpiece,moves) == 1){
-        if(playedpiece.color == NOIRE){
-            if(moves.initialmove.column % 2 ==1){// cas de pion horizontal
+        if(isDefaultMove(playedpiece,moves) == 1)
+            {
+            if(playedpiece.color == NOIRE)
+                {
+                if(moves.initialmove.column % 2 ==1)
+                    {// cas de pion horizontal
                     // cas 1 et 3
-                if((i - moves.initialmove.line) == 1 && fabs(j - moves.initialmove.column) == 1
-                   && A[i][j].type == VIDE){ //tester si les cases vides pour les occupées
+                    if((i - moves.initialmove.line) == 1 && fabs(j - moves.initialmove.column) == 1
+                        && A[i][j].type == VIDE)
+                        { //tester si les cases vides pour les occupées
                         return 1;
-                    }
+                }
                     // cas 2
                 else if(j == moves.initialmove.column && A[moves.initialmove.line+1][j].type == VIDE
-                   && i == moves.initialmove.line+2 && A[i][j].type == VIDE){ // tester s'il n ya pas de roi et la cas vide
-                    return 1;
-                   }
-                return 0;
+                        && i == moves.initialmove.line+2 && A[i][j].type == VIDE)
+                        { // tester s'il n ya pas de roi et la cas vide
+                        return 1;
+                    }
+                    return 0;
             }
             else if(moves.initialmove.column % 2 == 0){ // cas de pion verticale
                 // cas 4 et 6
