@@ -332,33 +332,38 @@ int isLegalMove(piece **A,movement moves, piece playedpiece) {
         return 0;
     }
     else if(playedpiece.color == BLANCHE){
-        if(moves.initialmove.column % 2 ==1){// cas de pion horizontal
+            if(moves.initialmove.column % 2 ==1)
+                {// cas de pion horizontal
                     // cas 1 et 3
                 if((i - moves.initialmove.line) == -1 && fabs(j - moves.initialmove.column) == 1
                    && A[i][j].type == VIDE){
                         return 1;
-                    }
+                }
                     // cas 2
                 else if(j == moves.initialmove.column && A[moves.initialmove.line-1][j].type == VIDE
-                   && i == moves.initialmove.line-2 && A[i][j].type == VIDE){
+                        && i == moves.initialmove.line-2 && A[i][j].type == VIDE)
+                    {
                     return 1;
                    }
                 return 0;
             }
-            else if(moves.initialmove.column % 2 == 0){ // cas de pion verticale
-                // cas 4 et 6
+            else if(moves.initialmove.column % 2 == 0)
+                 { // cas de pion verticale
+                     // cas 4 et 6
                 if((i - moves.initialmove.line) == -1 && fabs(j - moves.initialmove.column) == 1
-                   && A[i][j].type == VIDE){
-                   return 1;
-                   }
-                   // cas 5
-                   else if(j == moves.initialmove.column && i == moves.initialmove.line-2 && A[i][j].type == VIDE){
+                   && A[i][j].type == VIDE)
+                {
                     return 1;
-                   }
+                }
+                   // cas 5
+                   else if(j == moves.initialmove.column && i == moves.initialmove.line-2 && A[i][j].type == VIDE)
+                        {
+                            return 1;
+                        }
             return 0;
             }
         return 0;
-    }
+        }
     }
     else if(isEatingMove(A,moves,playedpiece) == 1){
         return 1;
