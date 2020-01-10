@@ -424,7 +424,6 @@ int isDefaultMove(piece playedpiece,movement moves){
     }
     else if (playedpiece.type == DAME)
     {
-        int i=moves.finalmove.line,j=moves.finalmove.column;
         if(moves.initialmove.line == i && (j-moves.initialmove.column)%2 == 0){
             return 1;
         }
@@ -436,9 +435,7 @@ int isDefaultMove(piece playedpiece,movement moves){
                     return 1;
                 }
             }
-            else {
-                return 0;
-            }
+        return 0;
     }
 }
 
