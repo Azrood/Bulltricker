@@ -260,7 +260,7 @@ int isOptionalCapture(piece **A,movement moves, piece playedpiece) {
                 {
                     return 1;
                 }
-                else return 0;
+                return 0;
             }
             else {
                 if (moves.finalmove.line - i == -2 && j==moves.finalmove.column
@@ -268,53 +268,107 @@ int isOptionalCapture(piece **A,movement moves, piece playedpiece) {
                 {
                     return 1;
                 }
-                else return 0;
+            return 0;
             }
         }
+        return 0;
     }
+    return 0;
 }
 
 void MovePion(piece **A,movement moves, piece playedpiece) {
     int i=moves.initialmove.line,j=moves.initialmove.column;
     if (A[i][j].type == playedpiece.type && A[i][j].color == playedpiece.color && A[i][j].firstmove == playedpiece.firstmove){
-            if (isOptionalCapture(A,moves,playedpiece) || isLegalMove(A, moves, playedpiece) ) {
+            if (isOptionalCapture(A,moves,playedpiece) == 1 || isLegalMove(A, moves, playedpiece) == 1 ) {
             A[moves.finalmove.line][moves.finalmove.column] = playedpiece;
             A[i][j].color = VIDE;
             A[i][j].type = VIDE;
             A[i][j].firstmove = VIDE;
             }
+            else printf("wahia\n");
         }
 }
 
 int isLegalMove(piece **A,movement moves, piece playedpiece) {
     int i=moves.finalmove.line,j=moves.finalmove.column;
-        if (isDefaultMove(playedpiece,moves)) {
-            if (A[i][j].type == VIDE ){
-                if (i-moves.initialmove.line == 2 || i-moves.initialmove.line == 4){ // vérifie si la case royale est vide pour ne pas passer au dessus du ROI
-                    if ((A[i-1][j].type != VIDE)) {
-                        return 0;
-                
+    if(playedpiece.type == PION){
+            /*
+             pion est horizontal cas 1,2,3  | pion est: vertical cas 4,5,6
+            cas 1 sens trigo inverse     cas 3 sens trigo       cas 2 up and jump case king
+            cas 4 sens trigo inverse     cas 6 sens trigo       cas 6 up jump butee
+            */
+        if(isDefaultMove(playedpiece,moves) == 1){
+        if(playedpiece.color == NOIRE){
+            if(moves.initialmove.column % 2 ==1){// cas de pion horizontal
+                    // cas 1 et 3
+                if((i - moves.initialmove.line) == 1 && fabs(j - moves.initialmove.column) == 1
+                   && A[i][j].type == VIDE){ //tester si les cases vides pour les occupées
+                        return 1;
                     }
-                    else return 1;
-                }
-                return 1;
+                    // cas 2
+                else if(j == moves.initialmove.column && A[moves.initialmove.line+1][j].type == VIDE
+                   && i == moves.initialmove.line+2 && A[i][j].type == VIDE){ // tester s'il n ya pas de roi et la cas vide
+                    return 1;
+                   }
+                return 0;
             }
-            else return 0;
-        }
-        else if (isEatingMove(A, moves, playedpiece)) 
-        {
-            return 1;
-        }
-        else return 0;
-    } 
-    else if (playedpiece.type == DAME) 
+            else if(moves.initialmove.column % 2 == 0){ // cas de pion verticale
+                // cas 4 et 6
+                if((i - moves.initialmove.line) == 1 && fabs(j - moves.initialmove.column) == 1
+                   && A[i][j].type == VIDE){ // tester si les cas sont vides pour les occuper
+                   return 1;
+                   }
+                   // cas 5
+                    //tester si la case est vide pour l'occuper
+                   else if(j == moves.initialmove.column && i == moves.initialmove.line+2 && A[i][j].type == VIDE){
+                    return 1;
+                   }
+                return 0;
+            }
+        return 0;
+    }
+    else if(playedpiece.color == BLANCHE){
+        if(moves.initialmove.column % 2 ==1){// cas de pion horizontal
+                    // cas 1 et 3
+                if((i - moves.initialmove.line) == -1 && fabs(j - moves.initialmove.column) == 1
+                   && A[i][j].type == VIDE){
+                        return 1;
+                    }
+                    // cas 2
+                else if(j == moves.initialmove.column && A[moves.initialmove.line-1][j].type == VIDE
+                   && i == moves.initialmove.line-2 && A[i][j].type == VIDE){
+                    return 1;
+                   }
+                return 0;
+            }
+            else if(moves.initialmove.column % 2 == 0){ // cas de pion verticale
+                // cas 4 et 6
+                if((i - moves.initialmove.line) == -1 && fabs(j - moves.initialmove.column) == 1
+                   && A[i][j].type == VIDE){
+                   return 1;
+                   }
+                   // cas 5
+                   else if(j == moves.initialmove.column && i == moves.initialmove.line-2 && A[i][j].type == VIDE){
+                    return 1;
+                   }
+            return 0;
+            }
+        return 0;
+    }
+    }
+    else if(isEatingMove(A,moves,playedpiece) == 1){
+        return 1;
+    }
+    return 0;
+    }
+    /*else if (playedpiece.type == DAME)
     {
         //TODO
 
-    }
+    }*/
+
 
 }
-
 int isDefaultMove(piece playedpiece,movement moves){
    // vérifie si le mouvement est par défaut possible, sans prendre en compte la présence de pièce de la couleur opposée.
     int i=moves.finalmove.line,j=moves.finalmove.column;
@@ -385,5 +439,102 @@ int isDefaultMove(piece playedpiece,movement moves){
             else {
                 return 0;
             }
+    }
+}
+
+int isEatingMove(piece **A,movement moves, piece playedpiece){
+    int i=moves.finalmove.line, j=moves.finalmove.column;
+    if(playedpiece.type == PION){
+        if(playedpiece.color == NOIRE){ // cas de joueure noir
+            if(moves.initialmove.column % 2 ==1 && j == moves.initialmove.column){ // cas de pion horizontal
+                if(i - moves.initialmove.line == 4){ // cas simple EatMove
+                    // tester les différent cases royales et l'existance d'une pience d'adversaice pour faire une simple eatmove
+                    if(A[moves.initialmove.line+1][j].type == VIDE
+                       && A[moves.initialmove.line+2][j].color == BLANCHE
+                       && A[moves.initialmove.line+3][j].type == VIDE
+                       && A[i][j].type == VIDE && (A[i+1][j].type != VIDE || A[i+2][j].type == VIDE || i+1>=15 || i+2>=15) ){
+                        return 1;
+                       }
+                    return 0;
+                }
+                else if(i - moves.initialmove.line == 8){ // cas de double EatMove
+                // tester les différent cases royales et l'existance de 2 piences d'adversaice pour faire une double eatmove
+                    if(A[moves.initialmove.line+1][j].type == VIDE
+                       && A[moves.initialmove.line+2][j].color == BLANCHE
+                       && A[moves.initialmove.line+3][j].type == VIDE
+                       && A[moves.initialmove.line+4][j].type == VIDE
+                       && A[moves.initialmove.line+5][j].type == VIDE
+                       && A[moves.initialmove.line+6][j].type == BLANCHE
+                       && A[moves.initialmove.line+7][j].type == VIDE
+                       && A[i][j].type == VIDE && i<15 && (A[i+1][j].type != VIDE || A[i+2][j].type == VIDE || i+1>=15 || i+2>=15)){
+                       return 1;
+                       }
+                    return 0;
+                }
+                else if(i - moves.initialmove.line == 12){ // cas de triple EatMove
+                    // tester les différent cases royales et l'existance de 3 piences d'adversaice pour faire une triple eatmove
+                    if(A[moves.initialmove.line+1][j].type == VIDE
+                       && A[moves.initialmove.line+2][j].color == BLANCHE
+                       && A[moves.initialmove.line+3][j].type == VIDE
+                       && A[moves.initialmove.line+4][j].type == VIDE
+                       && A[moves.initialmove.line+5][j].type == VIDE
+                       && A[moves.initialmove.line+6][j].type == BLANCHE
+                       && A[moves.initialmove.line+7][j].type == VIDE
+                       && A[moves.initialmove.line+8][j].type == VIDE
+                       && A[moves.initialmove.line+9][j].type == VIDE
+                       && A[moves.initialmove.line+10][j].type == BLANCHE
+                       && A[moves.initialmove.line+11][j].type == VIDE
+                       && A[moves.initialmove.line+12][j].type == VIDE && i<15){
+                       return 1;
+                       }
+                }
+                return 0;
+            }
+            return 0;
+        }
+        else if(playedpiece.color == BLANCHE){
+            if(moves.initialmove.column % 2 ==1 && j == moves.initialmove.column){ // cas de pion horizontal
+                if(moves.initialmove.line - i == 4){ // cas simple EatMove
+                    if(A[moves.initialmove.line-1][j].type == VIDE
+                       && A[moves.initialmove.line-2][j].color == BLANCHE
+                       && A[moves.initialmove.line-3][j].type == VIDE
+                       && A[i][j].type == VIDE && i>=0 && (A[i-1][j].type != VIDE || A[i-2][j].type == VIDE || i-1>=0 || i-2>=0) ){
+                        return 1;
+                       }
+                    return 0;
+                }
+                else if(moves.initialmove.line - i == 8){ // cas de double EatMove
+                    if(A[moves.initialmove.line-1][j].type == VIDE
+                       && A[moves.initialmove.line-2][j].color == BLANCHE
+                       && A[moves.initialmove.line-3][j].type == VIDE
+                       && A[moves.initialmove.line-4][j].type == VIDE
+                       && A[moves.initialmove.line+5][j].type == VIDE
+                       && A[moves.initialmove.line-6][j].type == BLANCHE
+                       && A[moves.initialmove.line-7][j].type == VIDE
+                       && A[i][j].type == VIDE && i>=0 && (A[i-1][j].type != VIDE || A[i-2][j].type == VIDE || i-1>=0 || i-2>=0)){
+                       return 1;
+                       }
+                    return 0;
+                }
+                else if(i - moves.initialmove.line == 12){ // cas de triple EatMove
+                    if(A[moves.initialmove.line-1][j].type == VIDE
+                       && A[moves.initialmove.line-2][j].color == BLANCHE
+                       && A[moves.initialmove.line-3][j].type == VIDE
+                       && A[moves.initialmove.line-4][j].type == VIDE
+                       && A[moves.initialmove.line-5][j].type == VIDE
+                       && A[moves.initialmove.line-6][j].type == BLANCHE
+                       && A[moves.initialmove.line-7][j].type == VIDE
+                       && A[moves.initialmove.line-8][j].type == VIDE
+                       && A[moves.initialmove.line-9][j].type == VIDE
+                       && A[moves.initialmove.line-10][j].type == BLANCHE
+                       && A[moves.initialmove.line-11][j].type == VIDE
+                       && A[moves.initialmove.line-12][j].type == VIDE && i>=0){
+                       return 1;
+                       }
+                }
+                return 0;
+            }
+        }
+        return 0;
     }
 }
