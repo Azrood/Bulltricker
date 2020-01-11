@@ -25,4 +25,5 @@ int CompulsoryCapture(piece **); // TO DO
 
 void MoveKing(piece **,movement, piece); // fonction pour faire bouger le roi
 void MovePion(piece **, movement, piece); // fonction pour faire bouger le pion
+void MoveDame(piece **, movement, piece); // fonction pour faire bouger le dame
 #endif
