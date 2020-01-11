@@ -21,6 +21,7 @@ int checkPiece(movement,piece **); // verifie s'il y a une piece qui bloque le m
 int checkKing(movement, piece, piece **); //return 1 if no king qui limite le mouvement, 0 if king
 int isLegalMove(piece **, movement, piece); // verifie si le mouvement est possible sur le plateau de jeu.
 int isEatingMove(piece **,movement, piece); //verifie si le mouvement est un mouvement de capture ou non.
+int CompulsoryCapture(piece **); // TO DO
 
 void MoveKing(piece **,movement, piece); // fonction pour faire bouger le roi
 void MovePion(piece **, movement, piece); // fonction pour faire bouger le pion

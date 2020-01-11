@@ -25,9 +25,10 @@ while (1){
     piece playedpiece;
     playedpiece.firstmove = 0;
     playedpiece.type = PION;
-    if (k%2==0) {
-    playedpiece.color = BLANCHE;
-    k=1;
+    if (k%2==0) 
+    {
+        playedpiece.color = BLANCHE;
+        k=1;
     }
     else {
         playedpiece.color = NOIRE; 
