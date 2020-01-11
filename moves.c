@@ -232,6 +232,29 @@ int checkKing(movement moves,piece playedpiece,piece **A)
     else return 1;
 }
 
+int CheckMat(piece ** A)
+{
+    for(int i = 0 ; i<DIM_PLAT ; i++)
+    {
+        for(int j = 0 ; j<DIM_PLAT ; j++)
+        {
+            if(A[i][j].type == ROI) // testet si la piece est roi
+            {
+                if(A[i][j+1].type != VIDE && A[i][j-1].type != VIDE
+                   && A[i+1][j].type != VIDE && A[i-1][j].type != VIDE)// tester si il ya 4 piece autour du roi
+                {
+                    if((A[i][j+1].color != A[i][j-1].color) || (A[i][j+1].color != A[i+1][j].color)
+                       || (A[i][j+1].color != A[i-1][j].color)) //teser si les pieces a des couleurs différents
+                    {
+                        return 0;
+                    }
+                }
+            }
+        }
+    }
+    return 1;
+}
+
 void MoveKing(piece **A,movement moves,piece king)
 {
 
@@ -255,7 +278,7 @@ void MoveKing(piece **A,movement moves,piece king)
 int isOptionalCapture(piece **A,movement moves, piece playedpiece)
 {
     int i=moves.initialmove.line,j=moves.initialmove.column;
-    if (playedpiece.type == PION) 
+    if (playedpiece.type == PION)
     {
         if (j%2==0) { //si la colonne est paire, la piece est verticale, elle peut donc faire la capture verticale qui est optionnelle
             if (playedpiece.color == NOIRE)
@@ -301,7 +324,7 @@ int isOptionalCapture(piece **A,movement moves, piece playedpiece)
             }
         return 0;
         }
-        
+
     }
     return 0;
 }
@@ -358,16 +381,16 @@ int isLegalMove(piece **A,movement moves, piece playedpiece) {
                 if(moves.initialmove.column % 2 ==1)
                 {// cas de pion horizontal
                     // cas 1 et 3
-                    if((i - moves.initialmove.line) == 1 
+                    if((i - moves.initialmove.line) == 1
                         && fabs(j - moves.initialmove.column) == 1
                         && A[i][j].type == VIDE)
                     { //tester si les cases vides pour les occupées
                         return 1;
                     }
                     // cas 2
-                    else if(j == moves.initialmove.column 
+                    else if(j == moves.initialmove.column
                             && A[moves.initialmove.line+1][j].type == VIDE
-                            && i == moves.initialmove.line+2 
+                            && i == moves.initialmove.line+2
                             && A[i][j].type == VIDE)
                             { // tester s'il n ya pas de roi et la cas vide
                                 return 1;
@@ -445,9 +468,7 @@ int isLegalMove(piece **A,movement moves, piece playedpiece) {
                 {
                     for(int k=moves.initialmove.line+2 ; k<=i ;k+=2)
                     {
-                        printf("%d",k);
-                        if(A[k][j].type != VIDE) { printf("NO\n"); return 0;}//tester si tous les case sont vide
-                        printf("YES\n");
+                        if(A[k][j].type != VIDE) return 0;//tester si tous les case sont vide
                     }
                     return 1;
                 }
@@ -521,6 +542,11 @@ int isLegalMove(piece **A,movement moves, piece playedpiece) {
                 }
                 return 0;
             }
+            else
+            {
+                if(A[i][j].type == VIDE) return 1;
+                return 0;
+            }
             return 0;
         }
         return 0;
@@ -564,7 +590,7 @@ int isDefaultMove(piece playedpiece,movement moves){
             }
 
         }
-        else if (playedpiece.color == BLANCHE) 
+        else if (playedpiece.color == BLANCHE)
         {
             if (playedpiece.firstmove == 1) {
                 if ( ((j == moves.initialmove.column)
@@ -693,7 +719,7 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                        && A[moves.initialmove.line+5][j].type == VIDE
                        && A[moves.initialmove.line-6][j].type == BLANCHE
                        && A[moves.initialmove.line-7][j].type == VIDE
-                       && A[i][j].type == VIDE && i>=0 
+                       && A[i][j].type == VIDE && i>=0
                        && (A[i-1][j].type != VIDE || A[i-2][j].type == VIDE || i-1>=0 || i-2>=0))
                     {
                         return 1;
@@ -728,3 +754,169 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
 
     }
 }
+int KingImmoByPiece(piece **A,int i,int j,int couleur)
+{
+    if(i == 1 && j == 1) // tester si le roi existe dans la case A[1][1]
+        {
+            if(A[i][j+1].color == couleur && A[i+1][j].color == couleur) return 1;
+            return 0;
+        }
+        else if(i<13 && i>1 && j == 1)// tester si le roi existe entre les cases A[1][1] et A[13][1]
+        {
+            if(A[i][j+1].color == couleur && A[i][j-1].color == couleur && A[i+1][j].color == couleur) return 1;
+            return 0;
+        }
+        else if(i == 13 && j == 1)// tester si le roi existe dans la case A[13][1]
+        {
+            if(A[i][j-1].color == couleur && A[i+1][j].color == couleur) return 1;
+            return 0;
+        }
+        else if(j<13 && j>1 && i == 1)// tester si le roi existe entre les cases A[1][1] et A[1][13]
+        {
+            if(A[i-1][j].color == couleur && A[i+1][j].color == couleur && A[i][j-1].color == couleur) return 1;
+            return 0;
+        }
+        else if(i == 13 && j == 13)// tester si le roi existe dans la case A[13][13]
+        {
+            if(A[i-1][j].color == couleur && A[i][j-1].color == couleur) return 1;
+            return 0;
+        }
+        else if(j<13 && j>1 && i == 13)// tester si le roi existe entre les cases A[13][1] et A[13][13]
+        {
+            if(A[i][j-1].color == couleur && A[i][j+1].color == couleur && A[i-1][j].color == couleur) return 1;
+            return 0;
+        }
+        else if(j == 1 && i == 13)// tester si le roi existe dans la case A[13][1]
+        {
+            if(A[i-1][j].color == couleur && A[i][j+1].color == couleur) return 1;
+            return 0;
+        }
+        else if(i<13 && i>1 && j == 1)// tester si le roi existe entre les cases A[1][1] et A[13][1]
+        {
+            if(A[i-1][j].color == couleur && A[i+1][j].color == couleur && A[i][j+1].color == couleur) return 1;
+            return 0;
+        }
+}
+
+int KingImmoByKing(piece **A,int i,int j,int couleur)
+{
+    if(A[i-1][j].color == couleur && A[i][j+1].color == couleur && A[i][j-1].color == couleur)
+    {
+        movement moves;
+        moves.initialmove.line = i;
+        moves.initialmove.column = j;
+        moves.finalmove.line = i+2;
+        moves.finalmove.column = j;
+
+        piece playedpiece;
+        playedpiece.color = A[i][j].color;
+        playedpiece.type = A[i][j].type;
+        playedpiece.firstmove = A[i][j].firstmove;
+
+        if(checkKing(moves,playedpiece,A) == 0) return 1;
+    }
+    else if(A[i-1][j].color == couleur && A[i+1][j].color == couleur && A[i][j+1].color == couleur)
+    {
+        movement moves;
+        moves.initialmove.line = i;
+        moves.initialmove.column = j;
+        moves.finalmove.line = i;
+        moves.finalmove.column = j-2;
+
+        piece playedpiece;
+        playedpiece.color = A[i][j].color;
+        playedpiece.type = A[i][j].type;
+        playedpiece.firstmove = A[i][j].firstmove;
+
+        if(checkKing(moves,playedpiece,A) == 0) return 1;
+    }
+    else if(A[i+1][j].color == couleur && A[i][j-1].color == couleur && A[i][j+1].color == couleur)
+    {
+        movement moves;
+        moves.initialmove.line = i;
+        moves.initialmove.column = j;
+        moves.finalmove.line = i-2;
+        moves.finalmove.column = j;
+
+        piece playedpiece;
+        playedpiece.color = A[i][j].color;
+        playedpiece.type = A[i][j].type;
+        playedpiece.firstmove = A[i][j].firstmove;
+
+        if(checkKing(moves,playedpiece,A) == 0) return 1;
+    }
+    else if(A[i][j-1].color == couleur && A[i-1][j].color == couleur && A[i+1][j].color == couleur)
+    {
+        movement moves;
+        moves.initialmove.line = i;
+        moves.initialmove.column = j;
+        moves.finalmove.line = i;
+        moves.finalmove.column = j+2;
+
+        piece playedpiece;
+        playedpiece.color = A[i][j].color;
+        playedpiece.type = A[i][j].type;
+        playedpiece.firstmove = A[i][j].firstmove;
+
+        if(checkKing(moves,playedpiece,A) == 0) return 1;
+    }
+    return 0;
+}
+
+int isDraw(piece ** A)
+{
+    int i,j,k=0;
+    for(i=0 ;i<DIM_PLAT ;i++)
+    {
+        for(j=0 ; j<DIM_PLAT ; j++)
+        {
+            if(A[i][j].color == NOIRE)
+            {
+                k++;
+            }
+        }
+    }
+    if(k == 1)
+    {
+        for(i=0 ;i<DIM_PLAT ;i++)
+        {
+            for(j=0 ; j<DIM_PLAT ; j++)
+            {
+                if(A[i][j].type == ROI && A[i][j].color == NOIRE) // charcher le roi noire
+                {
+                    break;
+                }
+            }
+        }
+        if(KingImmoByPiece(A,i,j,BLANCHE) == 1) return 1;
+        if(KingImmoByKing(A,i,j,BLANCHE) == 1) return 1;
+    }
+    k=0;
+    for(i=0 ;i<DIM_PLAT ;i++)
+    {
+        for(j=0 ; j<DIM_PLAT ; j++)
+        {
+            if(A[i][j].color == BLANCHE)
+            {
+                k++;
+            }
+        }
+    }
+    if(k == 1)
+    {
+        for(i=0 ;i<DIM_PLAT ;i++)
+        {
+            for(j=0 ; j<DIM_PLAT ; j++)
+            {
+                if(A[i][j].type == ROI && A[i][j].color == BLANCHE) // charcher le roi blanche
+                {
+                    break;
+                }
+            }
+        }
+        if(KingImmoByPiece(A,i,j,NOIRE) == 1) return 1;
+        if(KingImmoByKing(A,i,j,NOIRE) == 1) return 1;
+    }
+    return 0;
+}
+
