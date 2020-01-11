@@ -237,10 +237,12 @@ void MoveKing(piece **A,movement moves,piece king)
 
     int i=moves.finalmove.line,j=moves.finalmove.column;
     if ((king.color == A[moves.initialmove.line][moves.initialmove.column].color)
-        &&(king.type == A[moves.initialmove.line][moves.initialmove.column].type)
-        &&(king.firstmove == A[moves.initialmove.line][moves.initialmove.column].firstmove))
+        &&(king.type == A[moves.initialmove.line][moves.initialmove.column].type))
     {
-        if (isDefaultMove(king,moves) && checkKing(moves,king,A) && checkPiece(moves,A))
+        if (isDefaultMove(king,moves) 
+            && checkKing(moves,king,A) 
+            && checkPiece(moves,A) 
+            /* TODO CompulsoryCapture(parametre)*/)
         {
             A[i][j] = king;
             A[moves.initialmove.line][moves.initialmove.column].type = VIDE;
@@ -283,11 +285,16 @@ int isOptionalCapture(piece **A,movement moves, piece playedpiece)
 void MovePion(piece **A,movement moves, piece playedpiece) 
 {
     int i=moves.initialmove.line,j=moves.initialmove.column;
-    if (A[i][j].type == playedpiece.type && A[i][j].color == playedpiece.color && A[i][j].firstmove == playedpiece.firstmove)
+    if (A[i][j].type == playedpiece.type && A[i][j].color == playedpiece.color)
     {
-            if (isOptionalCapture(A,moves,playedpiece) == 1 || isLegalMove(A, moves, playedpiece) == 1 ) 
+            if (isOptionalCapture(A,moves,playedpiece) == 1 || isLegalMove(A, moves, playedpiece) == 1 /* TODO CompulsoryCapture(parametre)*/) 
             {
                 A[moves.finalmove.line][moves.finalmove.column] = playedpiece;
+                A[moves.finalmove.line][moves.finalmove.column].firstmove = 0;
+                if (moves.finalmove.line == 0 || moves.finalmove.line == 14)
+                {
+                    A[moves.finalmove.line][moves.finalmove.column].type = DAME;
+                }
                 A[i][j].color = VIDE;
                 A[i][j].type = VIDE;
                 A[i][j].firstmove = VIDE;
