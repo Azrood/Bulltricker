@@ -311,19 +311,19 @@ void MovePion(piece **A,movement moves, piece playedpiece)
     int i=moves.initialmove.line,j=moves.initialmove.column;
     if (A[i][j].type == playedpiece.type && A[i][j].color == playedpiece.color)
     {
-            if (isOptionalCapture(A,moves,playedpiece) == 1 || isLegalMove(A, moves, playedpiece) == 1 /* TODO CompulsoryCapture(parametre)*/)
+        if (isOptionalCapture(A,moves,playedpiece) == 1 || isLegalMove(A, moves, playedpiece) == 1 /* TODO CompulsoryCapture(parametre)*/)
+        {
+            A[moves.finalmove.line][moves.finalmove.column] = playedpiece;
+            A[moves.finalmove.line][moves.finalmove.column].firstmove = 0;
+            if (moves.finalmove.line == 0 || moves.finalmove.line == 14)
             {
-                A[moves.finalmove.line][moves.finalmove.column] = playedpiece;
-                A[moves.finalmove.line][moves.finalmove.column].firstmove = 0;
-                if (moves.finalmove.line == 0 || moves.finalmove.line == 14)
-                {
-                    A[moves.finalmove.line][moves.finalmove.column].type = DAME;
-                }
-                A[i][j].color = VIDE;
-                A[i][j].type = VIDE;
-                A[i][j].firstmove = VIDE;
+                A[moves.finalmove.line][moves.finalmove.column].type = DAME;
             }
+            A[i][j].color = VIDE;
+            A[i][j].type = VIDE;
+            A[i][j].firstmove = VIDE;
         }
+    }
 }
 
 void MoveDame(piece **A,movement moves, piece playedpiece)
@@ -332,12 +332,67 @@ void MoveDame(piece **A,movement moves, piece playedpiece)
     if (A[i][j].type == playedpiece.type && A[i][j].color == playedpiece.color)
     {
         if(isLegalMove(A, moves, playedpiece) == 1 /*|| isOptionalCapture(A,moves,playedpiece) == 1 || CompulsoryCapture(parametre)*/)
-        {
+        { printf("in condition of islegal move");
             A[moves.finalmove.line][moves.finalmove.column] = playedpiece;
             A[moves.finalmove.line][moves.finalmove.column].firstmove = 0;
             A[i][j].color = VIDE;
             A[i][j].type = VIDE;
             A[i][j].firstmove = VIDE;
+        }
+        if (isEatingMove(A,moves,playedpiece)==1 && isLegalMove(A, moves, playedpiece)==1)
+        { printf("somehow in the eat and legal condition");
+            A[moves.finalmove.line][moves.finalmove.column] = playedpiece;
+            A[i][j].color = VIDE;
+            A[i][j].type = VIDE;
+            A[i][j].firstmove = VIDE;
+            int fin=(i==moves.finalmove.line) ? moves.finalmove.column : moves.finalmove.line; // on prend la position final si elle est de colonne ou d eligne
+            if (i<moves.finalmove.line || j<moves.finalmove.column){
+                for (int k= (i==moves.finalmove.line) ? j : i,b=k;k<fin;k+=2)
+                {
+                    if (b==i) // le mouvement a été fait sur rangée verticale, donc changement de ligne
+                    {
+                        if (A[k][j].type != VIDE) 
+                        {
+                            A[k][j].color = VIDE;
+                            A[k][j].type = VIDE;
+                            A[k][j].firstmove = VIDE;
+                        }
+                    }
+                    else // mouvement fait sur rangée horizontale, donc changement de colonne
+                    {
+                        if (A[i][k].type != VIDE) 
+                        {
+                            A[i][k].color = VIDE;
+                            A[i][k].type = VIDE;
+                            A[i][k].firstmove = VIDE;
+                        }
+                    }
+                }
+            }
+            if (i>moves.finalmove.line || j>moves.finalmove.column)
+            {
+                for (int k= (i==moves.finalmove.line) ? j : i,b=k;k>fin;k-=2)
+                {
+                    if (b==i) // le mouvement a été fait sur rangée verticale, donc changement de ligne
+                    {
+                        if (A[k][j].type != VIDE) 
+                        {
+                            A[k][j].color = VIDE;
+                            A[k][j].type = VIDE;
+                            A[k][j].firstmove = VIDE;
+                        }
+                    }
+                    else // mouvement fait sur rangée horizontale, donc changement de colonne
+                    {
+                        if (A[i][k].type != VIDE) 
+                        {
+                            A[i][k].color = VIDE;
+                            A[i][k].type = VIDE;
+                            A[i][k].firstmove = VIDE;
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -428,34 +483,27 @@ int isLegalMove(piece **A,movement moves, piece playedpiece) {
                     return 0;
                 }
         }
-        else if(isEatingMove(A,moves,playedpiece) == 1)
-        {
-            return 1;
-        }
-        return 0;
+        else return 0;
     }
     else if (playedpiece.type == DAME) // cas d'une dame
     {
         if(isDefaultMove(playedpiece,moves) == 1)
-        {
-            if(isEatingMove(A,moves,playedpiece) == 1) return 1;// tester si le mouvement est de type EatMove
+        {printf("in the default");
             if(moves.initialmove.column % 2 == 0 && j==moves.initialmove.column)//mouvement colonnes verticale
             {
-                if(i > moves.initialmove.line) // cas muvement descendant
+                if(i > moves.initialmove.line) // cas mouvement descendant
                 {
                     for(int k=moves.initialmove.line+2 ; k<=i ;k+=2)
                     {
-                        printf("%d",k);
-                        if(A[k][j].type != VIDE) { printf("NO\n"); return 0;}//tester si tous les case sont vide
-                        printf("YES\n");
+                        if(A[k][j].type != VIDE)  return 0;//tester si toutes les case sont vides
                     }
                     return 1;
                 }
-                else if(i < moves.initialmove.line)// cas muvement ascendant
+                else if(i < moves.initialmove.line)// cas mouvement ascendant
                 {
-                    for(int k=moves.initialmove.line-2 ; k>=i ;k-=2)
+                    for(int k=moves.initialmove.line-2 ; k>=i ;k-=2) // on commence de la 1ere case et on parcourt jusqu'à la position finale
                     {
-                        if(A[k][j].type != VIDE) return 0; //tester si tous les case sont vide
+                        if(A[k][j].type != VIDE) return 0; //tester si toutes les case sont vides
                     }
                     return 1;
                 }
@@ -463,7 +511,7 @@ int isLegalMove(piece **A,movement moves, piece playedpiece) {
             }
             else if(moves.initialmove.column % 2 == 1 && j==moves.initialmove.column)//mouvement rangée verticale
             {
-                if(i > moves.initialmove.line) // cas muvement descendant
+                if(i > moves.initialmove.line) // cas mouvement descendant
                 {
                     for(int k=moves.initialmove.line+1 ; k<=i ;k++)
                     {
@@ -471,11 +519,11 @@ int isLegalMove(piece **A,movement moves, piece playedpiece) {
                     }
                     return 1;
                 }
-                else if(i < moves.initialmove.line)// cas muvement ascendant
+                else if(i < moves.initialmove.line)// cas mouvement ascendant
                 {
                     for(int k=moves.initialmove.line-1 ; k>=i ;k--)
                     {
-                        if(A[k][j].type != VIDE) return 0; //tester si tous les case sont vide
+                        if(A[k][j].type != VIDE) return 0; //tester si toutes les case sont vides
                     }
                     return 1;
                 }
@@ -609,7 +657,7 @@ int isDefaultMove(piece playedpiece,movement moves){
 }
 
 int isEatingMove(piece **A,movement moves, piece playedpiece)
-{
+{ //si le mouvement est un mouvement de capture
     int i=moves.finalmove.line, j=moves.finalmove.column;
     if(playedpiece.type == PION)
     {
@@ -725,6 +773,181 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
     }
     else if(playedpiece.type == DAME) // cas d'une dame
     {
+        if (playedpiece.color == NOIRE ) 
+        {
+            if (i==moves.initialmove.line) // mouvement sur les rangées en horizontal
+            {
+                if (j > moves.initialmove.column) // on bouge vers la droite, indice croissant
+                {
+                    for (int k=moves.initialmove.column+2; k<=j; k+=2)
+                    {
+                        if (A[i][k].color == NOIRE //on parcourt la ligne jusqu'à la position finale pour voir si
+                            ||(A[i][k].color == BLANCHE && A[i][k+2].type != VIDE)) // on trouve pour chaque blanc, une case vide devant lui
+                        {                                           // et pas de noir sur le chemin.
+                            return 0;
+                        }
+                        
+                    }
+                    for (int k=j;k<14;k+=2)
+                    {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
+                        if (A[i][k].color == NOIRE) break;
+                        if (A[i][k].color == BLANCHE && A[i][k+2].type == VIDE) return 0;
+                    }
+                    return 1;
 
+                }
+                else if (j < moves.initialmove.column) // on va vers la gauche, indice décroissan
+                {
+                    for (int k=moves.initialmove.column-2; k>=j; k-=2)
+                    {
+                        if (A[i][k].color == NOIRE //on parcourt la ligne jusqu'à la position finale pour voir si
+                            ||(A[i][k].color == BLANCHE && A[i][k-2].type != VIDE)) // on trouve pour chaque blanc, une case vide devant lui
+                        {                                           // et pas de noir sur le chemin.
+                            return 0;
+                        }
+                        
+                    }
+                    for (int k=j;k>0;k-=2)
+                    {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
+                        if (A[i][k].color == NOIRE) break;
+                        if (A[i][k].color == BLANCHE && A[i][k-2].type == VIDE) return 0;
+                    }
+                    return 1;
+
+                }
+                else return 0;
+            }
+            else if (j==moves.initialmove.column)
+            {
+                if (i > moves.initialmove.line) // on bouge vers le bas, indice croissant
+                {
+                    for (int k=moves.initialmove.line+2; k<=i; k+=2)
+                    {
+                        if (A[k][j].color == NOIRE //on parcourt la colonne jusqu'à la position finale pour voir si
+                            ||(A[k][j].color == BLANCHE && A[k+2][j].type != VIDE)) // on trouve pour chaque blanc, une case vide devant lui
+                        {                                           // et pas de noir sur le chemin.
+                            return 0;
+                        }
+                        
+                    }
+                    for (int k=i;k<14;k+=2)
+                    {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
+                        if (A[k][j].color == NOIRE) break;
+                        if (A[j][k].color == BLANCHE && A[k+2][j].type == VIDE) return 0;
+                    }
+                    return 1;
+
+                }
+                else if (i < moves.initialmove.line) // on va vers le haut, indice décroissant
+                {
+                    for (int k=moves.initialmove.line-2; k>=i; k-=2)
+                    {
+                        if (A[k][j].color == NOIRE //on parcourt la colonne jusqu'à la position finale pour voir si
+                            ||(A[k][j].color == BLANCHE && A[k-2][j].type != VIDE)) // on trouve pour chaque blanc, une case vide devant lui
+                        {                                           // et pas de noir sur le chemin.
+                            return 0;
+                        }
+                        
+                    }
+                    for (int k=i;k>0;k-=2)
+                    {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
+                        if (A[k][j].color == NOIRE) break;
+                        if (A[k][j].color == BLANCHE && A[k-2][j].type == VIDE) return 0;
+                    }
+                    return 1;
+
+                }
+                else return 0;
+            }
+            else return 0;
+        }
+        else {
+            
+            if (i==moves.initialmove.line) // mouvement sur les rangées en horizontal
+            {
+                if (j > moves.initialmove.column) // on bouge vers la droite, indice croissant
+                {
+                    for (int k=moves.initialmove.column+2; k<=j; k+=2)
+                    {
+                        if (A[i][k].color == BLANCHE //on parcourt la ligne jusqu'à la position finale pour voir si
+                            ||(A[i][k].color == NOIRE && A[i][k+2].type != VIDE)) // on trouve pour chaque blanc, une case vide devant lui
+                        {                                           // et pas de noir sur le chemin.
+                            return 0;
+                        }
+                        
+                    }
+                    for (int k=j;k<14;k+=2)
+                    {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
+                        if (A[i][k].color == BLANCHE) break;
+                        if (A[i][k].color == NOIRE && A[i][k+2].type == VIDE) return 0;
+                    }
+                    return 1;
+
+                }
+                else if (j < moves.initialmove.column) // on va vers la gauche, indice décroissan
+                {
+                    for (int k=moves.initialmove.column-2; k>=j; k-=2)
+                    {
+                        if (A[i][k].color == BLANCHE //on parcourt la ligne jusqu'à la position finale pour voir si
+                            ||(A[i][k].color == NOIRE && A[i][k-2].type != VIDE)) // on trouve pour chaque blanc, une case vide devant lui
+                        {                                           // et pas de noir sur le chemin.
+                            return 0;
+                        }
+                        
+                    }
+                    for (int k=j;k>0;k-=2)
+                    {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
+                        if (A[i][k].color == BLANCHE) break;
+                        if (A[i][k].color == NOIRE && A[i][k-2].type == VIDE) return 0;
+                    }
+                    return 1;
+
+                }
+                else return 0;
+            }
+            else if (j==moves.initialmove.column)
+            {
+                if (i > moves.initialmove.line) // on bouge vers le bas, indice croissant
+                {
+                    for (int k=moves.initialmove.line+2; k<=i; k+=2)
+                    {
+                        if (A[k][j].color == BLANCHE //on parcourt la colonne jusqu'à la position finale pour voir si
+                            ||(A[k][j].color == NOIRE && A[k+2][j].type != VIDE)) // on trouve pour chaque blanc, une case vide devant lui
+                        {                                           // et pas de noir sur le chemin.
+                            return 0;
+                        }
+                        
+                    }
+                    for (int k=i;k<14;k+=2)
+                    {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
+                        if (A[k][j].color == BLANCHE) break;
+                        if (A[j][k].color == NOIRE && A[k+2][j].type == VIDE) return 0;
+                    }
+                    return 1;
+
+                }
+                else if (i < moves.initialmove.line) // on va vers le haut, indice décroissant
+                {
+                    for (int k=moves.initialmove.line-2; k>=i; k-=2)
+                    {
+                        if (A[k][j].color == BLANCHE //on parcourt la colonne jusqu'à la position finale pour voir si
+                            ||(A[k][j].color == NOIRE && A[k-2][j].type != VIDE)) // on trouve pour chaque blanc, une case vide devant lui
+                        {                                           // et pas de noir sur le chemin.
+                            return 0;
+                        }
+                        
+                    }
+                    for (int k=i;k>0;k-=2)
+                    {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
+                        if (A[k][j].color == BLANCHE) break;
+                        if (A[k][j].color == NOIRE && A[k-2][j].type == VIDE) return 0;
+                    }
+                    return 1;
+
+                }
+                else return 0;
+            }
+            else return 0;
+        }
     }
 }
