@@ -23,6 +23,10 @@ int isDefaultMove(piece ,movement); // si le mouvement est par default possible 
 int isLegalMove(piece **, movement, piece); // verifie si le mouvement est possible sur le plateau de jeu.
 int isEatingMove(piece **,movement, piece); //verifie si le mouvement est un mouvement de capture ou non.
 int CompulsoryCapture(piece **); // TO DO
+int CheckMat(piece **); // tester la fin de partie 0 oui / 1 non
+int isDraw(piece **); // tester si il y a un cas de pat 1 oui / 0 non
+int KingImmoByPiece(piece **,int,int,int); // tester si le roi est immobile par 2 ou 3 piece
+int KingImmoByKing(piece **,int,int,int); // tester si le roi est immobile par pieces et roi 1 oui / 0 non
 
 void MoveKing(piece **,movement, piece); // fonction pour faire bouger le roi
 void MovePion(piece **, movement, piece); // fonction pour faire bouger le pion
