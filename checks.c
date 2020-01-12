@@ -991,3 +991,26 @@ int isDraw(piece ** A)
     }
     return 0;
 }
+
+int CheckMat(piece ** A)
+{
+    for(int i = 0 ; i<DIM_PLAT ; i++)
+    {
+        for(int j = 0 ; j<DIM_PLAT ; j++)
+        {
+            if(A[i][j].type == ROI) // testet si la piece est roi
+            {
+                if(A[i][j+1].type != VIDE && A[i][j-1].type != VIDE
+                   && A[i+1][j].type != VIDE && A[i-1][j].type != VIDE)// tester si il ya 4 piece autour du roi
+                {
+                    if((A[i][j+1].color != A[i][j-1].color) || (A[i][j+1].color != A[i+1][j].color)
+                       || (A[i][j+1].color != A[i-1][j].color)) //teser si les pieces a des couleurs différents
+                    {
+                        return 0;
+                    }
+                }
+            }
+        }
+    }
+    return 1;
+}
