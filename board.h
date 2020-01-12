@@ -21,4 +21,5 @@ typedef struct piece {
 
 void initialplateau(piece **);
 void affichage(piece **);
+// compulsory capture ?????
 #endif // BOARD_H_INCLUDED
