@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "moves.h"
+#include "checks.h"
 
 
 
@@ -17,28 +18,20 @@ initialplateau(A);
 affichage(A);
 printf("\n");
 int k=0;
-while (CheckMat(A) == 1 && isDraw(A) == 0){
+while (1){
     printf("\n");
     movement moves;
     piece playedpiece;
     playedpiece.firstmove = 0;
     int p;
-    printf("chose piece \n 1 dame \n 2 pion \n 3 roi \n");
-    p=getchar();
-    switch(p)
-    {
-        case '1': playedpiece.type = DAME; break;
-
-        case '2': playedpiece.type = PION; break;
-
-        case '3': playedpiece.type = ROI; break;
-    }
     if (k%2==0)
     {
+        printf("au tour des blancs\n");
         playedpiece.color = BLANCHE;
         k=1;
     }
     else {
+        printf("au tour des noirs \n");
         playedpiece.color = NOIRE;
         k=0;}
     fflush(stdin);
@@ -46,6 +39,8 @@ while (CheckMat(A) == 1 && isDraw(A) == 0){
     printf("initiale ");
     gets(positionstr);
     moves.initialmove = ConvertirLocation(positionstr);
+    playedpiece.type=A[moves.initialmove.line][moves.initialmove.column].type;
+    playedpiece.firstmove=A[moves.initialmove.line][moves.initialmove.column].firstmove;
     printf("finale ");
     gets(positionstr);
     moves.finalmove = ConvertirLocation(positionstr);
