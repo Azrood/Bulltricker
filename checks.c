@@ -41,6 +41,7 @@ int checkPiece(movement moves,piece ** A)
     else return 0;
 }
 
+
 int checkKing(movement moves,piece playedpiece,piece **A)
 { // verifie si le roi est toujours séparé d'une case par rapport à l'autre roi
     int i=moves.finalmove.line,j=moves.finalmove.column;
@@ -201,7 +202,6 @@ int checkKing(movement moves,piece playedpiece,piece **A)
     }
     else return 1;
 }
-
 
 
 int isLegalMove(piece **A,movement moves, piece playedpiece) {
@@ -401,6 +401,8 @@ int isLegalMove(piece **A,movement moves, piece playedpiece) {
         return 0;
     }
 }
+
+
 int isDefaultMove(piece playedpiece,movement moves){
    // vérifie si le mouvement est par défaut possible, sans prendre en compte la présence de pièce de la couleur opposée.
     int i=moves.finalmove.line,j=moves.finalmove.column;
@@ -482,6 +484,7 @@ int isDefaultMove(piece playedpiece,movement moves){
         return 0;
     }
 }
+
 
 int isEatingMove(piece **A,movement moves, piece playedpiece)
 { //si le mouvement est un mouvement de capture
@@ -792,6 +795,7 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
     }
 }
 
+
 int isOptionalCapture(piece **A,movement moves, piece playedpiece)
 {
     int i=moves.initialmove.line,j=moves.initialmove.column;
@@ -890,6 +894,7 @@ int KingImmoByPiece(piece **A,int i,int j,int couleur)
         }
 }
 
+
 int KingImmoByKing(piece **A,int i,int j,int couleur)
 {
     if(A[i-1][j].color == couleur && A[i][j+1].color == couleur && A[i][j-1].color == couleur)
@@ -955,6 +960,7 @@ int KingImmoByKing(piece **A,int i,int j,int couleur)
     return 0;
 }
 
+
 int isDraw(piece ** A)
 {
     int i,j,k=0;
@@ -1011,6 +1017,7 @@ int isDraw(piece ** A)
     }
     return 0;
 }
+
 
 int CheckMat(piece ** A,int *lost_player)
 {
