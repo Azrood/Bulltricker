@@ -1,58 +1,69 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "moves.h"
+#include "checks.h"
+#include "tools.h"
 
-
+int played;
 
 int main()
 {
 
-int i,j;
-piece **A=(piece **)malloc(DIM_PLAT*sizeof(piece *));
-for(i=0;i<DIM_PLAT;i++){
-    A[i]=(piece *)malloc(DIM_PLAT*sizeof(piece));
-}
-
-initialplateau(A);
-affichage(A);
-printf("\n");
-int k=0;
-while (CheckMat(A) == 1 && isDraw(A) == 0){
-    printf("\n");
-    movement moves;
-    piece playedpiece;
-    playedpiece.firstmove = 0;
-    int p;
-    printf("chose piece \n 1 dame \n 2 pion \n 3 roi \n");
-    p=getchar();
-    switch(p)
-    {
-        case '1': playedpiece.type = DAME; break;
-
-        case '2': playedpiece.type = PION; break;
-
-        case '3': playedpiece.type = ROI; break;
+    int i;
+    int lost_player;
+    piece **A=(piece **)malloc(DIM_PLAT*sizeof(piece *));
+    for(i=0;i<DIM_PLAT;i++){
+        A[i]=(piece *)malloc(DIM_PLAT*sizeof(piece));
     }
-    if (k%2==0)
-    {
-        playedpiece.color = BLANCHE;
-        k=1;
-    }
-    else {
-        playedpiece.color = NOIRE;
-        k=0;}
-    fflush(stdin);
-    char positionstr[10];
-    printf("initiale ");
-    gets(positionstr);
-    moves.initialmove = ConvertirLocation(positionstr);
-    printf("finale ");
-    gets(positionstr);
-    moves.finalmove = ConvertirLocation(positionstr);
-    if(playedpiece.type == PION) MovePion(A,moves,playedpiece);
-    if(playedpiece.type == DAME) MoveDame(A,moves,playedpiece);
-    if(playedpiece.type == ROI) MoveKing(A,moves,playedpiece);
+    position *Tab;
+    Tab = (position *)malloc(SIZE_TAB*sizeof(position));
+    initialplateau(A);
     affichage(A);
-}
-return 0;
+    printf("\n");
+    int k=0;
+    while (1)
+    {
+        printf("\n");
+        FlushTab(&Tab);
+        while (k%2==0)
+        {
+            RemplirTab(A,BLANCHE,&Tab);
+            printf("\nau tour des blancs\n");
+            play(A,Tab);
+            if (played==1)
+            {
+                played=0;
+                k=1;
+            }
+        }
+        affichage(A);
+        FlushTab(&Tab);
+        if (CheckMat(A,&lost_player)==0) break;
+        while(k%2==1)
+        {
+            RemplirTab(A,NOIRE,&Tab);
+            printf("\nau tour des noirs \n");
+            play(A,Tab);
+            if (played==1)
+            {
+                played=0;
+                k=0;
+            }
+        }
+
+
+        affichage(A);
+        if (CheckMat(A,&lost_player)==0) break;
+    }
+    int winner = (lost_player == NOIRE) ? BLANCHE : NOIRE; //on récupère la couleur du joueur
+    switch(winner)
+    {
+        case NOIRE:
+            printf("Joueur NOIR gagne !");
+            break;
+        case BLANCHE:
+        printf("Joueur BLANC gagne !");
+        break;
+    }
+    return 0;
 }
