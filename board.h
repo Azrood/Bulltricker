@@ -11,6 +11,8 @@
 #define INTERDIT '*'
 #define VIDE 0
 
+extern int played; // globale, qui permet de determiner si le tour d'un joueur est fini ou pas.
+
 typedef struct piece {
     int type; //ROI DAME or PION
     int color; // BLANCHE or NOIRE

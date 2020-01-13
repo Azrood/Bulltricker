@@ -11,37 +11,37 @@ void initialplateau(piece **A)
         {
             A[i][j].type=VIDE;       A[i][j].color=VIDE;
             A[i][j].firstmove=VIDE;
-            if (i%2 ==0 && j%2 == 0) 
+            if (i%2 ==0 && j%2 == 0)
             {
                 A[i][j].type = INTERDIT;
                 A[i][j].color = INTERDIT;
                 A[i][j].firstmove = INTERDIT;
             }
 
-            if (i==1) 
+            if (i==1)
             {
-                if (j==7) 
+                if (j==7)
                 {
                     A[i][j].type = ROI; A[i][j].color=NOIRE;
                     A[i][j].firstmove = VIDE;
                 }
-                else if ( j%2==0) 
+                else if ( j%2==0)
                 {
                         A[i][j].type = DAME;    A[i][j].color=NOIRE;
                         A[i][j].firstmove = VIDE;
                 }
             }
-            if (i==3 && j%2==0)  
+            if (i==3 && j%2==0)
             {
                 A[i][j].type = PION;    A[i][j].color=NOIRE;
                 A[i][j].firstmove = VIDE;
             }
-            if (i==2 && j%2==1) 
+            if (i==2 && j%2==1)
             {
                 A[i][j].type = PION;    A[i][j].color=NOIRE;
                 A[i][j].firstmove = 1;
             }
-            if ((i==11 && j%2==0) ) 
+            if ((i==11 && j%2==0) )
             {
                 A[i][j].type = PION;    A[i][j].color=BLANCHE;
                 A[i][j].firstmove = VIDE;
@@ -52,14 +52,14 @@ void initialplateau(piece **A)
                 A[i][j].firstmove = 1;
             }
 
-            if (i==13) 
+            if (i==13)
             {
-                if (j==7) 
+                if (j==7)
                 {
                 A[i][j].type = ROI;    A[i][j].color=BLANCHE;
                 A[i][j].firstmove = VIDE;
                 }
-                else if (j%2==0) 
+                else if (j%2==0)
                 {
                     A[i][j].type = DAME;    A[i][j].color=BLANCHE;
                     A[i][j].firstmove = VIDE;
@@ -69,9 +69,9 @@ void initialplateau(piece **A)
     }
 }
 
-void affichage(piece **A) 
+void affichage(piece **A)
 {
-    int i,j,k;
+    int i,j;
     for (i=0;i<DIM_PLAT;i++)
     {
         if(i%2==1)
@@ -99,7 +99,7 @@ void affichage(piece **A)
                     if(j==0)
                     {
                         if(j%2==0) printf("H%d|**|",(i+1)/2+1);
-                        if(j%2==1) 
+                        if(j%2==1)
                         {
                             if(A[i][j].type!=VIDE && A[i][j].color!=VIDE) printf("__%c%c__",A[i][j].type,A[i][j].color);
                             else printf("______");
@@ -109,7 +109,7 @@ void affichage(piece **A)
                     else
                     {
                         if(j%2==0) printf("|**|");
-                        if(j%2==1) 
+                        if(j%2==1)
                         {
                             if(A[i][j].type!=VIDE && A[i][j].color!=VIDE) printf("__%c%c__",A[i][j].type,A[i][j].color);
                             else printf("______");
