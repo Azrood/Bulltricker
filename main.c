@@ -18,7 +18,7 @@ const int HAUT_FENETRE = 648;
 typedef struct Point {
     int x;
     int y;
-}
+}Point;
 char * SavoirLocation(int x , int y )
 {
     char *pos=(char *)malloc(5);
@@ -106,7 +106,71 @@ void SDL_AfficherTexture(SDL_Window * window,SDL_Renderer* render ,SDL_Texture *
 
 int main( int argc, char * argv[] )
 {
-    Point P[15][15];
+    Point P[15][15]={0};
+
+    P[1][0].x = 47;
+    P[1][0].y = 67;
+    for(int j=2 ; j<15 ; j+=2){
+            P[1][j].x =  P[1][j-2].x + 77;
+            P[1][j].y = 67;
+    }
+    for(int i=3 ; i<15 ; i+=2)//chargement des coordonées  des piece verticale
+    {
+        P[i][0].x = 47;
+        P[i][0].y = P[i-2][0].y + 77;
+        for(int j=2 ; j<15 ; j+=2)
+        {
+            P[i][j].x = P[i][j-2].x + 77;
+            P[i][j].y = P[i][0].y;
+        }
+
+    }
+
+    P[0][1].x = 67;
+    P[0][1].y = 47;
+    for(int j=3 ; j<15 ; j+=2){
+            P[0][j].x =  P[0][j-2].x + 77;
+            P[0][j].y = 47;
+    }
+    for(int i=2 ; i<15 ; i+=2)//chargement des coordonées  des piece Horizontale
+    {
+        P[i][1].x = 67;
+        P[i][1].y = P[i-2][1].y + 77;
+        for(int j=3 ; j<15 ; j+=2)
+        {
+            P[i][j].x = P[i][j-2].x + 77;
+            P[i][j].y = P[i][1].y;
+        }
+
+    }
+
+    P[1][1].x = 77;
+    P[1][1].y = 77;
+    for(int j=3 ; j<15 ; j+=2){
+            P[1][j].x =  P[1][j-2].x + 77;
+            P[1][j].y = 77;
+    }
+    for(int i=3 ; i<15 ; i+=2)//chargement des coordonées  des cases royales
+    {
+        P[i][1].x = 77;
+        P[i][1].y = P[i-2][1].y + 77;
+        for(int j=3 ; j<15 ; j+=2)
+        {
+            P[i][j].x = P[i][j-2].x + 77;
+            P[i][j].y = P[i][1].y;
+        }
+
+    }
+
+
+    for(int i=0 ; i<15 ; i++)
+    {
+        for(int j=0 ; j<15 ; j++)
+        {
+            printf("(%d,%d)  ",P[i][j].x,P[i][j].y);
+        }
+        printf("\n");
+    }
     SDL_Window *window = NULL;
     SDL_Renderer *render = NULL;
     SDL_Texture *texture = NULL;
