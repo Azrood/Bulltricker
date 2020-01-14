@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <SDL.h>
+#include <strings.h>
+
 #define BOARD "images/Board.bmp"
 #define DAMEBV "images/DameB.bmp"
 #define DAMEBH "images/Dame2B.bmp"
@@ -13,12 +15,81 @@
 #define PIONNH "images/Pion2.bmp"
 #define ROIN   "images/Roi.bmp"
 
+#define ind_DAMEBV 0
+#define ind_DAMEBH 1
+#define ind_PIONBV 2
+#define ind_PIONBH 3
+#define ind_ROIB   4
+#define ind_DAMENV 5
+#define ind_DAMENH 6
+#define ind_PIONNV 7
+#define ind_PIONNH 8
+#define ind_ROIN   9
+
 const int LARG_FENETRE = 648;
 const int HAUT_FENETRE = 648;
 typedef struct Point {
     int x;
     int y;
-}Point;
+} Point;
+
+void remplirPoint(Point **P)
+{
+    P[1][0].x = 47;
+    P[1][0].y = 67;
+    for(int j=2 ; j<15 ; j+=2){
+            P[1][j].x =  P[1][j-2].x + 77;
+            P[1][j].y = 67;
+    }
+    for(int i=3 ; i<15 ; i+=2)//chargement des coordonÃ©es  des piece verticale
+    {
+        P[i][0].x = 47;
+        P[i][0].y = P[i-2][0].y + 77;
+        for(int j=2 ; j<15 ; j+=2)
+        {
+            P[i][j].x = P[i][j-2].x + 77;
+            P[i][j].y = P[i][0].y;
+        }
+
+    }
+
+    P[0][1].x = 67;
+    P[0][1].y = 47;
+    for(int j=3 ; j<15 ; j+=2){
+            P[0][j].x =  P[0][j-2].x + 77;
+            P[0][j].y = 47;
+    }
+    for(int i=2 ; i<15 ; i+=2)//chargement des coordonÃ©es  des piece Horizontale
+    {
+        P[i][1].x = 67;
+        P[i][1].y = P[i-2][1].y + 77;
+        for(int j=3 ; j<15 ; j+=2)
+        {
+            P[i][j].x = P[i][j-2].x + 77;
+            P[i][j].y = P[i][1].y;
+        }
+
+    }
+
+    P[1][1].x = 77;
+    P[1][1].y = 77;
+    for(int j=3 ; j<15 ; j+=2){
+            P[1][j].x =  P[1][j-2].x + 77;
+            P[1][j].y = 77;
+    }
+    for(int i=3 ; i<15 ; i+=2)//chargement des coordonÃ©es  des cases royales
+    {
+        P[i][1].x = 77;
+        P[i][1].y = P[i-2][1].y + 77;
+        for(int j=3 ; j<15 ; j+=2)
+        {
+            P[i][j].x = P[i][j-2].x + 77;
+            P[i][j].y = P[i][1].y;
+        }
+
+    }
+}
+
 char * SavoirLocation(int x , int y )
 {
     char *pos=(char *)malloc(5);
@@ -65,7 +136,8 @@ char * SavoirLocation(int x , int y )
     return pos;
 }
 
-void SDL_DestroywindowEtrender(SDL_Window *window,SDL_Renderer *render){
+void SDL_DestroywindowEtrender(SDL_Window *window,SDL_Renderer *render)
+{
     if(window)
         SDL_DestroyWindow(window);
     if(render)
@@ -106,62 +178,11 @@ void SDL_AfficherTexture(SDL_Window * window,SDL_Renderer* render ,SDL_Texture *
 
 int main( int argc, char * argv[] )
 {
-    Point P[15][15]={0};
+    Point **P;
+    P = (Point **) malloc(15*sizeof(Point *));
+    for (int i=0;i<15;i++) P[i]=(Point *) malloc(15*sizeof(Point));
 
-    P[1][0].x = 47;
-    P[1][0].y = 67;
-    for(int j=2 ; j<15 ; j+=2){
-            P[1][j].x =  P[1][j-2].x + 77;
-            P[1][j].y = 67;
-    }
-    for(int i=3 ; i<15 ; i+=2)//chargement des coordonées  des piece verticale
-    {
-        P[i][0].x = 47;
-        P[i][0].y = P[i-2][0].y + 77;
-        for(int j=2 ; j<15 ; j+=2)
-        {
-            P[i][j].x = P[i][j-2].x + 77;
-            P[i][j].y = P[i][0].y;
-        }
-
-    }
-
-    P[0][1].x = 67;
-    P[0][1].y = 47;
-    for(int j=3 ; j<15 ; j+=2){
-            P[0][j].x =  P[0][j-2].x + 77;
-            P[0][j].y = 47;
-    }
-    for(int i=2 ; i<15 ; i+=2)//chargement des coordonées  des piece Horizontale
-    {
-        P[i][1].x = 67;
-        P[i][1].y = P[i-2][1].y + 77;
-        for(int j=3 ; j<15 ; j+=2)
-        {
-            P[i][j].x = P[i][j-2].x + 77;
-            P[i][j].y = P[i][1].y;
-        }
-
-    }
-
-    P[1][1].x = 77;
-    P[1][1].y = 77;
-    for(int j=3 ; j<15 ; j+=2){
-            P[1][j].x =  P[1][j-2].x + 77;
-            P[1][j].y = 77;
-    }
-    for(int i=3 ; i<15 ; i+=2)//chargement des coordonées  des cases royales
-    {
-        P[i][1].x = 77;
-        P[i][1].y = P[i-2][1].y + 77;
-        for(int j=3 ; j<15 ; j+=2)
-        {
-            P[i][j].x = P[i][j-2].x + 77;
-            P[i][j].y = P[i][1].y;
-        }
-
-    }
-
+    remplirPoint(P);
 
     for(int i=0 ; i<15 ; i++)
     {
@@ -171,11 +192,17 @@ int main( int argc, char * argv[] )
         }
         printf("\n");
     }
+
+
     SDL_Window *window = NULL;
     SDL_Renderer *render = NULL;
     SDL_Texture *texture = NULL;
     SDL_Rect rect;
     int x=0, y=0;
+    SDL_Texture **F;
+    F = (SDL_Texture**) malloc(10*sizeof(SDL_Texture*));
+
+
     if(SDL_Init(SDL_INIT_VIDEO)!=0){
         SDL_ExitErreur("Initialisation SDL");
     }
@@ -191,74 +218,76 @@ int main( int argc, char * argv[] )
     SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
 
     // affichage des dames noire
-    texture=CreateTexture(DAMENV,render);
-    SDL_ChargementTexture(window,render,texture,&rect);
+
+
+    F[ind_DAMENV]=CreateTexture(DAMENV,render);
+    SDL_ChargementTexture(window,render,F[ind_DAMENV],&rect);
     x = 47; y = 67;
     for(int i=0 ; i<8 ; i++)
     {
-        SDL_AfficherTexture(window,render,texture,&rect,x,y);
+        SDL_AfficherTexture(window,render,F[ind_DAMENV],&rect,x,y);
         x = x + 77;
     }
 
     // affichage des pions verticales noire
-    texture=CreateTexture(PIONNV,render);
-    SDL_ChargementTexture(window,render,texture,&rect);
+    F[ind_PIONNV]=CreateTexture(PIONNV,render);
+    SDL_ChargementTexture(window,render,F[ind_PIONNV],&rect);
     x = 47; y = 144;
     for(int i=0 ; i<8 ; i++)
     {
-        SDL_AfficherTexture(window,render,texture,&rect,x,y);
+        SDL_AfficherTexture(window,render,F[ind_PIONNV],&rect,x,y);
         x = x + 77;
     }
 
     // affichage des pions horizontale noire
-    texture=CreateTexture(PIONNH,render);
-    SDL_ChargementTexture(window,render,texture,&rect);
+    F[ind_PIONNH]=CreateTexture(PIONNH,render);
+    SDL_ChargementTexture(window,render,F[ind_PIONNH],&rect);
     x = 68; y = 124;
     for(int i=0 ; i<7 ; i++)
     {
-        SDL_AfficherTexture(window,render,texture,&rect,x,y);
+        SDL_AfficherTexture(window,render,F[ind_PIONNH],&rect,x,y);
         x = x + 77;
     }
     // affichage du roi noire
-    texture=CreateTexture(ROIN,render);
-    SDL_ChargementTexture(window,render,texture,&rect);
-    SDL_AfficherTexture(window,render,texture,&rect,308,78);
+    F[ind_ROIN]=CreateTexture(ROIN,render);
+    SDL_ChargementTexture(window,render,F[ind_ROIN],&rect);
+    SDL_AfficherTexture(window,render,F[ind_ROIN],&rect,308,78);
 
 
     // affichage des dames blanche
-    texture=CreateTexture(DAMEBV,render);
-    SDL_ChargementTexture(window,render,texture,&rect);
+    F[ind_DAMEBV]=CreateTexture(DAMEBV,render);
+    SDL_ChargementTexture(window,render,F[ind_DAMEBV],&rect);
     x = 47; y = 529;
     for(int i=0 ; i<8 ; i++)
     {
-        SDL_AfficherTexture(window,render,texture,&rect,x,y);
+        SDL_AfficherTexture(window,render,F[ind_DAMEBV],&rect,x,y);
         x = x + 77;
     }
 
     // ************** charge PION BLANCHE VERTICALE
-    texture=CreateTexture(PIONBV,render);
-    SDL_ChargementTexture(window,render,texture,&rect);
+    F[ind_PIONBV]=CreateTexture(PIONBV,render);
+    SDL_ChargementTexture(window,render,F[ind_PIONBV],&rect);
     x = 47; y = 453;
     for(int i=0 ; i<8 ; i++)
     {
-        SDL_AfficherTexture(window,render,texture,&rect,x,y);
+        SDL_AfficherTexture(window,render,F[ind_PIONBV],&rect,x,y);
         x = x + 77;
     }
 
     // ************** charge PION BLANCHE HORIZONTALE
-    texture=CreateTexture(PIONBH,render);
-    SDL_ChargementTexture(window,render,texture,&rect);
+    F[ind_PIONBH]=CreateTexture(PIONBH,render);
+    SDL_ChargementTexture(window,render,F[ind_PIONBH],&rect);
     x = 68; y = 509;
     for(int i=0 ; i<7 ; i++)
     {
-        SDL_AfficherTexture(window,render,texture,&rect,x,y);
+        SDL_AfficherTexture(window,render,F[ind_PIONBH],&rect,x,y);
         x = x + 77;
     }
 
     // ************** charge ROI BLANCHE
-    texture=CreateTexture(ROIB,render);
-    SDL_ChargementTexture(window,render,texture,&rect);
-    SDL_AfficherTexture(window,render,texture,&rect,308,540);
+    F[ind_ROIB]=CreateTexture(ROIB,render);
+    SDL_ChargementTexture(window,render,F[ind_ROIB],&rect);
+    SDL_AfficherTexture(window,render,F[ind_ROIB],&rect,308,540);
 
     SDL_RenderPresent(render);
     /****************** Gestion des evenements *****************/
