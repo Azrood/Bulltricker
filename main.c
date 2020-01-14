@@ -1,50 +1,30 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <SDL.h>
-#define WINDOW_WIDTH 648
-#define WINDOW_HEIGHT 648
-void SDL_ExitWithError(const char *message)
-{
-    SDL_Log("Erreur : %s > %s\n",message, SDL_GetError());
-    SDL_Quit();
-    exit(EXIT_FAILURE);
+#define BOARD "images/Board.bmp"
+#define DAMEBV "images/DameB.bmp"
+#define DAMEBH "images/Dame2B.bmp"
+#define PIONBV "images/PionB.bmp"
+#define PIONBH "images/Pion2B.bmp"
+#define ROIB   "images/RoiB.bmp"
+#define DAMENV "images/Dame.bmp"
+#define DAMENH "images/Dame2.bmp"
+#define PIONNV "images/Pion.bmp"
+#define PIONNH "images/Pion2.bmp"
+#define ROIN   "images/Roi.bmp"
+
+const int LARG_FENETRE = 648;
+const int HAUT_FENETRE = 648;
+typedef struct Point {
+    int x;
+    int y;
 }
-
-void SDL_ExitError(const char * message , SDL_Renderer *render , SDL_Window *window)
-{
-    SDL_DestroyRenderer(render);
-    SDL_DestroyWindow(window);
-    SDL_ExitWithError(message);
-}
-
-void SDL_InserImage(char * URL,SDL_Window *window,SDL_Renderer *render,SDL_Surface *image,
-                    SDL_Texture *texture,SDL_Rect rectangle,int x,int y)
-{
-    image = SDL_LoadBMP(URL);
-    if(image == NULL) SDL_ExitError("Impossible de charger l'image",render,window);
-    texture = SDL_CreateTextureFromSurface(render,image);
-    SDL_FreeSurface(image);
-    if(texture == NULL) SDL_ExitError("impossible de cree la texture",render,window);
-
-
-    if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0)
-        SDL_ExitError("impossible de charger la texture",render,window);
-
-    rectangle.x = x;
-    rectangle.y = y;
-
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-}
-
 char * SavoirLocation(int x , int y )
 {
-    char *pos;
+    char *pos=(char *)malloc(5);
     if(y <= 604 && y>= 46)
     {
+
         if(y <= 67 && y >= 46) strcpy(pos,"H1");
         if(y <= 114 && y >= 78) strcpy(pos,"A");
         if(y <= 143 && y >= 123) strcpy(pos,"H2");
@@ -82,491 +62,142 @@ char * SavoirLocation(int x , int y )
     }
 
     //printf("%s\n",pos);
-    return *pos;
+    return pos;
 }
-int main(int argc, char *argv[])
-{
-    /****************** Déclaration *****************/
 
+void SDL_DestroywindowEtrender(SDL_Window *window,SDL_Renderer *render){
+    if(window)
+        SDL_DestroyWindow(window);
+    if(render)
+        SDL_DestroyRenderer(render);
+    return;
+}
+
+void SDL_ExitErreur(char * messageErreur){
+    SDL_Log("Erreur %s : %s\n",messageErreur,SDL_GetError());
+    SDL_Quit();
+    exit(EXIT_FAILURE);
+}
+
+SDL_Texture * CreateTexture(const char * text,SDL_Renderer *render){
+	SDL_Surface *background =SDL_LoadBMP(text);
+	SDL_Texture *texture = SDL_CreateTextureFromSurface(render, background);
+	SDL_FreeSurface(background);
+	return texture;
+}
+
+void SDL_ChargementTexture(SDL_Window * window,SDL_Renderer* render ,SDL_Texture * texture,SDL_Rect *rect){
+    if((SDL_QueryTexture(texture,NULL,NULL,&rect->w,&rect->h))!=0){
+        SDL_DestroywindowEtrender(window,render);//pour detruire la window et le renderer
+        SDL_DestroyTexture(texture);//pour detruire l texture
+        SDL_ExitErreur("Chargement texture");//afficher le message d'erreur e quitter SDL avec SDL_QUIT;
+    }
+}
+
+void SDL_AfficherTexture(SDL_Window * window,SDL_Renderer* render ,SDL_Texture * texture,SDL_Rect *rect,int x,int y){
+    rect->x=x;
+    rect->y=y;
+    if((SDL_RenderCopy(render,texture,NULL,rect))!=0){
+        SDL_DestroywindowEtrender(window,render);
+        SDL_DestroyTexture(texture);
+        SDL_ExitErreur("Affichage de l'image");
+    }
+}
+
+int main( int argc, char * argv[] )
+{
+    Point P[15][15];
     SDL_Window *window = NULL;
     SDL_Renderer *render = NULL;
-    SDL_Surface *image = NULL;
     SDL_Texture *texture = NULL;
-    SDL_Rect rectangle;
-    int x,y;
-    char *pos;
-    /****************** Initialisation *****************/
-
-
-    if((SDL_Init(SDL_INIT_VIDEO) != 0)) SDL_ExitWithError("Initialisation echoée");
-    /*window=SDL_CreateWindow("Bulltricker",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,648,648,SDL_WINDOW_SHOWN);
-    if((window == NULL)) SDL_ExitWithError("Creation fenetre echoée");
-
-    render = SDL_CreateRenderer(window,-1,SDL_RENDERER_SOFTWARE);
-    if(render == NULL) SDL_ExitWithError("Creation render echoée");
-    SDL_RenderPresent(render);
-
-    if(SDL_RenderClear(render) != 0) SDL_ExitWithError("clear render echoée");*/
-
-    if(SDL_CreateWindowAndRenderer(WINDOW_WIDTH,WINDOW_HEIGHT,SDL_WINDOW_SHOWN,&window,&render) != 0)
-        SDL_ExitWithError("impossible de cree fenetre et render");
-    // ************** charge BOARD
-    image = SDL_LoadBMP("images/board.bmp");
-    if(image == NULL) SDL_ExitError("Impossible de charger l'image",render,window);
-    texture = SDL_CreateTextureFromSurface(render,image);
-    SDL_FreeSurface(image);
-    if(texture == NULL) SDL_ExitError("impossible de cree la texture",render,window);
-
-
-    if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0)
-        SDL_ExitError("impossible de charger la texture",render,window);
-
-    rectangle.x = (WINDOW_WIDTH - rectangle.w) / 2;
-    rectangle.y = (WINDOW_HEIGHT - rectangle.h) / 2;
-
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
+    SDL_Rect rect;
+    int x=0, y=0;
+    if(SDL_Init(SDL_INIT_VIDEO)!=0){
+        SDL_ExitErreur("Initialisation SDL");
     }
-    /*texture = SDL_CreateTextureFromSurface(render,image);
-    SDL_FreeSurface(image);
-    if(texture == NULL) SDL_ExitError("impossible de cree la texture",render,window);
+    if((window=SDL_CreateWindow("Bulltricker",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,LARG_FENETRE,HAUT_FENETRE,SDL_WINDOW_SHOWN))==NULL){
+        SDL_ExitErreur("Creation de la fenetre");
+    }
+    if((render=SDL_CreateRenderer(window,-1,SDL_RENDERER_ACCELERATED))==NULL){
+        SDL_ExitErreur("Creation du renderer");
+    }
+    // affichage de board
+    texture=CreateTexture(BOARD,render);
+    SDL_ChargementTexture(window,render,texture,&rect);
+    SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
 
-
-    if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0)
-        SDL_ExitError("impossible de charger la texture",render,window);
-
-    rectangle.x = (WINDOW_WIDTH - rectangle.w) / 2;
-    rectangle.y = (WINDOW_HEIGHT - rectangle.h) / 2;
-
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
+    // affichage des dames noire
+    texture=CreateTexture(DAMENV,render);
+    SDL_ChargementTexture(window,render,texture,&rect);
+    x = 47; y = 67;
+    for(int i=0 ; i<8 ; i++)
     {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }*/
-
-    // ************** charge DAME NOIRE
-    image = SDL_LoadBMP("images/Dame.bmp");
-    if(image == NULL) SDL_ExitError("Impossible de charger l'image",render,window);
-    texture = SDL_CreateTextureFromSurface(render,image);
-    SDL_FreeSurface(image);
-    if(texture == NULL) SDL_ExitError("impossible de cree la texture",render,window);
-    if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0)
-        SDL_ExitError("impossible de charger la texture",render,window);
-
-    rectangle.x = 46;
-    rectangle.y = 67;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
+        SDL_AfficherTexture(window,render,texture,&rect,x,y);
+        x = x + 77;
     }
 
-    rectangle.x = 123;
-    rectangle.y = 67;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
+    // affichage des pions verticales noire
+    texture=CreateTexture(PIONNV,render);
+    SDL_ChargementTexture(window,render,texture,&rect);
+    x = 47; y = 144;
+    for(int i=0 ; i<8 ; i++)
     {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 200;
-    rectangle.y = 67;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 277;
-    rectangle.y = 67;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 355;
-    rectangle.y = 67;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 432;
-    rectangle.y = 67;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 509;
-    rectangle.y = 67;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 585;
-    rectangle.y = 67;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    // ************** charge ROI NOIRE
-    image = SDL_LoadBMP("images/Roi.bmp");
-    if(image == NULL) SDL_ExitError("Impossible de charger l'image",render,window);
-    texture = SDL_CreateTextureFromSurface(render,image);
-    SDL_FreeSurface(image);
-    if(texture == NULL) SDL_ExitError("impossible de cree la texture",render,window);
-    if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0)
-        SDL_ExitError("impossible de charger la texture",render,window);
-
-    rectangle.x = 308;
-    rectangle.y = 78;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    // ************** charge PION NOIRE
-
-    image = SDL_LoadBMP("images/Pion.bmp");
-    if(image == NULL) SDL_ExitError("Impossible de charger l'image",render,window);
-    texture = SDL_CreateTextureFromSurface(render,image);
-    SDL_FreeSurface(image);
-    if(texture == NULL) SDL_ExitError("impossible de cree la texture",render,window);
-    if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0)
-        SDL_ExitError("impossible de charger la texture",render,window);
-
-    // ************** charge PION NOIRE VERTICALE
-    rectangle.x = 46;
-    rectangle.y = 144;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 123;
-    rectangle.y = 144;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 200;
-    rectangle.y = 144;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 277;
-    rectangle.y = 144;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 355;
-    rectangle.y = 144;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 432;
-    rectangle.y = 144;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 509;
-    rectangle.y = 144;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 585;
-    rectangle.y = 144;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    // ************** charge PION NOIRE HORIZONTAL
-    image = SDL_LoadBMP("images/Pion2.bmp");
-    if(image == NULL) SDL_ExitError("Impossible de charger l'image",render,window);
-    texture = SDL_CreateTextureFromSurface(render,image);
-    SDL_FreeSurface(image);
-    if(texture == NULL) SDL_ExitError("impossible de cree la texture",render,window);
-    if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0)
-        SDL_ExitError("impossible de charger la texture",render,window);
-
-    rectangle.x = 68;
-    rectangle.y = 124;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 144;
-    rectangle.y = 124;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 221;
-    rectangle.y = 124;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 298;
-    rectangle.y = 124;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 376;
-    rectangle.y = 124;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 453;
-    rectangle.y = 124;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 530;
-    rectangle.y = 124;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
+        SDL_AfficherTexture(window,render,texture,&rect,x,y);
+        x = x + 77;
     }
 
-    // ************** charge DAME BLANCHE
-    image = SDL_LoadBMP("images/DameB.bmp");
-    if(image == NULL) SDL_ExitError("Impossible de charger l'image",render,window);
-    texture = SDL_CreateTextureFromSurface(render,image);
-    SDL_FreeSurface(image);
-    if(texture == NULL) SDL_ExitError("impossible de cree la texture",render,window);
-    if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0)
-        SDL_ExitError("impossible de charger la texture",render,window);
+    // affichage des pions horizontale noire
+    texture=CreateTexture(PIONNH,render);
+    SDL_ChargementTexture(window,render,texture,&rect);
+    x = 68; y = 124;
+    for(int i=0 ; i<7 ; i++)
+    {
+        SDL_AfficherTexture(window,render,texture,&rect,x,y);
+        x = x + 77;
+    }
+    // affichage du roi noire
+    texture=CreateTexture(ROIN,render);
+    SDL_ChargementTexture(window,render,texture,&rect);
+    SDL_AfficherTexture(window,render,texture,&rect,308,78);
 
-    rectangle.x = 46;
-    rectangle.y = 529;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 123;
-    rectangle.y = 529;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 200;
-    rectangle.y = 529;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 277;
-    rectangle.y = 529;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 355;
-    rectangle.y = 529;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 432;
-    rectangle.y = 529;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 509;
-    rectangle.y = 529;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 585;
-    rectangle.y = 529;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
 
-    // ************** charge ROI BLANCHE
-    image = SDL_LoadBMP("images/RoiB.bmp");
-    if(image == NULL) SDL_ExitError("Impossible de charger l'image",render,window);
-    texture = SDL_CreateTextureFromSurface(render,image);
-    SDL_FreeSurface(image);
-    if(texture == NULL) SDL_ExitError("impossible de cree la texture",render,window);
-    if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0)
-        SDL_ExitError("impossible de charger la texture",render,window);
-
-    rectangle.x = 308;
-    rectangle.y = 540;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
+    // affichage des dames blanche
+    texture=CreateTexture(DAMEBV,render);
+    SDL_ChargementTexture(window,render,texture,&rect);
+    x = 47; y = 529;
+    for(int i=0 ; i<8 ; i++)
     {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
+        SDL_AfficherTexture(window,render,texture,&rect,x,y);
+        x = x + 77;
     }
-
-    // ************** charge PION BLANCHE
-
-    image = SDL_LoadBMP("images/PionB.bmp");
-    if(image == NULL) SDL_ExitError("Impossible de charger l'image",render,window);
-    texture = SDL_CreateTextureFromSurface(render,image);
-    SDL_FreeSurface(image);
-    if(texture == NULL) SDL_ExitError("impossible de cree la texture",render,window);
-    if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0)
-        SDL_ExitError("impossible de charger la texture",render,window);
 
     // ************** charge PION BLANCHE VERTICALE
-    rectangle.x = 46;
-    rectangle.y = 453;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
+    texture=CreateTexture(PIONBV,render);
+    SDL_ChargementTexture(window,render,texture,&rect);
+    x = 47; y = 453;
+    for(int i=0 ; i<8 ; i++)
     {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 123;
-    rectangle.y = 453;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 200;
-    rectangle.y = 453;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 277;
-    rectangle.y = 453;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 355;
-    rectangle.y = 453;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 432;
-    rectangle.y = 453;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 509;
-    rectangle.y = 453;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 585;
-    rectangle.y = 453;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
+        SDL_AfficherTexture(window,render,texture,&rect,x,y);
+        x = x + 77;
     }
 
     // ************** charge PION BLANCHE HORIZONTALE
-    image = SDL_LoadBMP("images/Pion2B.bmp");
-    if(image == NULL) SDL_ExitError("Impossible de charger l'image",render,window);
-    texture = SDL_CreateTextureFromSurface(render,image);
-    SDL_FreeSurface(image);
-    if(texture == NULL) SDL_ExitError("impossible de cree la texture",render,window);
-    if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0)
-        SDL_ExitError("impossible de charger la texture",render,window);
+    texture=CreateTexture(PIONBH,render);
+    SDL_ChargementTexture(window,render,texture,&rect);
+    x = 68; y = 509;
+    for(int i=0 ; i<7 ; i++)
+    {
+        SDL_AfficherTexture(window,render,texture,&rect,x,y);
+        x = x + 77;
+    }
 
-    rectangle.x = 68;
-    rectangle.y = 509;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 144;
-    rectangle.y = 509;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 221;
-    rectangle.y = 509;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 298;
-    rectangle.y = 509;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 376;
-    rectangle.y = 509;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 453;
-    rectangle.y = 509;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
-    rectangle.x = 530;
-    rectangle.y = 509;
-    if(SDL_RenderCopy(render,texture,NULL,&rectangle) != 0)
-    {
-        SDL_DestroyTexture(texture);
-        SDL_ExitError("impossible d'afficher la texture",render,window);
-    }
+    // ************** charge ROI BLANCHE
+    texture=CreateTexture(ROIB,render);
+    SDL_ChargementTexture(window,render,texture,&rect);
+    SDL_AfficherTexture(window,render,texture,&rect,308,540);
 
     SDL_RenderPresent(render);
-
-    /****************** Code *****************/
+    /****************** Gestion des evenements *****************/
     SDL_bool program_lunched = SDL_TRUE;
     while(program_lunched)
     {
@@ -580,6 +211,7 @@ int main(int argc, char *argv[])
                     {
                         printf("(%d , %d )\n",event.button.x,event.button.y);
                         puts(SavoirLocation(event.button.x , event.button.y));
+                        //SavoirLocation(event.button.x , event.button.y);
                         continue;
                     }
                 case SDL_KEYDOWN :
@@ -602,8 +234,8 @@ int main(int argc, char *argv[])
             }
         }
     }
-
     /****************** Fermeture *****************/
+
     SDL_DestroyRenderer(render);
     SDL_DestroyWindow(window);
     SDL_Quit();
