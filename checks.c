@@ -204,7 +204,8 @@ int checkKing(movement moves,piece playedpiece,piece **A)
 }
 
 
-int isLegalMove(piece **A,movement moves, piece playedpiece) {
+int isLegalMove(piece **A,movement moves, piece playedpiece) 
+{
     int i=moves.finalmove.line,j=moves.finalmove.column;
     if(playedpiece.type == PION)
     {
@@ -222,6 +223,10 @@ int isLegalMove(piece **A,movement moves, piece playedpiece) {
                     if((j == moves.initialmove.column)
                     && (i-moves.initialmove.line == 2 || i-moves.initialmove.line == 4))
                     {
+                        for (int k = moves.initialmove.line+1;k<=i;k++) 
+                        {
+                            if (A[k][j].type != VIDE) return 0;
+                        }
                         return 1;
                     }
                 }
@@ -268,7 +273,12 @@ int isLegalMove(piece **A,movement moves, piece playedpiece) {
                 {
                     if((j == moves.initialmove.column)
                     && (i-moves.initialmove.line == -2 || i-moves.initialmove.line == -4))
-                    {
+                    { 
+                        for (int k = moves.initialmove.line-1;k>=i;k--) 
+                        {
+                            if (A[k][j].type != VIDE) return 0;
+                        }
+                        
                         return 1;
                     }
                 }
@@ -372,7 +382,7 @@ int isLegalMove(piece **A,movement moves, piece playedpiece) {
                 }
                 return 0;
             }
-            else if(i == moves.initialmove.line && moves.initialmove.line % 2 == 0)// mouvement rangée horizontale
+            else if(i == moves.initialmove.line && moves.initialmove.line % 2 == 1)// mouvement rangée horizontale
             {
                 if(j > moves.initialmove.column) // cas mouvement à droite
                 {

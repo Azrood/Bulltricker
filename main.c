@@ -50,8 +50,6 @@ int main()
                 k=0;
             }
         }
-
-
         affichage(A);
         if (CheckMat(A,&lost_player)==0) break;
     }
