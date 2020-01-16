@@ -72,7 +72,8 @@ void MovePion(piece **A,movement moves, piece playedpiece, position *Tab)
     if (A[i][j].type == playedpiece.type && A[i][j].color == playedpiece.color)
     {
         if ((isOptionalCapture(A,moves,playedpiece) == 1 || isLegalMove(A, moves, playedpiece) == 1) && (CompulsoryCapture(A,Tab,moves)==1))
-        {
+        {   
+            
             A[moves.finalmove.line][moves.finalmove.column] = playedpiece;
             A[moves.finalmove.line][moves.finalmove.column].firstmove = 0;
             if (moves.finalmove.line == 0 || moves.finalmove.line == 14)
@@ -126,7 +127,7 @@ void MoveDame(piece **A,movement moves, piece playedpiece,position *Tab)
     int i=moves.initialmove.line,j=moves.initialmove.column;
     if (A[i][j].type == playedpiece.type && A[i][j].color == playedpiece.color)
     {
-        if (isEatingMove(A,moves,playedpiece)==1 && CompulsoryCapture(A,Tab,moves))
+        if (isEatingMove(A,moves,playedpiece)==1 && CompulsoryCapture(A,Tab,moves)==1)
         {
             A[moves.finalmove.line][moves.finalmove.column] = playedpiece;
             A[i][j].color = VIDE;
@@ -137,7 +138,7 @@ void MoveDame(piece **A,movement moves, piece playedpiece,position *Tab)
             int fin=(i==moves.finalmove.line) ? moves.finalmove.column : moves.finalmove.line; // on prend la position final si elle est de colonne ou d eligne
             if (i<moves.finalmove.line || j<moves.finalmove.column) // mouvement ascendant ou vers la gauche
             {
-                for (int k= (i==moves.finalmove.line) ? j : i,b=k;k<fin;k+=2)
+                for (int k= (i==moves.finalmove.line) ? j : i , b=k;k<fin;k+=2)
                 {
                     if (b==i) // le mouvement a été fait sur rangée verticale, donc changement de ligne
                     {
@@ -184,8 +185,9 @@ void MoveDame(piece **A,movement moves, piece playedpiece,position *Tab)
                 }
             }
         }
-        else if(isOptionalCapture(A,moves,playedpiece) == 1 || CompulsoryCapture(A,Tab,moves)==0)
-        {   played = 1;
+        else if(isOptionalCapture(A,moves,playedpiece) == 1 && CompulsoryCapture(A,Tab,moves)==1)
+        {   
+            played = 1;
             A[moves.finalmove.line][moves.finalmove.column] = playedpiece;
             A[moves.finalmove.line][moves.finalmove.column].firstmove = 0;
             A[i][j].color = VIDE;
@@ -207,12 +209,19 @@ int AbleToEat(piece **A,position pos)
     moves.finalmove = pos; // la ligne sera changée suivant la couleur de la pièce donnée
     if (playedpiece.type == PION)
     {
-        moves.finalmove.line = (playedpiece.color == NOIRE) ? i+4 : i-4; // si la piece est noire, la position finale qu'on va verifier sera initial+4,
-                                                                        //sinon ligne initial -4
-        //on regarde si le mouvement est un mouvement de capture, si oui, alors la piece peut capturer
-        if (isEatingMove(A,moves,playedpiece)==1 /*&& isLegalMove(A,moves,playedpiece)==1*/) return 1;
+        // si la piece est noire, la position finale qu'on va verifier sera initial+4,+6 ou +8
+        //sinon ligne initial -4, -6 ou -8
+        //on regarde si le mouvement est un mouvement de capture, si oui, alors la piece peut capturer et on retourne 1, s'il n'y a pas de capture possible, on retourne 0.
+        for (int k=2;k<9;k+=2)
+        {
+            if (playedpiece.color == NOIRE) moves.finalmove.line = pos.line+k;
+            else moves.finalmove.line = pos.line-k;
+            if (isEatingMove(A,moves,playedpiece)==1) return 1;
+        }
         //sinon la piece ne peut pas capturer
-        else return 0;
+        return 0;
+
+
     }
     else //la piece à la position i,j est une dame
     {   // on va pas verifier la couleur, on va seulement verifier si la dame est en position verticale (donc parcours horizontal) ou horizontal (parcours vertical)
@@ -238,7 +247,6 @@ int AbleToEat(piece **A,position pos)
                         {
                             if (A[i][k].color==color) return 1;
                         }
-
                     }
                 }
             }
@@ -252,21 +260,19 @@ int AbleToEat(piece **A,position pos)
                 moves.finalmove.line = p;
                 if (isEatingMove(A,moves,playedpiece)==1)
                 {
-                    if (moves.finalmove.line > i) // on a trouvé un mouvement possible en haut, vérifions si on a fait une capture
+                    if (moves.finalmove.line > i) // on a trouvé un mouvement possible en bas, vérifions si on a fait une capture
                     {
                         for (int k=i;k<moves.finalmove.line;k+=2)
                         {
                             if (A[k][j].color == color) return 1;
                         }
-                        return 0; // on a pas fait de capture
                     }
-                    else // même chose mais pour le bas
+                    else // même chose mais pour le haut
                     {
                         for (int k=i;k>moves.finalmove.line;k-=2)
                         {
                             if (A[k][j].color==color) return 1;
                         }
-                        return 0;
                     }
                 }
             }
@@ -283,19 +289,20 @@ int CompulsoryCapture(piece **A,position *Tab,movement moves)
     piece playedpiece = A[moves.initialmove.line][moves.initialmove.column];
     if (A[Tab[0].line][Tab[0].column].type == DAME)
     {
-        if (playedpiece.type == DAME && isEatingMove(A,moves,A[moves.initialmove.line][moves.initialmove.column])) return 1;
+        if (inTab(Tab,moves.initialmove)==1)
+        {
+            if (playedpiece.type == DAME 
+                && isEatingMove(A,moves,A[moves.initialmove.line][moves.initialmove.column])==1
+                && ((moves.initialmove.line == moves.finalmove.line && moves.initialmove.line % 2==1)
+                    || (moves.finalmove.column == moves.initialmove.column) && moves.initialmove.column % 2==1)) return 1;
+            else return 0;
+        }
         else return 0;
     }
     else if ((inTab(Tab,moves.initialmove)==1) )
     {
-        for (int k=0;k==8;k+=2)
-        {   
-            
-            if(A[moves.initialmove.line][moves.initialmove.column].color == NOIRE
-                && isEatingMove(A,moves,A[moves.initialmove.line+k][moves.initialmove.column])) return 1;
-            if(A[moves.initialmove.line][moves.initialmove.column].color == BLANCHE
-                && isEatingMove(A,moves,A[moves.initialmove.line-k][moves.initialmove.column])) return 1;
-        }
+            if (isEatingMove(A,moves,A[moves.initialmove.line][moves.initialmove.column])) return 1;
+            else return 0;
     }
     return 0;
 }
