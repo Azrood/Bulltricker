@@ -18,6 +18,7 @@
 #define PIONNH "images/Pion2.bmp"
 #define ROIN   "images/Roi.bmp"
 #define MENU   "images/belltricker_menu.bmp"
+#define CREDITS   "images/Credits.bmp"
 
 #define ind_DAMEBV 0
 #define ind_DAMEBH 1
@@ -304,6 +305,7 @@ int main( int argc, char * argv[] )
     ///------------------- Gestion des evenements ----------------/
     SDL_bool program_lunched = SDL_TRUE;
     int start = 1; // 1 pour page menu 0 pour le jeu
+    int credits = 0; // 1 si l'user dans la page credit 0 sinon
     while(program_lunched)
     {
         movement moves;
@@ -321,7 +323,7 @@ int main( int argc, char * argv[] )
                     if(event.button.button == SDL_BUTTON_LEFT)
                     {
 
-                        if(start == 1)//tester
+                        if(start == 1)
                         {
 
                             if(event.button.x<495 && event.button.x>126 && event.button.y<300 && event.button.y>215)
@@ -402,24 +404,42 @@ int main( int argc, char * argv[] )
 
                                 start = 0;
                             }
-                            if(event.button.x<437 && event.button.x>198 && event.button.y<618 && event.button.y>572)
+                            if(event.button.x<437 && event.button.x>198 && event.button.y<618 && event.button.y>572) // l'user click sur exit
                             {
                                 program_lunched = SDL_FALSE;
                             }
+                            if(event.button.x<514 && event.button.x>153 && event.button.y<521 && event.button.y>441) // user click sur credits
+                            {
+
+                                texture=CreateTexture(CREDITS,render);
+                                SDL_ChargementTexture(window,render,texture,&rect);
+                                SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
+                                credits = 1;
+                            }
+                            if(credits == 1 && event.button.x<90 && event.button.x>-1 && event.button.y<90 && event.button.y>-1)
+                            {
+                                texture=CreateTexture(MENU,render);
+                                SDL_ChargementTexture(window,render,texture,&rect);
+                                SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
+                                credits = 0;
+                                start = 1;
+                            }
                             SDL_RenderPresent(render);
                         }
+                        if(start == 0)
+                        {
+                            printf("(%d , %d )\n",event.button.x,event.button.y);
+                            // stocker les indices du piece a jouer apres 1er click
+                            strcpy(positionstr , SavoirLocationY(event.button.y));
+                            strcat(positionstr , SavoirLocationX(event.button.x));
+                            moves.initialmove = ConvertirLocation(positionstr);
+                            playedpiece = A[moves.initialmove.line][moves.initialmove.column];
+                            fflush(stdin);
+                        }
 
-                        printf("(%d , %d )\n",event.button.x,event.button.y);
-                        // stocker les indices du piece a jouer apres 1er click
-                        strcpy(positionstr , SavoirLocationY(event.button.y));
-                        strcat(positionstr , SavoirLocationX(event.button.x));
-                        moves.initialmove = ConvertirLocation(positionstr);
-                        playedpiece = A[moves.initialmove.line][moves.initialmove.column];
-                        fflush(stdin);
-                        continue;
+
                     }
-
-                    if(event.button.button == SDL_BUTTON_RIGHT)
+                    if(event.button.button == SDL_BUTTON_RIGHT && start == 0)
                     {
                         // stocker les indices du position finale apres 2eme click
                         printf("(%d , %d )\n",event.button.x,event.button.y);
@@ -529,6 +549,8 @@ int main( int argc, char * argv[] )
                         }
                         continue;
                     }
+
+
                 case SDL_KEYDOWN :
                     switch(event.key.keysym.sym)
                     {
