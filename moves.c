@@ -307,22 +307,29 @@ int CompulsoryCapture(piece **A,position *Tab,movement moves)
     return 0;
 }
 
-void play(piece **A,position *Tab)
+void play(piece **A,position *Tab,movement *moves,piece *playedpiece,
+        SDL_MouseButtonEvent button,int *move_initialized, int couleur)
 {
-    movement moves;
-    piece playedpiece;
     char positionstr[10];
     fflush(stdin);
-    printf("initiale ");
-    gets(positionstr);
-    moves.initialmove = ConvertirLocation(positionstr);
-    playedpiece = A[moves.initialmove.line][moves.initialmove.column];
-    printf("finale");
-    fflush(stdin);
-    gets(positionstr);
-    printf("\n");
-    moves.finalmove = ConvertirLocation(positionstr);
-    if(playedpiece.type == PION) MovePion(A,moves,playedpiece,Tab);
-    if(playedpiece.type == DAME) MoveDame(A,moves,playedpiece,Tab);
-    if(playedpiece.type == ROI) MoveKing(A,moves,playedpiece);
+    //printf("initiale ");
+    //conversion des positions x et y en position A4, BV1 etc
+    strcpy(positionstr , SavoirLocationY(button.y));
+    strcat(positionstr , SavoirLocationX(button.x));
+
+    if (*move_initialized == 0) 
+    {
+        moves->initialmove = ConvertirLocation(positionstr);
+        *playedpiece = A[moves->initialmove.line][moves->initialmove.column];
+        playedpiece->color = couleur;
+        *move_initialized = 1;
+    }
+    else 
+    {
+        *move_initialized = 0;
+        moves->finalmove = ConvertirLocation(positionstr);
+        if (playedpiece->type == PION) MovePion(A,*moves,*playedpiece,Tab);
+        if (playedpiece->type == DAME) MoveDame(A,*moves,*playedpiece,Tab);
+        if (playedpiece->type == ROI) MoveKing(A,*moves,*playedpiece);
+    }
 }
