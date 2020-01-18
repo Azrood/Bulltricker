@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+
 #include "moves.h"
 #include "checks.h"
 
@@ -37,6 +38,7 @@ int checkPiece(movement moves,piece ** A)
             if(A[i+1][j].type == VIDE) return 1;
             else return 0;
         }
+        return 0;
     }
     else return 0;
 }

@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
+
 #include <SDL.h>
+
 #include "moves.h"
 #include "checks.h"
 #include "tools.h"
