@@ -511,7 +511,8 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                     if(A[moves.initialmove.line+1][j].type == VIDE
                        && A[moves.initialmove.line+2][j].color == BLANCHE
                        && A[moves.initialmove.line+3][j].type == VIDE
-                       && A[i][j].type == VIDE && (A[i+1][j].type != VIDE || A[i+2][j].type == VIDE || i+1>=15 || i+2>=15) )
+                       && A[i][j].type == VIDE 
+                       && (A[i+1][j].type != VIDE || A[i+2][j].type == VIDE || i+1>=15 || i+2>=15) )
                     {
                         return 1;
                     }
@@ -519,15 +520,16 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                 }
                 else if(i - moves.initialmove.line == 8)
                 { // cas de double EatMove
-                        // tester les différent cases royales et l'existance de 2 piences d'adversaice pour faire une double eatmove
+                        // tester les différent cases royales et l'existance de 2 pieces d'adversaice pour faire une double eatmove
                     if(A[moves.initialmove.line+1][j].type == VIDE
                        && A[moves.initialmove.line+2][j].color == BLANCHE
                        && A[moves.initialmove.line+3][j].type == VIDE
                        && A[moves.initialmove.line+4][j].type == VIDE
                        && A[moves.initialmove.line+5][j].type == VIDE
-                       && A[moves.initialmove.line+6][j].type == BLANCHE
+                       && A[moves.initialmove.line+6][j].color == BLANCHE
                        && A[moves.initialmove.line+7][j].type == VIDE
-                       && A[i][j].type == VIDE && i<15 && (A[i+1][j].type != VIDE || A[i+2][j].type == VIDE || i+1>=15 || i+2>=15))
+                       && A[i][j].type == VIDE
+                       && (A[i+1][j].type != VIDE || A[i+2][j].type == VIDE || i+1>=15 || i+2>=15))
                     {
                        return 1;
                     }
@@ -541,11 +543,11 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                        && A[moves.initialmove.line+3][j].type == VIDE
                        && A[moves.initialmove.line+4][j].type == VIDE
                        && A[moves.initialmove.line+5][j].type == VIDE
-                       && A[moves.initialmove.line+6][j].type == BLANCHE
+                       && A[moves.initialmove.line+6][j].color == BLANCHE
                        && A[moves.initialmove.line+7][j].type == VIDE
                        && A[moves.initialmove.line+8][j].type == VIDE
                        && A[moves.initialmove.line+9][j].type == VIDE
-                       && A[moves.initialmove.line+10][j].type == BLANCHE
+                       && A[moves.initialmove.line+10][j].color == BLANCHE
                        && A[moves.initialmove.line+11][j].type == VIDE
                        && A[moves.initialmove.line+12][j].type == VIDE)
                     {
@@ -579,7 +581,7 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                        && A[moves.initialmove.line-3][j].type == VIDE
                        && A[moves.initialmove.line-4][j].type == VIDE
                        && A[moves.initialmove.line-5][j].type == VIDE
-                       && A[moves.initialmove.line-6][j].type == NOIRE
+                       && A[moves.initialmove.line-6][j].color == NOIRE
                        && A[moves.initialmove.line-7][j].type == VIDE
                        && A[i][j].type == VIDE
                        && (A[i-1][j].type != VIDE || A[i-2][j].type == VIDE ))
@@ -595,11 +597,11 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                             && A[moves.initialmove.line-3][j].type == VIDE
                             && A[moves.initialmove.line-4][j].type == VIDE
                             && A[moves.initialmove.line-5][j].type == VIDE
-                            && A[moves.initialmove.line-6][j].type == NOIRE
+                            && A[moves.initialmove.line-6][j].color == NOIRE
                             && A[moves.initialmove.line-7][j].type == VIDE
                             && A[moves.initialmove.line-8][j].type == VIDE
                             && A[moves.initialmove.line-9][j].type == VIDE
-                            && A[moves.initialmove.line-10][j].type == NOIRE
+                            && A[moves.initialmove.line-10][j].color == NOIRE
                             && A[moves.initialmove.line-11][j].type == VIDE
                             && A[moves.initialmove.line-12][j].type == VIDE)
                         {
