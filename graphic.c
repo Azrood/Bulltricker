@@ -53,3 +53,97 @@ void SDL_AfficherTexture(SDL_Window * window,SDL_Renderer* render ,SDL_Texture *
         SDL_ExitErreur("Affichage de l'image");
     }
 }
+void display(piece **A,SDL_Renderer* render,SDL_Rect *rect,Point **Poi,SDL_Window *window,SDL_Texture **F)
+{
+    for(int i=0; i<DIM_PLAT ; i++)
+    {
+        for(int j=0 ; j<DIM_PLAT ; j++)
+        {
+            if(A[i][j].type != VIDE)
+            {
+                if(i%2 == 0 && j%2 == 1)//piece horizontale
+                {
+                    if(A[i][j].type == PION) //CAS PION
+                    {
+                        if(A[i][j].color == BLANCHE) //BLANCHE
+                        {
+                            //texture=CreateTexture(PIONBH,render);
+                            SDL_ChargementTexture(window,render,F[ind_PIONBH],rect);
+                            SDL_AfficherTexture(window,render,F[ind_PIONBH],rect,Poi[i][j].x,Poi[i][j].y);
+                        }else if(A[i][j].color == NOIRE) // NOIRE
+                        {
+                            //texture=CreateTexture(PIONNH,render);
+                            SDL_ChargementTexture(window,render,F[ind_PIONNH],rect);
+                            SDL_AfficherTexture(window,render,F[ind_PIONNH],rect,Poi[i][j].x,Poi[i][j].y);
+                        }
+                    }
+                    else if(A[i][j].type == DAME) // CAS DAME
+                    {
+                        if(A[i][j].color == BLANCHE) // BLANCHE
+                        {
+                            //texture=CreateTexture(DAMEBH,render);
+                            SDL_ChargementTexture(window,render,F[ind_DAMEBH],rect);
+                            SDL_AfficherTexture(window,render,F[ind_DAMEBH],rect,Poi[i][j].x,Poi[i][j].y);
+                        }else if(A[i][j].color == NOIRE) // NOIRE
+                        {
+                            //texture=CreateTexture(DAMENH,render);
+                            SDL_ChargementTexture(window,render,F[ind_DAMENH],rect);
+                            SDL_AfficherTexture(window,render,F[ind_DAMENH],rect,Poi[i][j].x,Poi[i][j].y);
+                        }
+                    }
+                }
+                else if(i%2 == 1 && j%2 == 0) //piece VERTICALE
+                {
+                    if(A[i][j].type == PION) //CAS PION
+                    {
+                        if(A[i][j].color == BLANCHE) //BLANCHE
+                        {
+                            //texture=CreateTexture(PIONBV,render);
+                            SDL_ChargementTexture(window,render,F[ind_PIONBV],rect);
+                            SDL_AfficherTexture(window,render,F[ind_PIONBV],rect,Poi[i][j].x,Poi[i][j].y);
+                        }else if(A[i][j].color == NOIRE) // NOIRE
+                        {
+                            //texture=CreateTexture(PIONNV,render);
+                            SDL_ChargementTexture(window,render,F[ind_PIONNV],rect);
+                            SDL_AfficherTexture(window,render,F[ind_PIONNV],rect,Poi[i][j].x,Poi[i][j].y);
+                        }
+                    }
+                    else if(A[i][j].type == DAME) // CAS DAME
+                    {
+                        if(A[i][j].color == BLANCHE) // BLANCHE
+                        {
+                            //texture=CreateTexture(DAMEBV,render);
+                            SDL_ChargementTexture(window,render,F[ind_DAMEBV],rect);
+                            SDL_AfficherTexture(window,render,F[ind_DAMEBV],rect,Poi[i][j].x,Poi[i][j].y);
+                        }else if(A[i][j].color == NOIRE) // NOIRE
+                        {
+                            //texture=CreateTexture(DAMENV,render);
+                            SDL_ChargementTexture(window,render,F[ind_DAMENV],rect);
+                            SDL_AfficherTexture(window,render,F[ind_DAMENV],rect,Poi[i][j].x,Poi[i][j].y);
+                        }
+                    }
+                }
+                else if(i%2 == 1 && j%2 == 1) //piece VERTICALE
+                {
+                    if(A[i][j].type == ROI) //CAS PION
+                    {
+                        if(A[i][j].color == BLANCHE) //BLANCHE
+                        {
+                            //texture=CreateTexture(ROIB,render);
+                            SDL_ChargementTexture(window,render,F[ind_ROIB],rect);
+                            SDL_AfficherTexture(window,render,F[ind_ROIB],rect,Poi[i][j].x,Poi[i][j].y);
+                        }else if(A[i][j].color == NOIRE) // NOIRE
+                        {
+                            //texture=CreateTexture(ROIN,render);
+                            SDL_ChargementTexture(window,render,F[ind_ROIN],rect);
+                            SDL_AfficherTexture(window,render,F[ind_ROIN],rect,Poi[i][j].x,Poi[i][j].y);
+                        }
+                    }
+                }
+
+            }
+
+
+        }
+    }
+}
