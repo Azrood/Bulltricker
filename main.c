@@ -10,7 +10,7 @@ int main()
 {
 
     int i;
-    int lost_player;
+    int lost_player=0;
     piece **A=(piece **)malloc(DIM_PLAT*sizeof(piece *));
     for(i=0;i<DIM_PLAT;i++){
         A[i]=(piece *)malloc(DIM_PLAT*sizeof(piece));
@@ -29,7 +29,7 @@ int main()
         {
             RemplirTab(A,BLANCHE,&Tab);
             printf("\nau tour des blancs\n");
-            play(A,Tab);
+            play(A,Tab,BLANCHE);
             if (played==1)
             {
                 played=0;
@@ -43,7 +43,7 @@ int main()
         {
             RemplirTab(A,NOIRE,&Tab);
             printf("\nau tour des noirs \n");
-            play(A,Tab);
+            play(A,Tab,NOIRE);
             if (played==1)
             {
                 played=0;

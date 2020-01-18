@@ -22,5 +22,5 @@ int AbleToEat(piece **,position); //verifie si la piece dans une position donné
 void MoveKing(piece **,movement, piece); // fonction pour faire bouger le roi
 void MovePion(piece **, movement, piece, position *); // fonction pour faire bouger le pion
 void MoveDame(piece **, movement, piece, position *); // fonction pour faire bouger le dame
-void play(piece **,position *);//fonction pour jouer le tour.
+void play(piece **,position *, int);//fonction pour jouer le tour.
 #endif

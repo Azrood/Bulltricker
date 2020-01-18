@@ -307,7 +307,7 @@ int CompulsoryCapture(piece **A,position *Tab,movement moves)
     return 0;
 }
 
-void play(piece **A,position *Tab)
+void play(piece **A,position *Tab,int couleur)
 {
     movement moves;
     piece playedpiece;
@@ -317,6 +317,7 @@ void play(piece **A,position *Tab)
     gets(positionstr);
     moves.initialmove = ConvertirLocation(positionstr);
     playedpiece = A[moves.initialmove.line][moves.initialmove.column];
+    playedpiece.color = couleur;
     printf("finale");
     fflush(stdin);
     gets(positionstr);

@@ -1042,11 +1042,14 @@ int CheckMat(piece ** A,int *lost_player)
                 if(A[i][j+1].type != VIDE && A[i][j-1].type != VIDE
                    && A[i+1][j].type != VIDE && A[i-1][j].type != VIDE)// tester si il ya 4 piece autour du roi
                 {
-                    if((A[i][j+1].color != A[i][j-1].color) || (A[i][j+1].color != A[i+1][j].color)
-                       || (A[i][j+1].color != A[i-1][j].color)) //teser si une des pieces a des couleurs différents
+                    if((A[i][j+1].color != A[i][j-1].color) 
+                    || (A[i][j+1].color != A[i+1][j].color)
+                    || (A[i][j+1].color != A[i-1][j].color)) //tester si une des pieces a des couleurs différents
                     {
-                        return 0;
+                        
                         *lost_player=A[i][j].color; // on récupère la couleur du joueur qui a été MAT.
+                        return 0;
+                        
                     }
                 }
             }
