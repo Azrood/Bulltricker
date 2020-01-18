@@ -693,7 +693,7 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                         for (int k=moves.initialmove.line-2; k>=i; k-=2)
                         {
                             if (A[k][j].color == NOIRE //on parcourt la colonne jusqu'à la position finale pour voir si
-                                ||(A[k][j].color == BLANCHE && A[k-2][j].type != VIDE)) // on trouve pour chaque blanc, une case vide devant lui
+                                || (A[k][j].color == BLANCHE && A[k-2][j].type != VIDE)) // on trouve pour chaque blanc, une case vide devant lui
                             {                                           // et pas de noir sur le chemin.
                                 return 0;
                             }

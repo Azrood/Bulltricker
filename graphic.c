@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <strings.h>
 
-#include <SDL.h>
-
 #include "moves.h"
 #include "checks.h"
 #include "tools.h"
@@ -71,7 +69,8 @@ void display(piece **A,SDL_Renderer* render,SDL_Rect *rect,Point **Poi,SDL_Windo
                         {
                             SDL_ChargementTexture(window,render,F[ind_PIONBH],rect);
                             SDL_AfficherTexture(window,render,F[ind_PIONBH],rect,Poi[i][j].x,Poi[i][j].y);
-                        }else if(A[i][j].color == NOIRE) // NOIRE
+                        }
+                        else if(A[i][j].color == NOIRE) // NOIRE
                         {
                             SDL_ChargementTexture(window,render,F[ind_PIONNH],rect);
                             SDL_AfficherTexture(window,render,F[ind_PIONNH],rect,Poi[i][j].x,Poi[i][j].y);
@@ -83,7 +82,8 @@ void display(piece **A,SDL_Renderer* render,SDL_Rect *rect,Point **Poi,SDL_Windo
                         {
                             SDL_ChargementTexture(window,render,F[ind_DAMEBH],rect);
                             SDL_AfficherTexture(window,render,F[ind_DAMEBH],rect,Poi[i][j].x,Poi[i][j].y);
-                        }else if(A[i][j].color == NOIRE) // NOIRE
+                        }
+                        else if(A[i][j].color == NOIRE) // NOIRE
                         {
                             SDL_ChargementTexture(window,render,F[ind_DAMENH],rect);
                             SDL_AfficherTexture(window,render,F[ind_DAMENH],rect,Poi[i][j].x,Poi[i][j].y);
@@ -127,14 +127,14 @@ void display(piece **A,SDL_Renderer* render,SDL_Rect *rect,Point **Poi,SDL_Windo
                         {
                             SDL_ChargementTexture(window,render,F[ind_ROIB],rect);
                             SDL_AfficherTexture(window,render,F[ind_ROIB],rect,Poi[i][j].x,Poi[i][j].y);
-                        }else if(A[i][j].color == NOIRE) // NOIRE
+                        }
+                        else if(A[i][j].color == NOIRE) // NOIRE
                         {
                             SDL_ChargementTexture(window,render,F[ind_ROIN],rect);
                             SDL_AfficherTexture(window,render,F[ind_ROIN],rect,Poi[i][j].x,Poi[i][j].y);
                         }
                     }
                 }
-
             }
         }
     }

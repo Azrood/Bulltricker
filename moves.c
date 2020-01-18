@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+
 #include "moves.h"
 #include "checks.h"
 #include "tools.h"
@@ -71,7 +72,8 @@ void MovePion(piece **A,movement moves, piece playedpiece, position *Tab)
     int i=moves.initialmove.line,j=moves.initialmove.column;
     if (A[i][j].type == playedpiece.type && A[i][j].color == playedpiece.color)
     {
-        if ((isOptionalCapture(A,moves,playedpiece) == 1 || isLegalMove(A, moves, playedpiece) == 1) && (CompulsoryCapture(A,Tab,moves)==1))
+        if ((isOptionalCapture(A,moves,playedpiece) == 1 || isLegalMove(A, moves, playedpiece) == 1) 
+            && (CompulsoryCapture(A,Tab,moves)==1))
         {   
             
             A[moves.finalmove.line][moves.finalmove.column] = playedpiece;
@@ -85,7 +87,8 @@ void MovePion(piece **A,movement moves, piece playedpiece, position *Tab)
             A[i][j].firstmove = VIDE;
             played=1;
         }
-        else if (isEatingMove(A,moves,playedpiece)==1 && CompulsoryCapture(A,Tab,moves))
+        else if (isEatingMove(A,moves,playedpiece)==1 
+                && CompulsoryCapture(A,Tab,moves))
         {
             A[moves.finalmove.line][moves.finalmove.column] = playedpiece;
             A[moves.finalmove.line][moves.finalmove.column].firstmove = 0;
@@ -127,7 +130,8 @@ void MoveDame(piece **A,movement moves, piece playedpiece,position *Tab)
     int i=moves.initialmove.line,j=moves.initialmove.column;
     if (A[i][j].type == playedpiece.type && A[i][j].color == playedpiece.color)
     {
-        if (isEatingMove(A,moves,playedpiece)==1 && CompulsoryCapture(A,Tab,moves)==1)
+        if (isEatingMove(A,moves,playedpiece)==1 
+            && CompulsoryCapture(A,Tab,moves)==1)
         {
             A[moves.finalmove.line][moves.finalmove.column] = playedpiece;
             A[i][j].color = VIDE;
@@ -139,8 +143,8 @@ void MoveDame(piece **A,movement moves, piece playedpiece,position *Tab)
             if (i<moves.finalmove.line || j<moves.finalmove.column) // mouvement ascendant ou vers la gauche
             {
                 for (int k= (i==moves.finalmove.line) ? j : i , b=k;k<fin;k+=2)
-                {
-                    if (b==i) // le mouvement a été fait sur rangée verticale, donc changement de ligne
+                { // k sera la colonne finale si la ligne est constante ou la ligne finale sinon
+                    if (b==i) // le mouvement a été fait sur rangée verticale, donc on a changement de ligne
                     {
                         if (A[k][j].type != VIDE)
                         {
@@ -149,7 +153,7 @@ void MoveDame(piece **A,movement moves, piece playedpiece,position *Tab)
                             A[k][j].firstmove = VIDE;
                         }
                     }
-                    else // mouvement fait sur rangée horizontale, donc changement de colonne
+                    else // mouvement fait sur rangée horizontale, donc on a changement de colonne
                     {
                         if (A[i][k].type != VIDE)
                         {
@@ -185,7 +189,8 @@ void MoveDame(piece **A,movement moves, piece playedpiece,position *Tab)
                 }
             }
         }
-        else if(isOptionalCapture(A,moves,playedpiece) == 1 && CompulsoryCapture(A,Tab,moves)==1)
+        else if(isOptionalCapture(A,moves,playedpiece) == 1 
+                && CompulsoryCapture(A,Tab,moves)==1)
         {   
             played = 1;
             A[moves.finalmove.line][moves.finalmove.column] = playedpiece;
@@ -193,7 +198,6 @@ void MoveDame(piece **A,movement moves, piece playedpiece,position *Tab)
             A[i][j].color = VIDE;
             A[i][j].type = VIDE;
             A[i][j].firstmove = VIDE;
-
         }
         else played =0;
     }
@@ -311,8 +315,6 @@ void play(piece **A,position *Tab,movement *moves,piece *playedpiece,
         SDL_MouseButtonEvent button,int *move_initialized, int couleur)
 {
     char positionstr[10];
-    fflush(stdin);
-    //printf("initiale ");
     //conversion des positions x et y en position A4, BV1 etc
     strcpy(positionstr , SavoirLocationY(button.y));
     strcat(positionstr , SavoirLocationX(button.x));

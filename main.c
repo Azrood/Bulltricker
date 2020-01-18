@@ -1,41 +1,41 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <SDL.h>
 #include <strings.h>
+
+#include <SDL.h>
+
 #include "moves.h"
 #include "checks.h"
 #include "tools.h"
 #include "graphic.h"
 
-#define ind_DAMEBV 0
-#define ind_DAMEBH 1
-#define ind_PIONBV 2
-#define ind_PIONBH 3
-#define ind_ROIB   4
-#define ind_DAMENV 5
-#define ind_DAMENH 6
-#define ind_PIONNV 7
-#define ind_PIONNH 8
-#define ind_ROIN   9
+
 
 int played;
-
 int main( int argc, char * argv[] )
 {
 
-    Point **Poi;
-    Poi = (Point **) malloc(15*sizeof(Point *));
-    for (int i=0;i<15;i++) Poi[i]=(Point *) malloc(15*sizeof(Point));
-    RemplirPoint(Poi);
-    int i;
     int lost_player;
-    piece **A=(piece **)malloc(DIM_PLAT*sizeof(piece *));
-    for(i=0;i<DIM_PLAT;i++){
-        A[i]=(piece *)malloc(DIM_PLAT*sizeof(piece));
-    }
-    position *Tab;
-    Tab = (position *)malloc(SIZE_TAB*sizeof(position));
+    int move_initialized=0; // si le mouvement est initialisé (1) ou non (0)
+    int couleur=BLANCHE; //les blancs commencent
+    int k=1; // 1 : tour du blanc, 0 : tour du joueur noir
+
+    // declaration et allocation de mémoire
+
+    Point **Poi = (Point **) malloc(DIM_PLAT*sizeof(Point *)); // tableau d'intervalles de pixels
+    piece **A=(piece **) malloc(DIM_PLAT*sizeof(piece *)); // tableau qui représente le plateau de jeu
+    position *Tab = (position *) malloc(SIZE_TAB*sizeof(position));; // tableau de positions qui va contenir 
+
+    // allocation de memoire pour les sous-tableaux
+
+    for (int i=0;i<DIM_PLAT;i++) Poi[i]=(Point *) malloc(DIM_PLAT*sizeof(Point));
+    for (int i=0;i<DIM_PLAT;i++) A[i]=(piece *) malloc(DIM_PLAT*sizeof(piece));
+
+    // initialisation de chaque tableau
+
+    RemplirPoint(Poi);
     initialplateau(A);
+    FlushTab(&Tab);
     affichage(A);
     printf("\n");
 
@@ -43,38 +43,40 @@ int main( int argc, char * argv[] )
     SDL_Renderer *render = NULL;
     SDL_Texture *texture = NULL;
     SDL_Rect rect;
-    int x=0, y=0;
     SDL_Texture **F;
     F = (SDL_Texture**) malloc(10*sizeof(SDL_Texture*));
 
-
-    if(SDL_Init(SDL_INIT_VIDEO)!=0){
+    if (SDL_Init(SDL_INIT_VIDEO)!=0)
+    {
         SDL_ExitErreur("Initialisation SDL");
     }
-    if((window=SDL_CreateWindow("Bulltricker",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,LARG_FENETRE,HAUT_FENETRE,SDL_WINDOW_SHOWN))==NULL){
+    if ((window=SDL_CreateWindow("Bulltricker",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,LARG_FENETRE,HAUT_FENETRE,SDL_WINDOW_SHOWN))==NULL)
+    {
         SDL_ExitErreur("Creation de la fenetre");
     }
-    if((render=SDL_CreateRenderer(window,-1,SDL_RENDERER_ACCELERATED))==NULL){
+    if ((render=SDL_CreateRenderer(window,-1,SDL_RENDERER_ACCELERATED))==NULL)
+    {
         SDL_ExitErreur("Creation du renderer");
     }
-    // affichage de board
+    // affichage de menu
     texture=CreateTexture(MENU,render);
     SDL_ChargementTexture(window,render,texture,&rect);
     SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
-
     SDL_RenderPresent(render);
+
+    // remplissage du tableau de texture
+
+    InitialiseTableauTexture(F,render);
+
     ///------------------- Gestion des evenements ----------------/
-    SDL_bool program_lunched = SDL_TRUE;
+
+    SDL_bool program_launched = SDL_TRUE;
     int start = 1; // 1 pour page menu 0 pour le jeu
     int credits = 0; // 1 si l'user dans la page credit 0 sinon
-    while(program_lunched)
+    movement *moves=(movement *) malloc(sizeof(movement));
+    piece *playedpiece=(piece *) malloc(sizeof(piece));
+    while(program_launched)
     {
-        movement moves;
-        piece playedpiece;
-        char positionstr[10];
-        fflush(stdin);
-        FlushTab(&Tab);
-
         SDL_Event event;
         while(SDL_PollEvent(&event))
         {
@@ -94,80 +96,13 @@ int main( int argc, char * argv[] )
                                 texture=CreateTexture(BOARD,render);
                                 SDL_ChargementTexture(window,render,texture,&rect);
                                 SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
-                                F[ind_DAMENV]=CreateTexture(DAMENV,render);
-                                SDL_ChargementTexture(window,render,F[ind_DAMENV],&rect);
-                                x = 47; y = 67;
-                                for(int i=0 ; i<8 ; i++)
-                                {
-                                    SDL_AfficherTexture(window,render,F[ind_DAMENV],&rect,x,y);
-                                    x = x + 77;
-                                }
 
-                                // affichage des pions verticales noire
-                                F[ind_PIONNV]=CreateTexture(PIONNV,render);
-                                SDL_ChargementTexture(window,render,F[ind_PIONNV],&rect);
-                                x = 47; y = 144;
-                                for(int i=0 ; i<8 ; i++)
-                                {
-                                    SDL_AfficherTexture(window,render,F[ind_PIONNV],&rect,x,y);
-                                    x = x + 77;
-                                }
-
-                                // affichage des pions horizontale noire
-                                F[ind_PIONNH]=CreateTexture(PIONNH,render);
-                                SDL_ChargementTexture(window,render,F[ind_PIONNH],&rect);
-                                x = 68; y = 124;
-                                for(int i=0 ; i<7 ; i++)
-                                {
-                                    SDL_AfficherTexture(window,render,F[ind_PIONNH],&rect,x,y);
-                                    x = x + 77;
-                                }
-                                // affichage du roi noire
-                                F[ind_ROIN]=CreateTexture(ROIN,render);
-                                SDL_ChargementTexture(window,render,F[ind_ROIN],&rect);
-                                SDL_AfficherTexture(window,render,F[ind_ROIN],&rect,308,78);
-
-
-                                // affichage des dames blanche
-                                F[ind_DAMEBV]=CreateTexture(DAMEBV,render);
-                                SDL_ChargementTexture(window,render,F[ind_DAMEBV],&rect);
-                                x = 47; y = 529;
-                                for(int i=0 ; i<8 ; i++)
-                                {
-                                    SDL_AfficherTexture(window,render,F[ind_DAMEBV],&rect,x,y);
-                                    x = x + 77;
-                                }
-
-                                // ************** charge PION BLANCHE VERTICALE
-                                F[ind_PIONBV]=CreateTexture(PIONBV,render);
-                                SDL_ChargementTexture(window,render,F[ind_PIONBV],&rect);
-                                x = 47; y = 453;
-                                for(int i=0 ; i<8 ; i++)
-                                {
-                                    SDL_AfficherTexture(window,render,F[ind_PIONBV],&rect,x,y);
-                                    x = x + 77;
-                                }
-
-                                // ************** charge PION BLANCHE HORIZONTALE
-                                F[ind_PIONBH]=CreateTexture(PIONBH,render);
-                                SDL_ChargementTexture(window,render,F[ind_PIONBH],&rect);
-                                x = 68; y = 509;
-                                for(int i=0 ; i<7 ; i++)
-                                {
-                                    SDL_AfficherTexture(window,render,F[ind_PIONBH],&rect,x,y);
-                                    x = x + 77;
-                                }
-
-                                // ************** charge ROI BLANCHE
-                                F[ind_ROIB]=CreateTexture(ROIB,render);
-                                SDL_ChargementTexture(window,render,F[ind_ROIB],&rect);
-                                SDL_AfficherTexture(window,render,F[ind_ROIB],&rect,308,540);
-
+                                display(A,render,&rect,Poi,window,F);
                                 start = 0;
                             }
                             if(event.button.x<437 && event.button.x>198 && event.button.y<618 && event.button.y>572) // l'user click sur exit
                             {
-                                program_lunched = SDL_FALSE;
+                                program_launched = SDL_FALSE;
                             }
                             if(event.button.x<514 && event.button.x>153 && event.button.y<521 && event.button.y>441) // user click sur credits
                             {
@@ -187,136 +122,37 @@ int main( int argc, char * argv[] )
                             }
                             SDL_RenderPresent(render);
                         }
-                        if(start == 0)
+                        else if(start == 0)
                         {
                             printf("(%d , %d )\n",event.button.x,event.button.y);
                             // stocker les indices du piece a jouer apres 1er click
-                            strcpy(positionstr , SavoirLocationY(event.button.y));
-                            strcat(positionstr , SavoirLocationX(event.button.x));
-                            moves.initialmove = ConvertirLocation(positionstr);
-                            playedpiece = A[moves.initialmove.line][moves.initialmove.column];
-                            fflush(stdin);
-                        }
-
-
-                    }
-                    if(event.button.button == SDL_BUTTON_RIGHT && start == 0)
-                    {
-                        // stocker les indices du position finale apres 2eme click
-                        printf("(%d , %d )\n",event.button.x,event.button.y);
-                        strcpy(positionstr , SavoirLocationY(event.button.y));
-                        strcat(positionstr , SavoirLocationX(event.button.x));
-                        moves.finalmove = ConvertirLocation(positionstr);
-                        if(playedpiece.type == PION) MovePion(A,moves,playedpiece,Tab);
-                        if(playedpiece.type == DAME) MoveDame(A,moves,playedpiece,Tab);
-                        if(playedpiece.type == ROI) MoveKing(A,moves,playedpiece);
-                        affichage(A);
-                        //charger le board a nouveau
-                        texture=CreateTexture(BOARD,render);
-                        SDL_ChargementTexture(window,render,texture,&rect);
-                        SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
-                        //cette boucle test le type couleur position du piece(verticale ou horizontale)
-                        //pour cree une texture avec la bonne position
-                        for(int i=0; i<DIM_PLAT ; i++)
-                        {
-                            for(int j=0 ; j<DIM_PLAT ; j++)
+                            RemplirTab(A,couleur,&Tab);
+                            play(A,Tab,moves,playedpiece,event.button,&move_initialized,couleur );
+                            if (played == 1)
                             {
-                                if(A[i][j].type != VIDE)
-                                {
-                                    if(i%2 == 0 && j%2 == 1)//piece horizontale
-                                    {
-                                        if(A[i][j].type == PION) //CAS PION
-                                        {
-                                            if(A[i][j].color == BLANCHE) //BLANCHE
-                                            {
-                                                texture=CreateTexture(PIONBH,render);
-                                                SDL_ChargementTexture(window,render,texture,&rect);
-                                                SDL_AfficherTexture(window,render,texture,&rect,Poi[i][j].x,Poi[i][j].y);
-                                            }else if(A[i][j].color == NOIRE) // NOIRE
-                                            {
-                                                texture=CreateTexture(PIONNH,render);
-                                                SDL_ChargementTexture(window,render,texture,&rect);
-                                                SDL_AfficherTexture(window,render,texture,&rect,Poi[i][j].x,Poi[i][j].y);
-                                            }
-                                        }
-                                        else if(A[i][j].type == DAME) // CAS DAME
-                                        {
-                                            if(A[i][j].color == BLANCHE) // BLANCHE
-                                            {
-                                                texture=CreateTexture(DAMEBH,render);
-                                                SDL_ChargementTexture(window,render,texture,&rect);
-                                                SDL_AfficherTexture(window,render,texture,&rect,Poi[i][j].x,Poi[i][j].y);
-                                            }else if(A[i][j].color == NOIRE) // NOIRE
-                                            {
-                                                texture=CreateTexture(DAMENH,render);
-                                                SDL_ChargementTexture(window,render,texture,&rect);
-                                                SDL_AfficherTexture(window,render,texture,&rect,Poi[i][j].x,Poi[i][j].y);
-                                            }
-                                        }
-                                    }
-                                    else if(i%2 == 1 && j%2 == 0) //piece VERTICALE
-                                    {
-                                        if(A[i][j].type == PION) //CAS PION
-                                        {
-                                            if(A[i][j].color == BLANCHE) //BLANCHE
-                                            {
-                                                texture=CreateTexture(PIONBV,render);
-                                                SDL_ChargementTexture(window,render,texture,&rect);
-                                                SDL_AfficherTexture(window,render,texture,&rect,Poi[i][j].x,Poi[i][j].y);
-                                            }else if(A[i][j].color == NOIRE) // NOIRE
-                                            {
-                                                texture=CreateTexture(PIONNV,render);
-                                                SDL_ChargementTexture(window,render,texture,&rect);
-                                                SDL_AfficherTexture(window,render,texture,&rect,Poi[i][j].x,Poi[i][j].y);
-                                            }
-                                        }
-                                        else if(A[i][j].type == DAME) // CAS DAME
-                                        {
-                                            if(A[i][j].color == BLANCHE) // BLANCHE
-                                            {
-                                                texture=CreateTexture(DAMEBV,render);
-                                                SDL_ChargementTexture(window,render,texture,&rect);
-                                                SDL_AfficherTexture(window,render,texture,&rect,Poi[i][j].x,Poi[i][j].y);
-                                            }else if(A[i][j].color == NOIRE) // NOIRE
-                                            {
-                                                texture=CreateTexture(DAMENV,render);
-                                                SDL_ChargementTexture(window,render,texture,&rect);
-                                                SDL_AfficherTexture(window,render,texture,&rect,Poi[i][j].x,Poi[i][j].y);
-                                            }
-                                        }
-                                    }
-                                    else if(i%2 == 1 && j%2 == 1) //piece VERTICALE
-                                    {
-                                        if(A[i][j].type == ROI) //CAS PION
-                                        {
-                                            if(A[i][j].color == BLANCHE) //BLANCHE
-                                            {
-                                                texture=CreateTexture(ROIB,render);
-                                                SDL_ChargementTexture(window,render,texture,&rect);
-                                                SDL_AfficherTexture(window,render,texture,&rect,Poi[i][j].x,Poi[i][j].y);
-                                            }else if(A[i][j].color == NOIRE) // NOIRE
-                                            {
-                                                texture=CreateTexture(ROIN,render);
-                                                SDL_ChargementTexture(window,render,texture,&rect);
-                                                SDL_AfficherTexture(window,render,texture,&rect,Poi[i][j].x,Poi[i][j].y);
-                                            }
-                                        }
-                                    }
+                                if (k%2==1) k=0;
+                                else k=1;
 
-                                }
-
-
+                                played=0;
+                                FlushTab(&Tab);
+                                couleur = (k%2==1) ? BLANCHE : NOIRE; //determination de la couleur du joueur, si k impair,tour du blanc sinon tour du noir.
+                                
                             }
+                            affichage(A);
+                            texture=CreateTexture(BOARD,render);
+                            SDL_ChargementTexture(window,render,texture,&rect);
+                            SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
+                            display(A,render,&rect,Poi,window,F);
+                            continue;
                         }
-                        continue;
+
+
                     }
-
-
                 case SDL_KEYDOWN :
                     switch(event.key.keysym.sym)
                     {
                         case SDLK_ESCAPE : //exit si l'user click sur echap
-                            program_lunched = SDL_FALSE;
+                            program_launched = SDL_FALSE;
                             break;
                         case SDLK_a :
                             printf("vous avez tapez A\n");
@@ -324,7 +160,7 @@ int main( int argc, char * argv[] )
                         default : continue;
                     }
                 case SDL_QUIT :
-                    program_lunched = SDL_FALSE;
+                    program_launched = SDL_FALSE;
                     break;
                 default :
                     break;

@@ -1,6 +1,7 @@
 #ifndef TOOLS_H_INCLUDED
 #define TOOLS_H_INCLUDED
 #define SIZE_TAB 30
+
 #include "moves.h"
 #include "graphic.h"
 

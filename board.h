@@ -1,7 +1,6 @@
 #ifndef BOARD_H_INCLUDED
 #define BOARD_H_INCLUDED
 
-
 #define PION 'P'
 #define DAME 'D'
 #define ROI 'R'
@@ -23,5 +22,5 @@ typedef struct piece {
 
 void initialplateau(piece **);
 void affichage(piece **);
-// compulsory capture ?????
+
 #endif // BOARD_H_INCLUDED

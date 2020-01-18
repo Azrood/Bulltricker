@@ -1,5 +1,6 @@
 #ifndef CHECKS_H_INCLUDED
 #define CHECKS_H_INCLUDED
+
 #include "moves.h"
 
 int checkPiece(movement,piece **); // verifie s'il y a une piece qui bloque le mouvement ou pas. 1 si pas de piece, 0 si piece.
