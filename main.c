@@ -127,10 +127,16 @@ int main( int argc, char * argv[] )
                         {
                             if(event.button.x<45 && event.button.x>-1 && event.button.y<27 && event.button.y>-1)
                             {
+                                //user clic sur button retour dans le jeu
                                 texture=CreateTexture(MENU,render);
                                 SDL_ChargementTexture(window,render,texture,&rect);
                                 SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
                                 start = 1;
+                            }
+                            if(event.button.x<89 && event.button.x>57 && event.button.y<33 && event.button.y>-1)
+                            {
+                                // user clic sur sauvgarder
+
                             }
                             SDL_RenderPresent(render);
                             if(start == 0)
