@@ -177,3 +177,18 @@ char * SavoirLocationY(int y)
     }
     return pos;
 }
+
+void InitialiseTableauTexture(SDL_Texture **F,SDL_Renderer *render)
+{
+    F[ind_DAMEBH]=CreateTexture(DAMEBH,render);
+    F[ind_DAMENH]=CreateTexture(DAMENH,render);
+    F[ind_DAMENV]=CreateTexture(DAMENV,render);
+    F[ind_PIONNV]=CreateTexture(PIONNV,render);
+    F[ind_PIONNV]=CreateTexture(PIONNV,render);
+    F[ind_PIONNH]=CreateTexture(PIONNH,render);
+    F[ind_DAMEBV]=CreateTexture(DAMEBV,render);
+    F[ind_PIONBV]=CreateTexture(PIONBV,render);
+    F[ind_PIONBH]=CreateTexture(PIONBH,render);
+    F[ind_ROIB]=CreateTexture(ROIB,render);
+    F[ind_ROIN]=CreateTexture(ROIN,render);
+}

@@ -3,8 +3,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <SDL.h>
 #include <strings.h>
+
+#include <SDL.h>
+
 #include "moves.h"
 #include "checks.h"
 #include "tools.h"
@@ -47,6 +49,6 @@ void SDL_DestroywindowEtrender(SDL_Window *,SDL_Renderer *);
 void SDL_ExitErreur(char * );
 SDL_Texture * CreateTexture(const char * ,SDL_Renderer *);
 void SDL_ChargementTexture(SDL_Window * ,SDL_Renderer*  ,SDL_Texture * ,SDL_Rect *);
-void SDL_AfficherTexture(SDL_Window * ,SDL_Renderer*  ,SDL_Texture * ,SDL_Rect *,int ,int );
-void display(piece **,SDL_Renderer* ,SDL_Rect *,Point **,SDL_Window *,SDL_Texture **);
+void SDL_AfficherTexture(SDL_Window * ,SDL_Renderer*  ,SDL_Texture * ,SDL_Rect *,int ,int ); // fonction qui affiche la texture chargée
+void display(piece **,SDL_Renderer* ,SDL_Rect *,Point **,SDL_Window *,SDL_Texture **); // fonction qui gère l'affichage du plateau
 #endif

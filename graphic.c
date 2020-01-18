@@ -69,12 +69,10 @@ void display(piece **A,SDL_Renderer* render,SDL_Rect *rect,Point **Poi,SDL_Windo
                     {
                         if(A[i][j].color == BLANCHE) //BLANCHE
                         {
-                            //texture=CreateTexture(PIONBH,render);
                             SDL_ChargementTexture(window,render,F[ind_PIONBH],rect);
                             SDL_AfficherTexture(window,render,F[ind_PIONBH],rect,Poi[i][j].x,Poi[i][j].y);
                         }else if(A[i][j].color == NOIRE) // NOIRE
                         {
-                            //texture=CreateTexture(PIONNH,render);
                             SDL_ChargementTexture(window,render,F[ind_PIONNH],rect);
                             SDL_AfficherTexture(window,render,F[ind_PIONNH],rect,Poi[i][j].x,Poi[i][j].y);
                         }
@@ -83,12 +81,10 @@ void display(piece **A,SDL_Renderer* render,SDL_Rect *rect,Point **Poi,SDL_Windo
                     {
                         if(A[i][j].color == BLANCHE) // BLANCHE
                         {
-                            //texture=CreateTexture(DAMEBH,render);
                             SDL_ChargementTexture(window,render,F[ind_DAMEBH],rect);
                             SDL_AfficherTexture(window,render,F[ind_DAMEBH],rect,Poi[i][j].x,Poi[i][j].y);
                         }else if(A[i][j].color == NOIRE) // NOIRE
                         {
-                            //texture=CreateTexture(DAMENH,render);
                             SDL_ChargementTexture(window,render,F[ind_DAMENH],rect);
                             SDL_AfficherTexture(window,render,F[ind_DAMENH],rect,Poi[i][j].x,Poi[i][j].y);
                         }
@@ -100,12 +96,11 @@ void display(piece **A,SDL_Renderer* render,SDL_Rect *rect,Point **Poi,SDL_Windo
                     {
                         if(A[i][j].color == BLANCHE) //BLANCHE
                         {
-                            //texture=CreateTexture(PIONBV,render);
                             SDL_ChargementTexture(window,render,F[ind_PIONBV],rect);
                             SDL_AfficherTexture(window,render,F[ind_PIONBV],rect,Poi[i][j].x,Poi[i][j].y);
-                        }else if(A[i][j].color == NOIRE) // NOIRE
+                        }
+                        else if(A[i][j].color == NOIRE) // NOIRE
                         {
-                            //texture=CreateTexture(PIONNV,render);
                             SDL_ChargementTexture(window,render,F[ind_PIONNV],rect);
                             SDL_AfficherTexture(window,render,F[ind_PIONNV],rect,Poi[i][j].x,Poi[i][j].y);
                         }
@@ -114,12 +109,11 @@ void display(piece **A,SDL_Renderer* render,SDL_Rect *rect,Point **Poi,SDL_Windo
                     {
                         if(A[i][j].color == BLANCHE) // BLANCHE
                         {
-                            //texture=CreateTexture(DAMEBV,render);
                             SDL_ChargementTexture(window,render,F[ind_DAMEBV],rect);
                             SDL_AfficherTexture(window,render,F[ind_DAMEBV],rect,Poi[i][j].x,Poi[i][j].y);
-                        }else if(A[i][j].color == NOIRE) // NOIRE
+                        }
+                        else if(A[i][j].color == NOIRE) // NOIRE
                         {
-                            //texture=CreateTexture(DAMENV,render);
                             SDL_ChargementTexture(window,render,F[ind_DAMENV],rect);
                             SDL_AfficherTexture(window,render,F[ind_DAMENV],rect,Poi[i][j].x,Poi[i][j].y);
                         }
@@ -131,12 +125,10 @@ void display(piece **A,SDL_Renderer* render,SDL_Rect *rect,Point **Poi,SDL_Windo
                     {
                         if(A[i][j].color == BLANCHE) //BLANCHE
                         {
-                            //texture=CreateTexture(ROIB,render);
                             SDL_ChargementTexture(window,render,F[ind_ROIB],rect);
                             SDL_AfficherTexture(window,render,F[ind_ROIB],rect,Poi[i][j].x,Poi[i][j].y);
                         }else if(A[i][j].color == NOIRE) // NOIRE
                         {
-                            //texture=CreateTexture(ROIN,render);
                             SDL_ChargementTexture(window,render,F[ind_ROIN],rect);
                             SDL_AfficherTexture(window,render,F[ind_ROIN],rect,Poi[i][j].x,Poi[i][j].y);
                         }
@@ -144,8 +136,6 @@ void display(piece **A,SDL_Renderer* render,SDL_Rect *rect,Point **Poi,SDL_Windo
                 }
 
             }
-
-
         }
     }
 }

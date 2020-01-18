@@ -11,5 +11,6 @@ void RemplirTab(piece **,int,position **); // remplit le tableau avec les pieces
 void RemplirPoint(Point **); //remplit le tableau avec les intervalles de pixels qui correspondent aux cases du plateau de jeu
 char * SavoirLocationX(int ); //convertit la position pixel en position "A4, AV1" pour les x
 char * SavoirLocationY(int ); // même chose pour les y
+void InitialiseTableauTexture(SDL_Texture **,SDL_Renderer *); // initialise le tableau F avec les textures des pièces
 
 #endif
