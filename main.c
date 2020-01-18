@@ -8,14 +8,13 @@
 #include "checks.h"
 #include "tools.h"
 #include "graphic.h"
+#include "board.h"
 
 
 
 int played;
 int main( int argc, char * argv[] )
 {
-
-    int lost_player;
     int move_initialized=0; // si le mouvement est initialisé (1) ou non (0)
     int couleur=BLANCHE; //les blancs commencent
     int k=1; // 1 : tour du blanc, 0 : tour du joueur noir
@@ -24,7 +23,7 @@ int main( int argc, char * argv[] )
 
     Point **Poi = (Point **) malloc(DIM_PLAT*sizeof(Point *)); // tableau d'intervalles de pixels
     piece **A=(piece **) malloc(DIM_PLAT*sizeof(piece *)); // tableau qui représente le plateau de jeu
-    position *Tab = (position *) malloc(SIZE_TAB*sizeof(position));; // tableau de positions qui va contenir 
+    position *Tab = (position *) malloc(SIZE_TAB*sizeof(position));; // tableau de positions qui va contenir
 
     // allocation de memoire pour les sous-tableaux
 
@@ -71,8 +70,10 @@ int main( int argc, char * argv[] )
     ///------------------- Gestion des evenements ----------------/
 
     SDL_bool program_launched = SDL_TRUE;
-    int start = 1; // 1 pour page menu 0 pour le jeu
+    int start = 1; // 1 pour page menu 0 pour le jeu -1 else
     int credits = 0; // 1 si l'user dans la page credit 0 sinon
+    int win = 0; // si l'user dans la page de WIN 1 oui / 0 non
+    int lost_player;
     movement *moves=(movement *) malloc(sizeof(movement));
     piece *playedpiece=(piece *) malloc(sizeof(piece));
     while(program_launched)
@@ -124,29 +125,56 @@ int main( int argc, char * argv[] )
                         }
                         else if(start == 0)
                         {
-                            printf("(%d , %d )\n",event.button.x,event.button.y);
-                            // stocker les indices du piece a jouer apres 1er click
-                            RemplirTab(A,couleur,&Tab);
-                            play(A,Tab,moves,playedpiece,event.button,&move_initialized,couleur );
-                            if (played == 1)
+                            if(event.button.x<45 && event.button.x>-1 && event.button.y<27 && event.button.y>-1)
                             {
-                                if (k%2==1) k=0;
-                                else k=1;
-
-                                played=0;
-                                FlushTab(&Tab);
-                                couleur = (k%2==1) ? BLANCHE : NOIRE; //determination de la couleur du joueur, si k impair,tour du blanc sinon tour du noir.
-                                
+                                texture=CreateTexture(MENU,render);
+                                SDL_ChargementTexture(window,render,texture,&rect);
+                                SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
+                                start = 1;
                             }
-                            affichage(A);
-                            texture=CreateTexture(BOARD,render);
-                            SDL_ChargementTexture(window,render,texture,&rect);
-                            SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
-                            display(A,render,&rect,Poi,window,F);
-                            continue;
+                            SDL_RenderPresent(render);
+                            if(start == 0)
+                            {
+                                printf("(%d , %d )\n",event.button.x,event.button.y);
+                                // stocker les indices du piece a jouer apres 1er click
+                                RemplirTab(A,couleur,&Tab);
+                                play(A,Tab,moves,playedpiece,event.button,&move_initialized,couleur );
+                                if (played == 1)
+                                {
+                                    if (k%2==1) k=0;
+                                    else k=1;
+
+                                    played=0;
+                                    FlushTab(&Tab);
+                                    couleur = (k%2==1) ? BLANCHE : NOIRE; //determination de la couleur du joueur, si k impair,tour du blanc sinon tour du noir.
+
+                                }
+                                affichage(A);
+                                texture=CreateTexture(BOARD,render);
+                                SDL_ChargementTexture(window,render,texture,&rect);
+                                SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
+                                display(A,render,&rect,Poi,window,F);
+                                continue;
+                            }
+
                         }
-
-
+                        else if(start == -1)
+                        {
+                            if(win == 1)
+                            {
+                                if(event.button.x<121 && event.button.x>-1 && event.button.y<87 && event.button.y>-1)
+                                {
+                                    initialplateau(A);
+                                    texture=CreateTexture(BOARD,render);
+                                    SDL_ChargementTexture(window,render,texture,&rect);
+                                    SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
+                                    display(A,render,&rect,Poi,window,F);
+                                    start = 0;
+                                    win = 0;
+                                }
+                            }
+                        }
+                    SDL_RenderPresent(render);
                     }
                 case SDL_KEYDOWN :
                     switch(event.key.keysym.sym)
@@ -167,6 +195,29 @@ int main( int argc, char * argv[] )
 
             }
             SDL_RenderPresent(render);//mise a jour de rendu
+            if(CheckMat(A,&lost_player) == 0)
+            {
+                int winner = (lost_player == NOIRE) ? BLANCHE : NOIRE; //on récupère la couleur du joueur
+                switch(winner)
+                {
+                    case NOIRE:
+                        texture=CreateTexture("images/Black_win.bmp",render);
+                        SDL_ChargementTexture(window,render,texture,&rect);
+                        SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
+                        win = 1;
+                        start = -1;
+                        SDL_RenderPresent(render);//mise a jour de rendu
+                        break;
+                    case BLANCHE:
+                    texture=CreateTexture("images/White_win.bmp",render);
+                    SDL_ChargementTexture(window,render,texture,&rect);
+                    SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
+                    win = 1;
+                    start = -1;
+                    SDL_RenderPresent(render);//mise a jour de rendu
+                    break;
+                }
+            }
         }
     }
     //------------------ Fermeture ----------------/
