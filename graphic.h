@@ -1,0 +1,41 @@
+#ifndef GRAPHIC_H_INCLUDED
+#define GRAPHIC_H_INCLUDED
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <SDL.h>
+#include <strings.h>
+#include "moves.h"
+#include "checks.h"
+#include "tools.h"
+
+#define BOARD "images/Board.bmp"
+#define DAMEBV "images/DameB.bmp"
+#define DAMEBH "images/Dame2B.bmp"
+#define PIONBV "images/PionB.bmp"
+#define PIONBH "images/Pion2B.bmp"
+#define ROIB   "images/RoiB.bmp"
+#define DAMENV "images/Dame.bmp"
+#define DAMENH "images/Dame2.bmp"
+#define PIONNV "images/Pion.bmp"
+#define PIONNH "images/Pion2.bmp"
+#define ROIN   "images/Roi.bmp"
+#define MENU   "images/belltricker_menu.bmp"
+#define CREDITS   "images/Credits.bmp"
+
+#define LARG_FENETRE 648
+#define HAUT_FENETRE 648
+
+typedef struct Point {
+    int x;
+    int y;
+} Point;
+
+
+void SDL_DestroywindowEtrender(SDL_Window *,SDL_Renderer *);
+void SDL_ExitErreur(char * );
+SDL_Texture * CreateTexture(const char * ,SDL_Renderer *);
+void SDL_ChargementTexture(SDL_Window * ,SDL_Renderer*  ,SDL_Texture * ,SDL_Rect *);
+void SDL_AfficherTexture(SDL_Window * ,SDL_Renderer*  ,SDL_Texture * ,SDL_Rect *,int ,int );
+
+#endif

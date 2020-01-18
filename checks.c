@@ -204,7 +204,7 @@ int checkKing(movement moves,piece playedpiece,piece **A)
 }
 
 
-int isLegalMove(piece **A,movement moves, piece playedpiece) 
+int isLegalMove(piece **A,movement moves, piece playedpiece)
 {
     int i=moves.finalmove.line,j=moves.finalmove.column;
     if(playedpiece.type == PION)
@@ -223,7 +223,7 @@ int isLegalMove(piece **A,movement moves, piece playedpiece)
                     if((j == moves.initialmove.column)
                     && (i-moves.initialmove.line == 2 || i-moves.initialmove.line == 4))
                     {
-                        for (int k = moves.initialmove.line+1;k<=i;k++) 
+                        for (int k = moves.initialmove.line+1;k<=i;k++)
                         {
                             if (A[k][j].type != VIDE) return 0;
                         }
@@ -273,12 +273,12 @@ int isLegalMove(piece **A,movement moves, piece playedpiece)
                 {
                     if((j == moves.initialmove.column)
                     && (i-moves.initialmove.line == -2 || i-moves.initialmove.line == -4))
-                    { 
-                        for (int k = moves.initialmove.line-1;k>=i;k--) 
+                    {
+                        for (int k = moves.initialmove.line-1;k>=i;k--)
                         {
                             if (A[k][j].type != VIDE) return 0;
                         }
-                        
+
                         return 1;
                     }
                 }
@@ -769,7 +769,7 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                         }
                         for (int k=i;k<14;k+=2)
                         {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
-                            if (A[k][j].color == BLANCHE 
+                            if (A[k][j].color == BLANCHE
                                 ||(A[k][j].color == NOIRE && A[k+2][j].type != VIDE) ) break;
                             if (A[k][j].color == NOIRE && A[k+2][j].type == VIDE) return 0;
                         }
