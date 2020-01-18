@@ -206,7 +206,7 @@ int checkKing(movement moves,piece playedpiece,piece **A)
 }
 
 
-int isLegalMove(piece **A,movement moves, piece playedpiece)
+int isLegalMove(piece **A,movement moves, piece playedpiece) 
 {
     int i=moves.finalmove.line,j=moves.finalmove.column;
     if(playedpiece.type == PION)
@@ -225,7 +225,7 @@ int isLegalMove(piece **A,movement moves, piece playedpiece)
                     if((j == moves.initialmove.column)
                     && (i-moves.initialmove.line == 2 || i-moves.initialmove.line == 4))
                     {
-                        for (int k = moves.initialmove.line+1;k<=i;k++)
+                        for (int k = moves.initialmove.line+1;k<=i;k++) 
                         {
                             if (A[k][j].type != VIDE) return 0;
                         }
@@ -275,12 +275,12 @@ int isLegalMove(piece **A,movement moves, piece playedpiece)
                 {
                     if((j == moves.initialmove.column)
                     && (i-moves.initialmove.line == -2 || i-moves.initialmove.line == -4))
-                    {
-                        for (int k = moves.initialmove.line-1;k>=i;k--)
+                    { 
+                        for (int k = moves.initialmove.line-1;k>=i;k--) 
                         {
                             if (A[k][j].type != VIDE) return 0;
                         }
-
+                        
                         return 1;
                     }
                 }
@@ -513,7 +513,8 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                     if(A[moves.initialmove.line+1][j].type == VIDE
                        && A[moves.initialmove.line+2][j].color == BLANCHE
                        && A[moves.initialmove.line+3][j].type == VIDE
-                       && A[i][j].type == VIDE && (A[i+1][j].type != VIDE || A[i+2][j].type == VIDE || i+1>=15 || i+2>=15) )
+                       && A[i][j].type == VIDE 
+                       && (A[i+1][j].type != VIDE || A[i+2][j].type == VIDE || i+1>=15 || i+2>=15) )
                     {
                         return 1;
                     }
@@ -521,15 +522,16 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                 }
                 else if(i - moves.initialmove.line == 8)
                 { // cas de double EatMove
-                        // tester les différent cases royales et l'existance de 2 piences d'adversaice pour faire une double eatmove
+                        // tester les différent cases royales et l'existance de 2 pieces d'adversaice pour faire une double eatmove
                     if(A[moves.initialmove.line+1][j].type == VIDE
                        && A[moves.initialmove.line+2][j].color == BLANCHE
                        && A[moves.initialmove.line+3][j].type == VIDE
                        && A[moves.initialmove.line+4][j].type == VIDE
                        && A[moves.initialmove.line+5][j].type == VIDE
-                       && A[moves.initialmove.line+6][j].type == BLANCHE
+                       && A[moves.initialmove.line+6][j].color == BLANCHE
                        && A[moves.initialmove.line+7][j].type == VIDE
-                       && A[i][j].type == VIDE && i<15 && (A[i+1][j].type != VIDE || A[i+2][j].type == VIDE || i+1>=15 || i+2>=15))
+                       && A[i][j].type == VIDE
+                       && (A[i+1][j].type != VIDE || A[i+2][j].type == VIDE || i+1>=15 || i+2>=15))
                     {
                        return 1;
                     }
@@ -543,11 +545,11 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                        && A[moves.initialmove.line+3][j].type == VIDE
                        && A[moves.initialmove.line+4][j].type == VIDE
                        && A[moves.initialmove.line+5][j].type == VIDE
-                       && A[moves.initialmove.line+6][j].type == BLANCHE
+                       && A[moves.initialmove.line+6][j].color == BLANCHE
                        && A[moves.initialmove.line+7][j].type == VIDE
                        && A[moves.initialmove.line+8][j].type == VIDE
                        && A[moves.initialmove.line+9][j].type == VIDE
-                       && A[moves.initialmove.line+10][j].type == BLANCHE
+                       && A[moves.initialmove.line+10][j].color == BLANCHE
                        && A[moves.initialmove.line+11][j].type == VIDE
                        && A[moves.initialmove.line+12][j].type == VIDE)
                     {
@@ -581,7 +583,7 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                        && A[moves.initialmove.line-3][j].type == VIDE
                        && A[moves.initialmove.line-4][j].type == VIDE
                        && A[moves.initialmove.line-5][j].type == VIDE
-                       && A[moves.initialmove.line-6][j].type == NOIRE
+                       && A[moves.initialmove.line-6][j].color == NOIRE
                        && A[moves.initialmove.line-7][j].type == VIDE
                        && A[i][j].type == VIDE
                        && (A[i-1][j].type != VIDE || A[i-2][j].type == VIDE ))
@@ -597,11 +599,11 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                             && A[moves.initialmove.line-3][j].type == VIDE
                             && A[moves.initialmove.line-4][j].type == VIDE
                             && A[moves.initialmove.line-5][j].type == VIDE
-                            && A[moves.initialmove.line-6][j].type == NOIRE
+                            && A[moves.initialmove.line-6][j].color == NOIRE
                             && A[moves.initialmove.line-7][j].type == VIDE
                             && A[moves.initialmove.line-8][j].type == VIDE
                             && A[moves.initialmove.line-9][j].type == VIDE
-                            && A[moves.initialmove.line-10][j].type == NOIRE
+                            && A[moves.initialmove.line-10][j].color == NOIRE
                             && A[moves.initialmove.line-11][j].type == VIDE
                             && A[moves.initialmove.line-12][j].type == VIDE)
                         {
@@ -771,7 +773,7 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                         }
                         for (int k=i;k<14;k+=2)
                         {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
-                            if (A[k][j].color == BLANCHE
+                            if (A[k][j].color == BLANCHE 
                                 ||(A[k][j].color == NOIRE && A[k+2][j].type != VIDE) ) break;
                             if (A[k][j].color == NOIRE && A[k+2][j].type == VIDE) return 0;
                         }
@@ -1042,11 +1044,12 @@ int CheckMat(piece ** A,int *lost_player)
                 if(A[i][j+1].type != VIDE && A[i][j-1].type != VIDE
                    && A[i+1][j].type != VIDE && A[i-1][j].type != VIDE)// tester si il ya 4 piece autour du roi
                 {
-                    if((A[i][j+1].color != A[i][j-1].color) || (A[i][j+1].color != A[i+1][j].color)
-                       || (A[i][j+1].color != A[i-1][j].color)) //teser si une des pieces a des couleurs différents
+                    if((A[i][j+1].color != A[i][j-1].color) 
+                    || (A[i][j+1].color != A[i+1][j].color)
+                    || (A[i][j+1].color != A[i-1][j].color)) //tester si une des pieces a des couleurs différents
                     {
-                        return 0;
                         *lost_player=A[i][j].color; // on récupère la couleur du joueur qui a été MAT.
+                        return 0;
                     }
                 }
             }

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+
 #include "moves.h"
 #include "tools.h"
 #include "graphic.h"
@@ -73,7 +74,8 @@ void RemplirPoint(Point **P)
 {
     P[1][0].x = 47;
     P[1][0].y = 67;
-    for(int j=2 ; j<15 ; j+=2){
+    for(int j=2 ; j<15 ; j+=2)
+    {
             P[1][j].x =  P[1][j-2].x + 77;
             P[1][j].y = 67;
     }
@@ -91,7 +93,8 @@ void RemplirPoint(Point **P)
 
     P[0][1].x = 67;
     P[0][1].y = 47;
-    for(int j=3 ; j<15 ; j+=2){
+    for(int j=3 ; j<15 ; j+=2)
+    {
             P[0][j].x =  P[0][j-2].x + 77;
             P[0][j].y = 47;
     }
@@ -104,12 +107,11 @@ void RemplirPoint(Point **P)
             P[i][j].x = P[i][j-2].x + 77;
             P[i][j].y = P[i][1].y;
         }
-
     }
-
     P[1][1].x = 77;
     P[1][1].y = 77;
-    for(int j=3 ; j<15 ; j+=2){
+    for(int j=3 ; j<15 ; j+=2)
+    {
             P[1][j].x =  P[1][j-2].x + 77;
             P[1][j].y = 77;
     }
