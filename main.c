@@ -8,13 +8,13 @@
 #include "checks.h"
 #include "tools.h"
 #include "graphic.h"
-#include "board.h"
 
 
 
 int played;
 int main( int argc, char * argv[] )
 {
+    int lost_player; //contient la couleur du joueur qui a perdu
     int move_initialized=0; // si le mouvement est initialisé (1) ou non (0)
     int couleur=BLANCHE; //les blancs commencent
     int k=1; // 1 : tour du blanc, 0 : tour du joueur noir
@@ -58,6 +58,7 @@ int main( int argc, char * argv[] )
         SDL_ExitErreur("Creation du renderer");
     }
     // affichage de menu
+
     texture=CreateTexture(MENU,render);
     SDL_ChargementTexture(window,render,texture,&rect);
     SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
@@ -73,9 +74,10 @@ int main( int argc, char * argv[] )
     int start = 1; // 1 pour page menu 0 pour le jeu -1 else
     int credits = 0; // 1 si l'user dans la page credit 0 sinon
     int win = 0; // si l'user dans la page de WIN 1 oui / 0 non
-    int lost_player;
+
     movement *moves=(movement *) malloc(sizeof(movement));
     piece *playedpiece=(piece *) malloc(sizeof(piece));
+
     while(program_launched)
     {
         SDL_Event event;
@@ -159,6 +161,7 @@ int main( int argc, char * argv[] )
                                 texture=CreateTexture(BOARD,render);
                                 SDL_ChargementTexture(window,render,texture,&rect);
                                 SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
+
                                 display(A,render,&rect,Poi,window,F);
                                 continue;
                             }
@@ -207,7 +210,7 @@ int main( int argc, char * argv[] )
                 switch(winner)
                 {
                     case NOIRE:
-                        texture=CreateTexture("images/Black_win.bmp",render);
+                        texture=CreateTexture(BLACK_WIN,render);
                         SDL_ChargementTexture(window,render,texture,&rect);
                         SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
                         win = 1;
@@ -215,13 +218,13 @@ int main( int argc, char * argv[] )
                         SDL_RenderPresent(render);//mise a jour de rendu
                         break;
                     case BLANCHE:
-                    texture=CreateTexture("images/White_win.bmp",render);
-                    SDL_ChargementTexture(window,render,texture,&rect);
-                    SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
-                    win = 1;
-                    start = -1;
-                    SDL_RenderPresent(render);//mise a jour de rendu
-                    break;
+                        texture=CreateTexture(WHITE_WIN,render);
+                        SDL_ChargementTexture(window,render,texture,&rect);
+                        SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
+                        win = 1;
+                        start = -1;
+                        SDL_RenderPresent(render);//mise a jour de rendu
+                        break;
                 }
             }
         }
