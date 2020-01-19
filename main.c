@@ -91,6 +91,10 @@ int main( int argc, char * argv[] )
 
                         if(start == 1)
                         {
+                            if(event.button.x<520 && event.button.x>150 && event.button.y<410 && event.button.y>325)
+                            {
+                                // charger partie
+                            }
 
                             if(event.button.x<495 && event.button.x>126 && event.button.y<300 && event.button.y>215)
                             {
