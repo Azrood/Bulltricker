@@ -207,6 +207,7 @@ int main( int argc, char * argv[] )
             if(CheckMat(A,&lost_player) == 0)
             {
                 int winner = (lost_player == NOIRE) ? BLANCHE : NOIRE; //on récupère la couleur du joueur
+                SDL_Delay(500); // Pour avoir un peu de temps pour voir le roi être mat avant d'afficher l'image de victoire
                 switch(winner)
                 {
                     case NOIRE:
