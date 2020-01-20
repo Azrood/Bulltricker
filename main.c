@@ -77,7 +77,8 @@ int main( int argc, char * argv[] )
 
     movement *moves=(movement *) malloc(sizeof(movement));
     piece *playedpiece=(piece *) malloc(sizeof(piece));
-
+    SDL_Surface *icon = SDL_LoadBMP(ICON);
+    SDL_SetWindowIcon(window,icon);
     while(program_launched)
     {
         SDL_Event event;
@@ -139,9 +140,24 @@ int main( int argc, char * argv[] )
                                 SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
                                 start = 1;
                             }
-                            if(event.button.x<89 && event.button.x>57 && event.button.y<33 && event.button.y>-1)
+                            if(event.button.x<89 && event.button.x>57 && event.button.y<33 && event.button.y>1)
                             {
                                 // user clic sur sauvgarder
+                                printf("sauvgarder");
+
+                            }
+                            if(event.button.x<148 && event.button.x>115 && event.button.y<35 && event.button.y>5)
+                            {
+                                // user clic sur replay
+                                initialplateau(A);
+                                texture=CreateTexture(BOARD,render);
+                                SDL_ChargementTexture(window,render,texture,&rect);
+                                SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
+                                couleur=BLANCHE;
+                                display(A,render,&rect,Poi,window,F);
+                                SDL_RenderPresent(render);
+                                continue;
+
 
                             }
                             SDL_RenderPresent(render);
