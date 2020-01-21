@@ -206,7 +206,7 @@ int checkKing(movement moves,piece playedpiece,piece **A)
 }
 
 
-int isLegalMove(piece **A,movement moves, piece playedpiece) 
+int isLegalMove(piece **A,movement moves, piece playedpiece)
 {
     int i=moves.finalmove.line,j=moves.finalmove.column;
     if(playedpiece.type == PION)
@@ -225,7 +225,7 @@ int isLegalMove(piece **A,movement moves, piece playedpiece)
                     if((j == moves.initialmove.column)
                     && (i-moves.initialmove.line == 2 || i-moves.initialmove.line == 4))
                     {
-                        for (int k = moves.initialmove.line+1;k<=i;k++) 
+                        for (int k = moves.initialmove.line+1;k<=i;k++)
                         {
                             if (A[k][j].type != VIDE) return 0;
                         }
@@ -275,12 +275,12 @@ int isLegalMove(piece **A,movement moves, piece playedpiece)
                 {
                     if((j == moves.initialmove.column)
                     && (i-moves.initialmove.line == -2 || i-moves.initialmove.line == -4))
-                    { 
-                        for (int k = moves.initialmove.line-1;k>=i;k--) 
+                    {
+                        for (int k = moves.initialmove.line-1;k>=i;k--)
                         {
                             if (A[k][j].type != VIDE) return 0;
                         }
-                        
+
                         return 1;
                     }
                 }
@@ -323,7 +323,8 @@ int isLegalMove(piece **A,movement moves, piece playedpiece)
     else if (playedpiece.type == DAME) // cas d'une dame
     {
         if(isDefaultMove(playedpiece,moves) == 1)
-        {   if (A[i][j].type != VIDE) return 0;
+        {
+            if (A[i][j].type != VIDE) return 0;
             if(moves.initialmove.column % 2 == 0 && j==moves.initialmove.column)//mouvement colonnes verticale
             {
                 if(i > moves.initialmove.line) // cas mouvement descendant
@@ -348,7 +349,7 @@ int isLegalMove(piece **A,movement moves, piece playedpiece)
             {
                 if(i > moves.initialmove.line) // cas mouvement descendant
                 {
-                    for(int k=moves.initialmove.line+1 ; k<i-1 ;k+=2)
+                    for(int k=moves.initialmove.line+1 ; k<=i-1 ;k+=2)
                     {
                         if(A[k][j].type != VIDE) return 0; //tester si toutes les cases royales sont vides
                     }
@@ -356,7 +357,7 @@ int isLegalMove(piece **A,movement moves, piece playedpiece)
                 }
                 else if(i < moves.initialmove.line)// cas mouvement ascendant
                 {
-                    for(int k=moves.initialmove.line-1 ; k>i+1 ;k-=2)
+                    for(int k=moves.initialmove.line-1 ; k>=i+1 ;k-=2)
                     {
                         if(A[k][j].type != VIDE) return 0; //tester si toutes les cases royales sont vides
                     }
@@ -388,7 +389,7 @@ int isLegalMove(piece **A,movement moves, piece playedpiece)
             {
                 if(j > moves.initialmove.column) // cas mouvement à droite
                 {
-                    for(int k=moves.initialmove.column+1 ; k<j-1 ; k+=2)// tester si toutes les cases royales sont vides
+                    for(int k=moves.initialmove.column+1 ; k<=j-1 ; k+=2)// tester si toutes les cases royales sont vides
                     {
                         if(A[i][k].type != VIDE) return 0;
                     }
@@ -396,7 +397,7 @@ int isLegalMove(piece **A,movement moves, piece playedpiece)
                 }
                 else if(j < moves.initialmove.column)// cas mouvement à gauche
                 {
-                    for(int k=moves.initialmove.column-1 ; k>j+1 ; k-=2)// tester si toutes les cases royales sont vides
+                    for(int k=moves.initialmove.column-1 ; k>=j+1 ; k-=2)// tester si toutes les cases royales sont vides
                     {
                         if(A[i][k].type != VIDE) return 0;
                     }
@@ -513,7 +514,7 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                     if(A[moves.initialmove.line+1][j].type == VIDE
                        && A[moves.initialmove.line+2][j].color == BLANCHE
                        && A[moves.initialmove.line+3][j].type == VIDE
-                       && A[i][j].type == VIDE 
+                       && A[i][j].type == VIDE
                        && (A[i+1][j].type != VIDE || A[i+2][j].type == VIDE || i+1>=15 || i+2>=15) )
                     {
                         return 1;
@@ -633,13 +634,19 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                             {                                           // et pas de noir sur le chemin.
                                 return 0;
                             }
-
                         }
-                        for (int k=j;k<14;k+=2)
+                        for (int k=j+1;k<14;k+=4)
                         {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
-                            if (A[i][k].color == NOIRE
-                                ||(A[i][k].color == BLANCHE && A[i][k+2].type != VIDE)) break;
-                            if (A[i][k].color == BLANCHE && A[i][k+2].type == VIDE) return 0;
+                            if (A[i][k+1].color == NOIRE
+                                || A[i][k].type != VIDE
+                                ||(A[i][k+1].color == BLANCHE //on trouve une pièce de couleur opposée
+                                    && (A[i][k+2].type != VIDE //et la case royale qui la suit est occupé 
+                                        || A[i][k+3].type != VIDE))) break;// ou le rectangle suivant est occupé
+                                    
+                            if (A[i][k].type ==VIDE 
+                                && A[i][k+1].color== BLANCHE 
+                                && A[i][k+2].type == VIDE
+                                && A[i][k+3].type == VIDE) return 0;
                         }
                         return 1;
 
@@ -655,11 +662,19 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                             }
 
                         }
-                        for (int k=j;k>0;k-=2)
-                        {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
-                            if (A[i][k].color == NOIRE
-                                ||(A[i][k].color == BLANCHE && A[i][k-2].type != VIDE)) break;
-                            if (A[i][k].color == BLANCHE && A[i][k-2].type == VIDE) return 0;
+                        for (int k=j-1;k>0;k-=4)
+                        {   
+                            //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
+                            if (A[i][k-1].color == NOIRE
+                                || A[i][k].type != VIDE
+                                ||(A[i][k-1].color == BLANCHE //on trouve une pièce de couleur opposée
+                                    && (A[i][k-2].type != VIDE //et la case royale qui la suit est occupé 
+                                        || A[i][k-3].type != VIDE))) break;// ou le rectangle suivant est occupé
+                                    
+                            if (A[i][k].type ==VIDE 
+                                && A[i][k-1].color== BLANCHE 
+                                && A[i][k-2].type == VIDE
+                                && A[i][k-3].type == VIDE) return 0;
                         }
                         return 1;
 
@@ -679,11 +694,18 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                             }
 
                         }
-                        for (int k=i;k<14;k+=2)
+                        for (int k=i+1;k<14;k+=4)
                         {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
-                            if (A[k][j].color == NOIRE
-                                ||(A[k][j].color == BLANCHE && A[k+2][j].type != VIDE)) break;
-                            if (A[k][j].color == BLANCHE && A[k+2][j].type == VIDE) return 0;
+                            if (A[k+1][j].color == NOIRE
+                                || A[k][j].type != VIDE
+                                ||(A[k+1][j].color == BLANCHE //on trouve une pièce de couleur opposée
+                                    && (A[k+2][j].type != VIDE //et la case royale qui la suit est occupé 
+                                        || A[k+3][j].type != VIDE))) break;// ou le rectangle suivant est occupé
+                                    
+                            if (A[k][j].type ==VIDE 
+                                && A[k+1][j].color== BLANCHE 
+                                && A[k+2][j].type == VIDE
+                                && A[k+3][j].type == VIDE) return 0;
                         }
                         return 1;
 
@@ -699,11 +721,20 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                             }
 
                         }
-                        for (int k=i;k>0;k-=2)
-                        {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
-                            if (A[k][j].color == NOIRE
-                                ||(A[k][j].color == BLANCHE && A[k-2][j].type != VIDE)) break;
-                            if (A[k][j].color == BLANCHE && A[k-2][j].type == VIDE) return 0;
+                        for (int k=i-1;k>0;k-=4)
+                        {   
+                            //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
+                            if (A[k-1][j].color == NOIRE
+                                || A[k][j].type != VIDE
+                                ||(A[k-1][j].color == BLANCHE //on trouve une pièce de couleur opposée
+                                    && (A[k-2][j].type != VIDE //et la case royale qui la suit est occupé 
+                                        || A[k-3][j].type != VIDE))) break;// ou le rectangle suivant est occupé
+                                    
+                            if (A[k][j].type ==VIDE 
+                                && A[k-1][j].color== BLANCHE 
+                                && A[k-2][j].type == VIDE
+                                && A[k-3][j].type == VIDE) return 0;
+
                         }
                         return 1;
 
@@ -727,11 +758,19 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                             }
 
                         }
-                        for (int k=j;k<14;k+=2)
+                        for (int k=j+1;k<14;k+=4)
                         {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
-                            if (A[i][k].color == BLANCHE
-                            ||(A[i][k].color == NOIRE && A[i][k+2].type != VIDE)) break;
-                            if (A[i][k].color == NOIRE && A[i][k+2].type == VIDE) return 0;
+                            if (A[i][k+1].color == BLANCHE
+                                || A[i][k].type != VIDE
+                                ||(A[i][k+1].color == NOIRE //on trouve une pièce de couleur opposée
+                                    && (A[i][k+2].type != VIDE //et la case royale qui la suit est occupé 
+                                        || A[i][k+3].type != VIDE))) break;// ou le rectangle suivant est occupé
+                                    
+                            if (A[i][k].type ==VIDE 
+                                && A[i][k+1].color== NOIRE
+                                && A[i][k+2].type == VIDE
+                                && A[i][k+3].type == VIDE) return 0;
+
                         }
                         return 1;
 
@@ -747,11 +786,18 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                             }
 
                         }
-                        for (int k=j;k>0;k-=2)
+                        for (int k=j-1;k>0;k-=4)
                         {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
-                            if (A[i][k].color == BLANCHE
-                            ||(A[i][k].color == NOIRE && A[i][k-2].type != VIDE)) break;
-                            if (A[i][k].color == NOIRE && A[i][k-2].type == VIDE) return 0;
+                            if (A[i][k-1].color == BLANCHE
+                                || A[i][k].type != VIDE
+                                ||(A[i][k-1].color == NOIRE //on trouve une pièce de couleur opposée
+                                    && (A[i][k-2].type != VIDE //et la case royale qui la suit est occupé 
+                                        || A[i][k-3].type != VIDE))) break;// ou le rectangle suivant est occupé
+                                    
+                            if (A[i][k].type ==VIDE 
+                                && A[i][k-1].color== NOIRE
+                                && A[i][k-2].type == VIDE
+                                && A[i][k-3].type == VIDE) return 0;
                         }
                         return 1;
 
@@ -771,11 +817,18 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                             }
 
                         }
-                        for (int k=i;k<14;k+=2)
+                        for (int k=i+1;k<14;k+=4)
                         {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
-                            if (A[k][j].color == BLANCHE 
-                                ||(A[k][j].color == NOIRE && A[k+2][j].type != VIDE) ) break;
-                            if (A[k][j].color == NOIRE && A[k+2][j].type == VIDE) return 0;
+                            if (A[k+1][j].color == BLANCHE
+                                || A[k][j].type != VIDE
+                                ||(A[k+1][j].color == NOIRE //on trouve une pièce de couleur opposée
+                                    && (A[k+2][j].type != VIDE //et la case royale qui la suit est occupé 
+                                        || A[k+3][j].type != VIDE))) break;// ou le rectangle suivant est occupé
+                                    
+                            if (A[k][j].type ==VIDE 
+                                && A[k+1][j].color== NOIRE
+                                && A[k+2][j].type == VIDE
+                                && A[k+3][j].type == VIDE) return 0;
                         }
                         return 1;
 
@@ -791,11 +844,18 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                             }
 
                         }
-                        for (int k=i;k>=2;k-=2)
+                        for (int k=i-1;k>=2;k-=4)
                         {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
-                            if (A[k][j].color == BLANCHE
-                                ||(A[k][j].color == NOIRE && A[k-2][j].type != VIDE)) break;
-                            if (A[k][j].color == NOIRE && A[k-2][j].type == VIDE) return 0;
+                            if (A[k-1][j].color == BLANCHE
+                                || A[k][j].type != VIDE
+                                ||(A[k-1][j].color == NOIRE //on trouve une pièce de couleur opposée
+                                    && (A[k-2][j].type != VIDE //et la case royale qui la suit est occupé 
+                                        || A[k-3][j].type != VIDE))) break;// ou le rectangle suivant est occupé
+                                    
+                            if (A[k][j].type ==VIDE 
+                                && A[k-1][j].color== NOIRE
+                                && A[k-2][j].type == VIDE
+                                && A[k-3][j].type == VIDE) return 0;
                         }
                         return 1;
 
@@ -1044,7 +1104,7 @@ int CheckMat(piece ** A,int *lost_player)
                 if(A[i][j+1].type != VIDE && A[i][j-1].type != VIDE
                    && A[i+1][j].type != VIDE && A[i-1][j].type != VIDE)// tester si il ya 4 piece autour du roi
                 {
-                    if((A[i][j+1].color != A[i][j-1].color) 
+                    if((A[i][j+1].color != A[i][j-1].color)
                     || (A[i][j+1].color != A[i+1][j].color)
                     || (A[i][j+1].color != A[i-1][j].color)) //tester si une des pieces a des couleurs différents
                     {

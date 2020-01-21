@@ -9,8 +9,6 @@
 #include "tools.h"
 #include "graphic.h"
 
-
-
 int played;
 int main( int argc, char * argv[] )
 {
@@ -143,7 +141,7 @@ int main( int argc, char * argv[] )
                             if(event.button.x<89 && event.button.x>57 && event.button.y<33 && event.button.y>1)
                             {
                                 // user clic sur sauvgarder
-                                printf("sauvgarder");
+                                printf("sauvegarder");
 
                             }
                             if(event.button.x<148 && event.button.x>115 && event.button.y<35 && event.button.y>5)
@@ -255,7 +253,6 @@ int main( int argc, char * argv[] )
     SDL_DestroyRenderer(render);
     SDL_DestroyWindow(window);
     SDL_Quit();
-
-
+    
     return EXIT_SUCCESS;
 }

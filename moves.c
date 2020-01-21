@@ -44,7 +44,7 @@ position ConvertirLocation(char positionstr[])
 
 
 
-void MoveKing(piece **A,movement moves,piece king)
+void MoveKing(piece **A,movement moves,piece king,position *Tab)
 {
 
     int i=moves.finalmove.line,j=moves.finalmove.column;
@@ -54,7 +54,7 @@ void MoveKing(piece **A,movement moves,piece king)
         if (isDefaultMove(king,moves)
             && checkKing(moves,king,A)
             && checkPiece(moves,A)
-            /* TODO CompulsoryCapture(parametre)*/)
+            && CompulsoryCapture(A,Tab,moves))
         {
             A[i][j] = king;
             A[moves.initialmove.line][moves.initialmove.column].type = VIDE;
@@ -332,6 +332,6 @@ void play(piece **A,position *Tab,movement *moves,piece *playedpiece,
         moves->finalmove = ConvertirLocation(positionstr);
         if (playedpiece->type == PION) MovePion(A,*moves,*playedpiece,Tab);
         if (playedpiece->type == DAME) MoveDame(A,*moves,*playedpiece,Tab);
-        if (playedpiece->type == ROI) MoveKing(A,*moves,*playedpiece);
+        if (playedpiece->type == ROI) MoveKing(A,*moves,*playedpiece,Tab);
     }
 }
