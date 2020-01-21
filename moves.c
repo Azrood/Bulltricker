@@ -10,7 +10,7 @@
 int played;
 
 position ConvertirLocation(char positionstr[])
-{ // Cette fonction marche correctement.
+{
 /* Elle retourne une structure Position avec les attributs line et colonne)*/
     //convertis la position string "A2" ou "GV2" en position int i,j
     int param1,param2,param3;
@@ -204,93 +204,18 @@ void MoveDame(piece **A,movement moves, piece playedpiece,position *Tab)
 }
 
 
-int AbleToEat(piece **A,position pos)
-{
-    int i=pos.line,j=pos.column;
-    piece playedpiece = A[i][j];
-    movement moves;
-    moves.initialmove = pos;
-    moves.finalmove = pos; // la ligne sera changée suivant la couleur de la pièce donnée
-    if (playedpiece.type == PION)
-    {
-        // si la piece est noire, la position finale qu'on va verifier sera initial+4,+6 ou +8
-        //sinon ligne initial -4, -6 ou -8
-        //on regarde si le mouvement est un mouvement de capture, si oui, alors la piece peut capturer et on retourne 1, s'il n'y a pas de capture possible, on retourne 0.
-        for (int k=2;k<9;k+=2)
-        {
-            if (playedpiece.color == NOIRE) moves.finalmove.line = pos.line+k;
-            else moves.finalmove.line = pos.line-k;
-            if (isEatingMove(A,moves,playedpiece)==1) return 1;
-        }
-        //sinon la piece ne peut pas capturer
-        return 0;
-
-
-    }
-    else //la piece à la position i,j est une dame
-    {   // on va pas verifier la couleur, on va seulement verifier si la dame est en position verticale (donc parcours horizontal) ou horizontal (parcours vertical)
-        // ici on va parcourir pour chaque sens  si on trouve une piece de couleur differente
-        int color = (playedpiece.color == NOIRE) ? BLANCHE : NOIRE; // si la pièce donnée est noire, on va chercher si on peut capturer une blanche et vice versa
-        if (j%2==0) // la piece est verticale, donc on va faire un parcours horizontal
-        {
-            for (int p=0;p<DIM_PLAT;p+=2) // on va parcourir toute la ligne horizontale, jusqu'à trouver une position où on peut capturer, ou finir la boucle.
-            {
-                moves.finalmove.column = p;
-                if (isEatingMove(A,moves,playedpiece)==1)
-                {
-                    if (moves.finalmove.column > j) // on a trouvé un mouvement possible à droite, vérifions si on a fait une capture
-                    {
-                        for (int k=j;k<moves.finalmove.column;k+=2)
-                        {
-                            if (A[i][k].color == color) return 1;
-                        }
-                    }
-                    else // même chose mais pour la gauche
-                    {
-                        for (int k=j;k>moves.finalmove.column;k-=2)
-                        {
-                            if (A[i][k].color==color) return 1;
-                        }
-                    }
-                }
-            }
-            return 0; // on est sortis de la boucle sans faire de capture, il n'y a donc pas de capture possible
-        }
-        else // la dame est horizontal, le parcours sera fait en vertical.
-        {
-
-            for (int p=0;p<DIM_PLAT;p+=2) // on va parcourir toute la rangee verticale, jusqu'à trouver une position où on peut capturer, ou finir la boucle.
-            {
-                moves.finalmove.line = p;
-                if (isEatingMove(A,moves,playedpiece)==1)
-                {
-                    if (moves.finalmove.line > i) // on a trouvé un mouvement possible en bas, vérifions si on a fait une capture
-                    {
-                        for (int k=i;k<moves.finalmove.line;k+=2)
-                        {
-                            if (A[k][j].color == color) return 1;
-                        }
-                    }
-                    else // même chose mais pour le haut
-                    {
-                        for (int k=i;k>moves.finalmove.line;k-=2)
-                        {
-                            if (A[k][j].color==color) return 1;
-                        }
-                    }
-                }
-            }
-            return 0; //on a pas fait de capture.
-        }
-    }
-}
-
 int CompulsoryCapture(piece **A,position *Tab,movement moves)
 {
+    piece playedpiece = A[moves.initialmove.line][moves.initialmove.column];
+    int start = (moves.initialmove.line == moves.finalmove.line) ? moves.initialmove.column : moves.initialmove.line;
+    int finish = (moves.initialmove.line == moves.finalmove.line) ? moves.finalmove.column : moves.finalmove.line;
+    int delta = finish - start;
+    int opponent_color = (playedpiece.color == BLANCHE) ? NOIRE : BLANCHE;
+
     if (isEmpty(Tab)==1) return 1; // si le tableau est vide, la pièce peut bouger.
     //on va vérifier le 1er element du tableau des pièces à capture obligatoire, s'il y a une dame, on vérifie que le joueur a aussi sélectionné une dame
     //pour respecter la règle des priorités.
-    piece playedpiece = A[moves.initialmove.line][moves.initialmove.column];
+    
     if (A[Tab[0].line][Tab[0].column].type == DAME)
     {
         if (inTab(Tab,moves.initialmove)==1)
@@ -298,21 +223,61 @@ int CompulsoryCapture(piece **A,position *Tab,movement moves)
             if (playedpiece.type == DAME 
                 && isEatingMove(A,moves,A[moves.initialmove.line][moves.initialmove.column])==1
                 && ((moves.initialmove.line == moves.finalmove.line && moves.initialmove.line % 2==1)
-                    || (moves.finalmove.column == moves.initialmove.column) && moves.initialmove.column % 2==1)) return 1;
+                    || (moves.finalmove.column == moves.initialmove.column) && moves.initialmove.column % 2==1))
+            {
+                if (delta > 0) //indice croissant
+                {
+                    if (start == moves.initialmove.line) //mouvement sur rangée verticales
+                    {
+                        for (int k = start;k<finish;k+=2)
+                        {
+                            if (A[k][moves.initialmove.column].color == opponent_color) return 1;
+                        }
+                        return 0;
+                    }
+                    else // mouvement sur rangées horiztonales
+                    {
+                        for (int k = start;k<finish;k+=2)
+                        {
+                            if (A[moves.initialmove.line][k].color == opponent_color) return 1;
+                        }
+                        return 0;
+                    }
+                }
+                else
+                {
+                    if (start == moves.initialmove.line) //mouvement sur rangée verticales
+                    {
+                        for (int k = start;k>finish;k-=2)
+                        {
+                            if (A[k][moves.initialmove.column].color == opponent_color) return 1;
+                        }
+                        return 0;
+                    }
+                    else // mouvement sur rangées horiztonales
+                    {
+                        for (int k = start;k>finish;k-=2)
+                        {
+                            if (A[moves.initialmove.line][k].color == opponent_color) return 1;
+                        }
+                        return 0;
+                    }
+                } 
+            }
             else return 0;
         }
         else return 0;
     }
     else if ((inTab(Tab,moves.initialmove)==1) )
     {
-            if (isEatingMove(A,moves,A[moves.initialmove.line][moves.initialmove.column])) return 1;
-            else return 0;
+        if (isEatingMove(A,moves,A[moves.initialmove.line][moves.initialmove.column])) return 1;
+        else return 0;
     }
     return 0;
 }
 
 void play(piece **A,position *Tab,movement *moves,piece *playedpiece,
-        SDL_MouseButtonEvent button,int *move_initialized, int couleur)
+            SDL_MouseButtonEvent button,int *move_initialized, int couleur)
 {
     char positionstr[10];
     //conversion des positions x et y en position A4, BV1 etc

@@ -10,6 +10,7 @@ int isOptionalCapture(piece **,movement,piece); // vérifie si le mouvement est 
 int isDefaultMove(piece ,movement); // si le mouvement est par default possible ou non.
 int isLegalMove(piece **, movement, piece); // verifie si le mouvement est possible sur le plateau de jeu.
 int isEatingMove(piece **,movement, piece); //verifie si le mouvement est un mouvement de capture ou non.
+int AbleToEat(piece **,position); //verifie si la piece dans une position donnée peut capturer (1) ou non (0)
 
 int CheckMat(piece **,int *); // tester la fin de partie 0 oui / 1 non
 int isDraw(piece **); // tester si il y a un cas de pat 1 oui / 0 non
