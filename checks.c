@@ -635,7 +635,7 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                                 return 0;
                             }
                         }
-                        for (int k=j+1;k<14;k+=4)
+                        for (int k=j+1;k<12;k+=2)
                         {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
                             if (A[i][k+1].color == NOIRE
                                 || A[i][k].type != VIDE
@@ -662,7 +662,7 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                             }
 
                         }
-                        for (int k=j-1;k>0;k-=4)
+                        for (int k=j-1;k>2;k-=2)
                         {   
                             //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
                             if (A[i][k-1].color == NOIRE
@@ -694,7 +694,7 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                             }
 
                         }
-                        for (int k=i+1;k<14;k+=4)
+                        for (int k=i+1;k<12;k+=2)
                         {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
                             if (A[k+1][j].color == NOIRE
                                 || A[k][j].type != VIDE
@@ -721,7 +721,7 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                             }
 
                         }
-                        for (int k=i-1;k>0;k-=4)
+                        for (int k=i-1;k>2;k-=2)
                         {   
                             //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
                             if (A[k-1][j].color == NOIRE
@@ -737,7 +737,6 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
 
                         }
                         return 1;
-
                     }
                     else return 0;
                 }
@@ -758,7 +757,7 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                             }
 
                         }
-                        for (int k=j+1;k<14;k+=4)
+                        for (int k=j+1;k<12;k+=2)
                         {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
                             if (A[i][k+1].color == BLANCHE
                                 || A[i][k].type != VIDE
@@ -786,7 +785,7 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                             }
 
                         }
-                        for (int k=j-1;k>0;k-=4)
+                        for (int k=j-1;k>2;k-=2)
                         {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
                             if (A[i][k-1].color == BLANCHE
                                 || A[i][k].type != VIDE
@@ -800,7 +799,6 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                                 && A[i][k-3].type == VIDE) return 0;
                         }
                         return 1;
-
                     }
                     else return 0;
                 }
@@ -817,7 +815,7 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                             }
 
                         }
-                        for (int k=i+1;k<14;k+=4)
+                        for (int k=i+1;k<12;k+=2)
                         {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
                             if (A[k+1][j].color == BLANCHE
                                 || A[k][j].type != VIDE
@@ -844,7 +842,7 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                             }
 
                         }
-                        for (int k=i-1;k>=2;k-=4)
+                        for (int k=i-1;k>2;k-=2)
                         {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
                             if (A[k-1][j].color == BLANCHE
                                 || A[k][j].type != VIDE
@@ -858,7 +856,6 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                                 && A[k-3][j].type == VIDE) return 0;
                         }
                         return 1;
-
                     }
                     else return 0;
                 }
