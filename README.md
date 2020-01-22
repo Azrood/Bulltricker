@@ -14,7 +14,7 @@ For more info, go to : http://bulltricker.free.fr/regledujeu.htm
 
 ![image](https://user-images.githubusercontent.com/53349565/72903898-f3b48600-3d25-11ea-90cd-6949c5cd7e56.png)
 
-## King is Mate
+## King is Mat
 
 ![image](https://user-images.githubusercontent.com/53349565/72904143-59a10d80-3d26-11ea-9008-84319110a2d9.png)
 
