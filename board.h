@@ -22,5 +22,7 @@ typedef struct piece {
 
 void initialplateau(piece **);
 void affichage(piece **);
+void save(piece **A);
+void load(piece **A);
 
 #endif // BOARD_H_INCLUDED

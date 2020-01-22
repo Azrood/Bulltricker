@@ -158,3 +158,41 @@ void affichage(piece **A)
         if(j%2==1) printf("  %d ",(j+1)/2);
     }
 }
+
+void save(piece **A)
+{
+    FILE *fp=NULL;
+    fp = fopen("save.bin","wb");
+
+    if (fp!=NULL)
+    {
+        printf("going in the loop");
+        printf("noir = %d, blanc = %d, dame = %d, roi = %d, pion = %d\n",NOIRE,BLANCHE,DAME,ROI,PION);
+        for (int i=0; i<DIM_PLAT;i++)
+        {
+            for(int j=0; j<DIM_PLAT;j++)
+            {
+                fwrite(&A[i][j],sizeof(piece),1,fp);
+            }
+        }
+        fclose(fp);
+    }
+}
+
+void load(piece **A)
+{
+    FILE *fp=NULL;
+    fp = fopen("save.bin","rb");
+
+    if (fp!=NULL)
+    {
+        for (int i=0;i<DIM_PLAT;i++)
+        {
+            for(int j=0;j<DIM_PLAT;j++)
+            {
+                fread(&A[i][j],sizeof(piece),1,fp);
+            }
+        }
+        fclose(fp);
+    }
+}

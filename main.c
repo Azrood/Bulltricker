@@ -75,6 +75,7 @@ int main( int argc, char * argv[] )
 
     movement *moves=(movement *) malloc(sizeof(movement));
     piece *playedpiece=(piece *) malloc(sizeof(piece));
+    
     SDL_Surface *icon = SDL_LoadBMP(ICON);
     SDL_SetWindowIcon(window,icon);
     while(program_launched)
@@ -93,6 +94,15 @@ int main( int argc, char * argv[] )
                             if(event.button.x<520 && event.button.x>150 && event.button.y<410 && event.button.y>325)
                             {
                                 // charger partie
+                                load(A);
+                                move_initialized=0;
+                                played=0;
+                                start=0;
+                                texture=CreateTexture(BOARD,render);
+                                SDL_ChargementTexture(window,render,texture,&rect);
+                                SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
+                                affichage(A);
+                                display(A,render,&rect,Poi,window,F);
                             }
 
                             if(event.button.x<495 && event.button.x>126 && event.button.y<300 && event.button.y>215)
@@ -102,7 +112,6 @@ int main( int argc, char * argv[] )
                                 texture=CreateTexture(BOARD,render);
                                 SDL_ChargementTexture(window,render,texture,&rect);
                                 SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
-
                                 display(A,render,&rect,Poi,window,F);
                                 start = 0;
                             }
@@ -141,8 +150,10 @@ int main( int argc, char * argv[] )
                             if(event.button.x<89 && event.button.x>57 && event.button.y<33 && event.button.y>1)
                             {
                                 // user clic sur sauvgarder
-                                printf("sauvegarder");
-
+                                save(A);
+                                printf("sauvegarder\n");
+                                affichage(A);
+                                continue;
                             }
                             if(event.button.x<148 && event.button.x>115 && event.button.y<35 && event.button.y>5)
                             {
@@ -152,11 +163,11 @@ int main( int argc, char * argv[] )
                                 SDL_ChargementTexture(window,render,texture,&rect);
                                 SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
                                 couleur=BLANCHE;
+                                move_initialized=0;
+                                played=0;
                                 display(A,render,&rect,Poi,window,F);
                                 SDL_RenderPresent(render);
                                 continue;
-
-
                             }
                             SDL_RenderPresent(render);
                             if(start == 0)
@@ -253,6 +264,6 @@ int main( int argc, char * argv[] )
     SDL_DestroyRenderer(render);
     SDL_DestroyWindow(window);
     SDL_Quit();
-    
+
     return EXIT_SUCCESS;
 }
