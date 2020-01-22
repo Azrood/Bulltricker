@@ -1,6 +1,7 @@
 # Bulltricker
 
 Bulltricker is a game that mixes chess and checkers, implemented in C with SDL for a school project.
+For more info, go to : http://bulltricker.free.fr/regledujeu.htm
 
 
 # SCREENSHOTS
