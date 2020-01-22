@@ -133,7 +133,8 @@ int checkKing(movement moves,piece playedpiece,piece **A)
             else return 0;
         }
     }
-    else if (j==1){
+    else if (j==1)
+    {
         if (i==1)
         {
             if ((A[i][j+2].type != ROI || A[i][j+2].color == playedpiece.color)
@@ -249,7 +250,7 @@ int isLegalMove(piece **A,movement moves, piece playedpiece)
                             { // tester s'il n ya pas de roi et la cas vide
                                 return 1;
                             }
-                        return 0;
+                    return 0;
                 }
                 else if(moves.initialmove.column % 2 == 0)
                 { // cas de pion verticale
@@ -280,7 +281,6 @@ int isLegalMove(piece **A,movement moves, piece playedpiece)
                         {
                             if (A[k][j].type != VIDE) return 0;
                         }
-
                         return 1;
                     }
                 }
@@ -452,7 +452,6 @@ int isDefaultMove(piece playedpiece,movement moves){
                 }
                 else return 0;
             }
-
         }
         else if (playedpiece.color == BLANCHE)
         {
@@ -938,7 +937,6 @@ int AbleToEat(piece **A,position pos)
         }
         else // la dame est horizontal, le parcours sera fait en vertical.
         {
-
             for (int p=0;p<DIM_PLAT;p+=2) // on va parcourir toute la rangee verticale, jusqu'à trouver une position où on peut capturer, ou finir la boucle.
             {
                 moves.finalmove.line = p;

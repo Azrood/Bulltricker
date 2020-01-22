@@ -25,5 +25,5 @@ int CompulsoryCapture(piece **,position *,movement); // retourne 1 si la piece Ã
 void MoveKing(piece **,movement, piece,position *); // fonction pour faire bouger le roi
 void MovePion(piece **, movement, piece, position *); // fonction pour faire bouger le pion
 void MoveDame(piece **, movement, piece, position *); // fonction pour faire bouger le dame
-void play(piece **,position *,movement *,piece *,SDL_MouseButtonEvent, int *,int);//fonction pour jouer le tour.
+void play(piece **,position *,movement *,piece *,SDL_MouseButtonEvent, int *,int);//fonction pour jouer un tour
 #endif
