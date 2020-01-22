@@ -5,8 +5,6 @@
 #include <stdlib.h>
 #include <strings.h>
 
-#include <SDL.h>
-
 #include "moves.h"
 #include "checks.h"
 #include "tools.h"
@@ -37,6 +35,7 @@
 #define CREDITS "images/Credits.bmp"
 #define BLACK_WIN "images/Black_win.bmp"
 #define WHITE_WIN "images/White_win.bmp"
+#define ICON "icon.ico"
 
 #define LARG_FENETRE 648
 #define HAUT_FENETRE 648

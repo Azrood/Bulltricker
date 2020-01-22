@@ -72,10 +72,10 @@ void MovePion(piece **A,movement moves, piece playedpiece, position *Tab)
     int i=moves.initialmove.line,j=moves.initialmove.column;
     if (A[i][j].type == playedpiece.type && A[i][j].color == playedpiece.color)
     {
-        if ((isOptionalCapture(A,moves,playedpiece) == 1 || isLegalMove(A, moves, playedpiece) == 1) 
+        if ((isOptionalCapture(A,moves,playedpiece) == 1 || isLegalMove(A, moves, playedpiece) == 1)
             && (CompulsoryCapture(A,Tab,moves)==1))
-        {   
-            
+        {
+
             A[moves.finalmove.line][moves.finalmove.column] = playedpiece;
             A[moves.finalmove.line][moves.finalmove.column].firstmove = 0;
             if (moves.finalmove.line == 0 || moves.finalmove.line == 14)
@@ -87,7 +87,7 @@ void MovePion(piece **A,movement moves, piece playedpiece, position *Tab)
             A[i][j].firstmove = VIDE;
             played=1;
         }
-        else if (isEatingMove(A,moves,playedpiece)==1 
+        else if (isEatingMove(A,moves,playedpiece)==1
                 && CompulsoryCapture(A,Tab,moves))
         {
             A[moves.finalmove.line][moves.finalmove.column] = playedpiece;
@@ -95,6 +95,10 @@ void MovePion(piece **A,movement moves, piece playedpiece, position *Tab)
             A[i][j].color = VIDE;
             A[i][j].type = VIDE;
             A[i][j].firstmove = VIDE;
+            if (moves.finalmove.line == 0 || moves.finalmove.line == 14)
+            {
+                A[moves.finalmove.line][moves.finalmove.column].type = DAME;
+            }
             played=1;
             if (playedpiece.color==NOIRE) //indice croissant
             {
@@ -130,7 +134,7 @@ void MoveDame(piece **A,movement moves, piece playedpiece,position *Tab)
     int i=moves.initialmove.line,j=moves.initialmove.column;
     if (A[i][j].type == playedpiece.type && A[i][j].color == playedpiece.color)
     {
-        if (isEatingMove(A,moves,playedpiece)==1 
+        if (isEatingMove(A,moves,playedpiece)==1
             && CompulsoryCapture(A,Tab,moves)==1)
         {
             A[moves.finalmove.line][moves.finalmove.column] = playedpiece;
@@ -189,9 +193,9 @@ void MoveDame(piece **A,movement moves, piece playedpiece,position *Tab)
                 }
             }
         }
-        else if(isOptionalCapture(A,moves,playedpiece) == 1 
+        else if(isOptionalCapture(A,moves,playedpiece) == 1
                 && CompulsoryCapture(A,Tab,moves)==1)
-        {   
+        {
             played = 1;
             A[moves.finalmove.line][moves.finalmove.column] = playedpiece;
             A[moves.finalmove.line][moves.finalmove.column].firstmove = 0;
@@ -215,15 +219,15 @@ int CompulsoryCapture(piece **A,position *Tab,movement moves)
     if (isEmpty(Tab)==1) return 1; // si le tableau est vide, la pièce peut bouger.
     //on va vérifier le 1er element du tableau des pièces à capture obligatoire, s'il y a une dame, on vérifie que le joueur a aussi sélectionné une dame
     //pour respecter la règle des priorités.
-    
+
     if (A[Tab[0].line][Tab[0].column].type == DAME)
     {
         if (inTab(Tab,moves.initialmove)==1)
         {
-            if (playedpiece.type == DAME 
+            if (playedpiece.type == DAME
                 && isEatingMove(A,moves,A[moves.initialmove.line][moves.initialmove.column])==1
                 && ((moves.initialmove.line == moves.finalmove.line && moves.initialmove.line % 2==1)
-                    || (moves.finalmove.column == moves.initialmove.column) && moves.initialmove.column % 2==1))
+                    || ((moves.finalmove.column == moves.initialmove.column) && moves.initialmove.column % 2==1)))
             {
                 if (delta > 0) //indice croissant
                 {
@@ -262,7 +266,7 @@ int CompulsoryCapture(piece **A,position *Tab,movement moves)
                         }
                         return 0;
                     }
-                } 
+                }
             }
             else return 0;
         }
@@ -284,14 +288,14 @@ void play(piece **A,position *Tab,movement *moves,piece *playedpiece,
     strcpy(positionstr , SavoirLocationY(button.y));
     strcat(positionstr , SavoirLocationX(button.x));
 
-    if (*move_initialized == 0) 
+    if (*move_initialized == 0)
     {
         moves->initialmove = ConvertirLocation(positionstr);
         *playedpiece = A[moves->initialmove.line][moves->initialmove.column];
         playedpiece->color = couleur;
         *move_initialized = 1;
     }
-    else 
+    else
     {
         *move_initialized = 0;
         moves->finalmove = ConvertirLocation(positionstr);
