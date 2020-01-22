@@ -21,7 +21,8 @@ int main( int argc, char * argv[] )
 
     Point **Poi = (Point **) malloc(DIM_PLAT*sizeof(Point *)); // tableau d'intervalles de pixels
     piece **A=(piece **) malloc(DIM_PLAT*sizeof(piece *)); // tableau qui représente le plateau de jeu
-    position *Tab = (position *) malloc(SIZE_TAB*sizeof(position));; // tableau de positions qui va contenir
+    position *Tab = (position *) malloc(SIZE_TAB*sizeof(position));; // tableau de positions qui va contenir les positions des pièces qui peuvent capturer
+
 
     // allocation de memoire pour les sous-tableaux
 
@@ -151,8 +152,6 @@ int main( int argc, char * argv[] )
                             {
                                 // user clic sur sauvgarder
                                 save(A);
-                                printf("sauvegarder\n");
-                                affichage(A);
                                 continue;
                             }
                             if(event.button.x<148 && event.button.x>115 && event.button.y<35 && event.button.y>5)
@@ -172,8 +171,8 @@ int main( int argc, char * argv[] )
                             SDL_RenderPresent(render);
                             if(start == 0)
                             {
+                                //on prend la position du 1er clic qui va initialiser un mouvement
                                 printf("(%d , %d )\n",event.button.x,event.button.y);
-                                // stocker les indices du piece a jouer apres 1er click
                                 RemplirTab(A,couleur,&Tab);
                                 play(A,Tab,moves,playedpiece,event.button,&move_initialized,couleur );
                                 if (played == 1)

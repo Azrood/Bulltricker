@@ -166,8 +166,6 @@ void save(piece **A)
 
     if (fp!=NULL)
     {
-        printf("going in the loop");
-        printf("noir = %d, blanc = %d, dame = %d, roi = %d, pion = %d\n",NOIRE,BLANCHE,DAME,ROI,PION);
         for (int i=0; i<DIM_PLAT;i++)
         {
             for(int j=0; j<DIM_PLAT;j++)

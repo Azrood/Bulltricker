@@ -124,7 +124,6 @@ void RemplirPoint(Point **P)
             P[i][j].x = P[i][j-2].x + 77;
             P[i][j].y = P[i][1].y;
         }
-
     }
 }
 
@@ -150,7 +149,6 @@ char * SavoirLocationX(int x)
         if (x <= 583 && x >= 526) strcpy(pos,"7");
         if (x <= 603 && x >= 585) strcpy(pos,"V8");
     }
-
     return pos;
 }
 
@@ -159,7 +157,6 @@ char * SavoirLocationY(int y)
     char *pos = (char *)malloc(2);
     if(y <= 604 && y>= 46)
     {
-
         if(y <= 67 && y >= 46) strcpy(pos,"H1");
         if(y <= 114 && y >= 78) strcpy(pos,"A");
         if(y <= 143 && y >= 123) strcpy(pos,"H2");
