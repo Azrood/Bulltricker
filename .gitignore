@@ -5,3 +5,5 @@ bulltricker/
 *.cbp
 *.depend
 *.layout
+obj/
+bin/
