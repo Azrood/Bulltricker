@@ -35,7 +35,7 @@
 #define CREDITS "images/Credits.bmp"
 #define BLACK_WIN "images/Black_win.bmp"
 #define WHITE_WIN "images/White_win.bmp"
-#define ICON "icon.ico"
+#define ICON "images/icon.bmp"
 
 #define LARG_FENETRE 648
 #define HAUT_FENETRE 648
