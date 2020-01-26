@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
-
+#define _WIN32_WINNT 0x0500
+#include <windows.h>
 #include <SDL.h>
 
 #include "moves.h"
@@ -12,6 +13,9 @@
 int played;
 int main( int argc, char * argv[] )
 {
+    HWND hWnd = GetConsoleWindow();
+    ShowWindow( hWnd, SW_HIDE );
+
     int lost_player; //contient la couleur du joueur qui a perdu
     int move_initialized=0; // si le mouvement est initialisé (1) ou non (0)
     int couleur=BLANCHE; //les blancs commencent
@@ -76,7 +80,7 @@ int main( int argc, char * argv[] )
 
     movement *moves=(movement *) malloc(sizeof(movement));
     piece *playedpiece=(piece *) malloc(sizeof(piece));
-    
+
     SDL_Surface *icon = SDL_LoadBMP(ICON);
     SDL_SetWindowIcon(window,icon);
     while(program_launched)
@@ -110,6 +114,8 @@ int main( int argc, char * argv[] )
                                 //tester si l'user click sur nouvelle partie
                                 //pour cree board et initialiser les pieces
                                 initialplateau(A);
+                                k=1;
+                                move_initialized=0;
                                 texture=CreateTexture(BOARD,render);
                                 SDL_ChargementTexture(window,render,texture,&rect);
                                 SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
@@ -162,6 +168,7 @@ int main( int argc, char * argv[] )
                                 SDL_ChargementTexture(window,render,texture,&rect);
                                 SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
                                 couleur=BLANCHE;
+                                k=1;
                                 move_initialized=0;
                                 played=0;
                                 display(A,render,&rect,Poi,window,F);
@@ -178,7 +185,7 @@ int main( int argc, char * argv[] )
                                 if (played == 1)
                                 {
                                     if (k%2==1) k=0;
-                                    else k=1;
+                                    else k=1; // flag pour changement de couleur
 
                                     played=0;
                                     FlushTab(&Tab);
@@ -201,6 +208,8 @@ int main( int argc, char * argv[] )
                                 if(event.button.x<121 && event.button.x>-1 && event.button.y<87 && event.button.y>-1)
                                 {
                                     initialplateau(A);
+                                    k=1;
+                                    move_initialized=1;
                                     texture=CreateTexture(BOARD,render);
                                     SDL_ChargementTexture(window,render,texture,&rect);
                                     SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
