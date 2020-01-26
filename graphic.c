@@ -36,9 +36,9 @@ void SDL_ChargementTexture(SDL_Window * window,SDL_Renderer* render ,SDL_Texture
 {
     if((SDL_QueryTexture(texture,NULL,NULL,&rect->w,&rect->h))!=0)
     {
-        SDL_DestroywindowEtrender(window,render);//pour detruire la window et le renderer
-        SDL_DestroyTexture(texture);//pour detruire l texture
-        SDL_ExitErreur("Chargement texture");//afficher le message d'erreur e quitter SDL avec SDL_QUIT;
+        SDL_DestroywindowEtrender(window,render);//pour detruire le window et le renderer
+        SDL_DestroyTexture(texture);//pour detruire la texture
+        SDL_ExitErreur("Chargement texture");//afficher le message d'erreur et quitter SDL avec SDL_QUIT;
     }
 }
 

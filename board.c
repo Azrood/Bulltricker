@@ -117,7 +117,6 @@ void affichage(piece **A)
 
                         }
                     }
-
                 }
                 /*affichage contenu des cases royales et les dames a cote*/
                 if(i%2==1)
@@ -131,7 +130,6 @@ void affichage(piece **A)
                         if(j%2==0) printf("|%c%c|",A[i][j].type,A[i][j].color);
                         if(j%2==1) printf("  %c%c  ",A[i][j].type,A[i][j].color);
                     }
-
                 }
         }printf("\n");
     /*affichage des cases terminer*/
@@ -163,7 +161,7 @@ void save(piece **A)
 {
     FILE *fp=NULL;
     fp = fopen("save.bin","wb");
-
+    
     if (fp!=NULL)
     {
         for (int i=0; i<DIM_PLAT;i++)

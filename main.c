@@ -89,7 +89,6 @@ int main( int argc, char * argv[] )
                 case SDL_MOUSEBUTTONDOWN :
                     if(event.button.button == SDL_BUTTON_LEFT)
                     {
-
                         if(start == 1)
                         {
                             if(event.button.x<520 && event.button.x>150 && event.button.y<410 && event.button.y>325)
@@ -110,6 +109,7 @@ int main( int argc, char * argv[] )
                             {
                                 //tester si l'user click sur nouvelle partie
                                 //pour cree board et initialiser les pieces
+                                initialplateau(A);
                                 texture=CreateTexture(BOARD,render);
                                 SDL_ChargementTexture(window,render,texture,&rect);
                                 SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
@@ -183,7 +183,6 @@ int main( int argc, char * argv[] )
                                     played=0;
                                     FlushTab(&Tab);
                                     couleur = (k%2==1) ? BLANCHE : NOIRE; //determination de la couleur du joueur, si k impair,tour du blanc sinon tour du noir.
-
                                 }
                                 affichage(A);
                                 texture=CreateTexture(BOARD,render);
@@ -211,7 +210,7 @@ int main( int argc, char * argv[] )
                                 }
                             }
                         }
-                    SDL_RenderPresent(render);
+                        SDL_RenderPresent(render);
                     }
                 case SDL_KEYDOWN :
                     switch(event.key.keysym.sym)
@@ -229,12 +228,11 @@ int main( int argc, char * argv[] )
                     break;
                 default :
                     break;
-
             }
             SDL_RenderPresent(render);//mise a jour de rendu
             if(CheckMat(A,&lost_player) == 0)
             {
-                int winner = (lost_player == NOIRE) ? BLANCHE : NOIRE; //on récupère la couleur du joueur
+                int winner = (lost_player == NOIRE) ? BLANCHE : NOIRE; //on recupere la couleur du joueur
                 SDL_Delay(500); // Pour avoir un peu de temps pour voir le roi être mat avant d'afficher l'image de victoire
                 switch(winner)
                 {

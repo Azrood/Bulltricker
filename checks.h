@@ -4,7 +4,7 @@
 #include "moves.h"
 
 int checkPiece(movement,piece **); // verifie s'il y a une piece qui bloque le mouvement ou pas. 1 si pas de piece, 0 si piece.
-int checkKing(movement, piece, piece **); //return 1 if no king qui limite le mouvement, 0 if king
+int checkKing(movement, piece, piece **); //return 1 if pas de roi ne limite le mouvement, 0 si le roi adverse limite le mouvement
 
 int isOptionalCapture(piece **,movement,piece); // vérifie si le mouvement est une capture. 1 si vrai, 0 sinon.
 int isDefaultMove(piece ,movement); // si le mouvement est par default possible ou non.

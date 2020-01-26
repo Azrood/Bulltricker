@@ -17,12 +17,12 @@ typedef struct piece {
     int color; // BLANCHE or NOIRE
     int firstmove; /*initialisé à 1 pour les pions en horizontal
                 0 pour les autres pièces 
-                et devient 0 après le 1er move d'une pièce PION*/
+                et devient 0 après le 1er mouvement d'une pièce PION horizontale*/
 }piece;
 
-void initialplateau(piece **);
-void affichage(piece **);
-void save(piece **A);
-void load(piece **A);
+void initialplateau(piece **); // initialisation du plateau de jeu
+void affichage(piece **); // affichage en console du plateau de jeu
+void save(piece **A); // sauvegarde de l'avancement du jeu
+void load(piece **A); // chargement de la sauvegarde
 
 #endif // BOARD_H_INCLUDED
