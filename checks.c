@@ -62,7 +62,7 @@ int checkKing(movement moves,piece playedpiece,piece **A)
         }
         else return 0;
 
-    }
+    } // traitement des cas spéciaux qui causent un débordement d'indice
     else if (i==1)
     {
         if (j==13)
@@ -247,7 +247,7 @@ int isLegalMove(piece **A,movement moves, piece playedpiece)
                             && A[moves.initialmove.line+1][j].type == VIDE
                             && i == moves.initialmove.line+2
                             && A[i][j].type == VIDE)
-                            { // tester s'il n ya pas de roi et la cas vide
+                            { // tester s'il n ya pas de roi et la case vide
                                 return 1;
                             }
                     return 0;
@@ -255,14 +255,17 @@ int isLegalMove(piece **A,movement moves, piece playedpiece)
                 else if(moves.initialmove.column % 2 == 0)
                 { // cas de pion verticale
                 // cas 4 et 6
-                    if((i - moves.initialmove.line) == 1 && fabs(j - moves.initialmove.column) == 1
+                    if((i - moves.initialmove.line) == 1
+                        && fabs(j - moves.initialmove.column) == 1
                         && A[i][j].type == VIDE)
                     { // tester si les cas sont vides pour les occuper
                         return 1;
                     }
                         // cas 5
                         //tester si la case est vide pour l'occuper
-                    else if(j == moves.initialmove.column && i == moves.initialmove.line+2 && A[i][j].type == VIDE)
+                    else if(j == moves.initialmove.column
+                            && i == moves.initialmove.line+2
+                            && A[i][j].type == VIDE)
                     {
                         return 1;
                     }
@@ -287,14 +290,17 @@ int isLegalMove(piece **A,movement moves, piece playedpiece)
                 if(moves.initialmove.column % 2 ==1)
                 {// cas de pion horizontal
                     // cas 1 et 3
-                    if((i - moves.initialmove.line) == -1 && fabs(j - moves.initialmove.column) == 1
+                    if((i - moves.initialmove.line) == -1
+                        && fabs(j - moves.initialmove.column) == 1
                         && A[i][j].type == VIDE)
                     {
                             return 1;
                     }
                         // cas 2
-                    else if(j == moves.initialmove.column && A[moves.initialmove.line-1][j].type == VIDE
-                            && i == moves.initialmove.line-2 && A[i][j].type == VIDE)
+                    else if(j == moves.initialmove.column
+                            && A[moves.initialmove.line-1][j].type == VIDE
+                            && i == moves.initialmove.line-2
+                            && A[i][j].type == VIDE)
                         {
                             return 1;
                         }
@@ -303,13 +309,16 @@ int isLegalMove(piece **A,movement moves, piece playedpiece)
                 else if(moves.initialmove.column % 2 == 0)
                 { // cas de pion verticale
                     // cas 4 et 6
-                    if((i - moves.initialmove.line) == -1 && fabs(j - moves.initialmove.column) == 1
+                    if((i - moves.initialmove.line) == -1
+                        && fabs(j - moves.initialmove.column) == 1
                         && A[i][j].type == VIDE)
                     {
                         return 1;
                     }
                     // cas 5
-                    else if(j == moves.initialmove.column && i == moves.initialmove.line-2 && A[i][j].type == VIDE)
+                    else if(j == moves.initialmove.column
+                        && i == moves.initialmove.line-2
+                        && A[i][j].type == VIDE)
                         {
                             return 1;
                         }
@@ -431,7 +440,6 @@ int isDefaultMove(piece playedpiece,movement moves){
     else if (playedpiece.type == PION)
     {
         if (playedpiece.color == NOIRE)
-
         {
             if (playedpiece.firstmove == 1)
             {
@@ -512,7 +520,7 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
             { // cas de pion horizontal
                 if(delta_pion == 4 || delta_pion == 8 || delta_pion == 12)
                 {
-                    
+
                     for (int k = moves.initialmove.line+2; k<i; k+=2) //boucle qui vérifie qu'on a bien fait un mouvement de capture
                     {
                         if (A[k-1][j].type != VIDE || A[k+1][j].type != VIDE) return 0;
@@ -522,7 +530,7 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
 
                         if (A[k][j].color == BLANCHE) opponent_piece_count++; //on compte le nombre de piece adversaire
                     }
-                    
+
                     if (fabs(delta_pion/4) != opponent_piece_count) return 0; //si le mouvement donné ne correspond pas au nombre de pièces capturés
                     //par exemple pour un delta de 4, on doit avoir 1 pièce capturé, pour 8 on trouve 2 et ainsi de suite
 
@@ -530,11 +538,11 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                     {
                         //vérifier s'il reste un mouvement de capture ou non
                         if(A[i+1][j].type == VIDE
-                            &&A[i+2][j].color == BLANCHE
-                            &&A[i+3][j].type == VIDE
-                            &&A[i+4][j].type == VIDE)
+                            && A[i+2][j].color == BLANCHE
+                            && A[i+3][j].type == VIDE
+                            && A[i+4][j].type == VIDE)
                             {
-                            return 0;
+                                return 0;
                             }
                     }
                     return 1;
@@ -547,7 +555,7 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
         {
             if(moves.initialmove.column % 2 == 1 && j == moves.initialmove.column)
             { // cas de pion horizontal
-                if(delta_pion == -4 || delta_pion == -8 || delta_pion == -12)
+                if(delta_pion == -4 || delta_pion == -8 || delta_pion == -12) // mouvement de capture simple, double ou triple
                 {
                     for (int k = moves.initialmove.line-2; k>i; k-=2) //boucle qui vérifie qu'on a bien fait un mouvement de capture
                     {
@@ -558,7 +566,7 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
 
                         if (A[k][j].color == NOIRE) opponent_piece_count++; //on compte le nombre de piece adversaire
                     }
-                    
+
                     if (fabs(delta_pion/4) != opponent_piece_count) return 0; //si le mouvement donné ne correspond pas au nombre de pièces capturés
                     //par exemple pour un delta de 4, on doit avoir 1 pièce capturé, pour 8 on trouve 2 et ainsi de suite
                     if (i>2) // éviter débordement d'indice, si i=2, il n'y a par défaut pas de capture possible
@@ -680,7 +688,6 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                             {                                           // et pas de noir sur le chemin.
                                 return 0;
                             }
-
                         }
                         for (int k=i-1;k>2;k-=2)
                         {
@@ -716,7 +723,6 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                             {                                           // et pas de noir sur le chemin.
                                 return 0;
                             }
-
                         }
                         for (int k=j+1;k<12;k+=2)
                         {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
@@ -733,7 +739,6 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
 
                         }
                         return 1;
-
                     }
                     else if (j < moves.initialmove.column) // on va vers la gauche, indice décroissan
                     {
@@ -744,7 +749,6 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                             {                                           // et pas de noir sur le chemin.
                                 return 0;
                             }
-
                         }
                         for (int k=j-1;k>2;k-=2)
                         {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
@@ -774,7 +778,6 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                             {                                           // et pas de noir sur le chemin.
                                 return 0;
                             }
-
                         }
                         for (int k=i+1;k<12;k+=2)
                         {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
@@ -790,7 +793,6 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                                 && A[k+3][j].type == VIDE) return 0;
                         }
                         return 1;
-
                     }
                     else if (i < moves.initialmove.line) // on va vers le haut, indice décroissant
                     {
@@ -801,7 +803,6 @@ int isEatingMove(piece **A,movement moves, piece playedpiece)
                             {                                           // et pas de blanc sur le chemin.
                                 return 0;
                             }
-
                         }
                         for (int k=i-1;k>2;k-=2)
                         {   //on continue de parcourir jusqu'au bord du plateau pour voir s'il nous reste des pieces restantes à capturer
@@ -903,8 +904,6 @@ int AbleToEat(piece **A,position pos)
         }
         //sinon la piece ne peut pas capturer
         return 0;
-
-
     }
     else //la piece à la position i,j est une dame
     {   // on va pas verifier la couleur, on va seulement verifier si la dame est en position verticale (donc parcours horizontal) ou horizontal (parcours vertical)
@@ -1109,7 +1108,7 @@ int isDraw(piece ** A)
         {
             for(j=0 ; j<DIM_PLAT ; j++)
             {
-                if(A[i][j].type == ROI && A[i][j].color == BLANCHE) // charcher le roi blanche
+                if(A[i][j].type == ROI && A[i][j].color == BLANCHE) // charcher le roi blanc
                 {
                     break;
                 }
@@ -1133,9 +1132,10 @@ int CheckMat(piece ** A,int *lost_player)
                 if(A[i][j+1].type != VIDE && A[i][j-1].type != VIDE
                    && A[i+1][j].type != VIDE && A[i-1][j].type != VIDE)// tester si il ya 4 piece autour du roi
                 {
-                    if((A[i][j+1].color != A[i][j-1].color)
-                    || (A[i][j+1].color != A[i+1][j].color)
-                    || (A[i][j+1].color != A[i-1][j].color)) //tester si une des pieces a des couleurs différents
+                    if(A[i][j].color != A[i][j+1].color
+                       || A[i][j].color != A[i+1][j].color
+                       || A[i][j].color != A[i-1][j].color
+                       || A[i][j].color != A[i][j-1].color) //tester si une ou plusieurs pieces a des couleurs différents
                     {
                         *lost_player=A[i][j].color; // on récupère la couleur du joueur qui a été MAT.
                         return 0;
