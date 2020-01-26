@@ -1,0 +1,10 @@
+.vscode/
+*.exe
+*.o
+bulltricker/
+*.cbp
+*.depend
+*.layout
+obj/
+bin/
+*.bin
