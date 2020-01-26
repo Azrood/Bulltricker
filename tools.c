@@ -19,11 +19,11 @@ int inTab(position *Tab, position pos)
     for(int i=0;i<SIZE_TAB;i++)
     {
         if (pos.line == Tab[i].line && pos.column == Tab[i].column) return 1;
-        // la position entrée est dans la tableau, donc la piece
+        // la position entrée est dans le tableau, donc la piece
         // donc la pièce jouée est une pièce avec une prise obligatoire
 
     }
-    return 0; // la piece jouée n'est pas une pièce à prise obligatoire
+    return 0; // la position de la piece jouée n'est pas dans le tableau des positions des pièces à capture obligatoire.
 }
 
 void FlushTab(position **Tab)
@@ -43,7 +43,8 @@ void RemplirTab(piece **A,int couleur,position **Tab)
     {
         for (int j=0;j<DIM_PLAT;j++)
         {
-            if ((j%2 == 1 && i%2==1) || A[i][j].type == INTERDIT)
+            if ((j%2 == 1 && i%2==1) // case royale
+                || A[i][j].type == INTERDIT) // case de butee
             {
                 continue;
             }
@@ -58,6 +59,7 @@ void RemplirTab(piece **A,int couleur,position **Tab)
                         (*Tab)[b]=(*Tab)[b-1];
                     } // on décale les éléments
                     (*Tab)[0]=pos; //on insère la position de la dame au début.
+                    k++;
                 }
                 else
                 { //on insère normalement
@@ -76,8 +78,8 @@ void RemplirPoint(Point **P)
     P[1][0].y = 67;
     for(int j=2 ; j<15 ; j+=2)
     {
-            P[1][j].x =  P[1][j-2].x + 77;
-            P[1][j].y = 67;
+        P[1][j].x =  P[1][j-2].x + 77;
+        P[1][j].y = 67;
     }
     for(int i=3 ; i<15 ; i+=2)//chargement des coordonnées des piece verticales
     {
@@ -95,10 +97,10 @@ void RemplirPoint(Point **P)
     P[0][1].y = 47;
     for(int j=3 ; j<15 ; j+=2)
     {
-            P[0][j].x =  P[0][j-2].x + 77;
-            P[0][j].y = 47;
+        P[0][j].x =  P[0][j-2].x + 77;
+        P[0][j].y = 47;
     }
-    for(int i=2 ; i<15 ; i+=2)//chargement des coordonnées  des piece Horizontale
+    for(int i=2 ; i<15 ; i+=2)//chargement des coordonnées des piece Horizontale
     {
         P[i][1].x = 67;
         P[i][1].y = P[i-2][1].y + 77;
@@ -112,8 +114,8 @@ void RemplirPoint(Point **P)
     P[1][1].y = 77;
     for(int j=3 ; j<15 ; j+=2)
     {
-            P[1][j].x =  P[1][j-2].x + 77;
-            P[1][j].y = 77;
+        P[1][j].x =  P[1][j-2].x + 77;
+        P[1][j].y = 77;
     }
     for(int i=3 ; i<15 ; i+=2)//chargement des coordonnées  des cases royales
     {

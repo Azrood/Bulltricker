@@ -143,7 +143,7 @@ void MoveDame(piece **A,movement moves, piece playedpiece,position *Tab)
             A[i][j].firstmove = VIDE;
 
             played=1;
-            int fin=(i==moves.finalmove.line) ? moves.finalmove.column : moves.finalmove.line; // on prend la position final si elle est de colonne ou d eligne
+            int fin=(i==moves.finalmove.line) ? moves.finalmove.column : moves.finalmove.line; // on prend la position final si elle est de colonne ou de ligne
             if (i<moves.finalmove.line || j<moves.finalmove.column) // mouvement ascendant ou vers la gauche
             {
                 for (int k= (i==moves.finalmove.line) ? j : i , b=k;k<fin;k+=2)
@@ -220,7 +220,7 @@ int CompulsoryCapture(piece **A,position *Tab,movement moves)
     //on va vérifier le 1er element du tableau des pièces à capture obligatoire, s'il y a une dame, on vérifie que le joueur a aussi sélectionné une dame
     //pour respecter la règle des priorités.
 
-    if (A[Tab[0].line][Tab[0].column].type == DAME)
+    if (A[Tab[0].line][Tab[0].column].type == DAME) // on a au moins une dame qui a une prise obligatoire
     {
         if (inTab(Tab,moves.initialmove)==1)
         {
@@ -248,7 +248,7 @@ int CompulsoryCapture(piece **A,position *Tab,movement moves)
                         return 0;
                     }
                 }
-                else
+                else // indice decroissant
                 {
                     if (start == moves.initialmove.line) //mouvement sur rangée verticales
                     {
@@ -258,7 +258,7 @@ int CompulsoryCapture(piece **A,position *Tab,movement moves)
                         }
                         return 0;
                     }
-                    else // mouvement sur rangées horiztonales
+                    else // mouvement sur rangées horizontales
                     {
                         for (int k = start;k>finish;k-=2)
                         {

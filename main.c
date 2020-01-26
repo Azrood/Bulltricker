@@ -13,7 +13,7 @@
 int played;
 int main( int argc, char * argv[] )
 {
-    HWND hWnd = GetConsoleWindow();
+    HWND hWnd = GetConsoleWindow(); // Pour cacher la console
     ShowWindow( hWnd, SW_HIDE );
 
     int lost_player; //contient la couleur du joueur qui a perdu
@@ -39,7 +39,6 @@ int main( int argc, char * argv[] )
     initialplateau(A);
     FlushTab(&Tab);
     affichage(A);
-    printf("\n");
 
     SDL_Window *window = NULL;
     SDL_Renderer *render = NULL;
