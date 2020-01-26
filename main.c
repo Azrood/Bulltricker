@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
-#define _WIN32_WINNT 0x0500
-#include <windows.h>
+
 #include <SDL.h>
 
 #include "moves.h"
@@ -13,8 +12,6 @@
 int played;
 int main( int argc, char * argv[] )
 {
-    HWND hWnd = GetConsoleWindow(); // Pour cacher la console
-    ShowWindow( hWnd, SW_HIDE );
 
     int lost_player; //contient la couleur du joueur qui a perdu
     int move_initialized=0; // si le mouvement est initialisé (1) ou non (0)
@@ -114,6 +111,7 @@ int main( int argc, char * argv[] )
                                 //pour cree board et initialiser les pieces
                                 initialplateau(A);
                                 k=1;
+                                couleur = BLANCHE;
                                 move_initialized=0;
                                 texture=CreateTexture(BOARD,render);
                                 SDL_ChargementTexture(window,render,texture,&rect);
