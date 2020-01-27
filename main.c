@@ -17,7 +17,6 @@ int main( int argc, char * argv[] )
     int lost_player; //contient la couleur du joueur qui a perdu
     int move_initialized=0; // si le mouvement est initialisé (1) ou non (0)
     int couleur=BLANCHE; //les blancs commencent
-    int k=1; // 1 : tour du blanc, 0 : tour du joueur noir
 
     // declaration et allocation de mémoire
 
@@ -121,7 +120,6 @@ int main( int argc, char * argv[] )
                                 //tester si l'user click sur nouvelle partie
                                 //pour cree board et initialiser les pieces
                                 initialplateau(A);
-                                k=1;
                                 move_initialized=0;
                                 couleur=BLANCHE;
                                 texture=CreateTexture(BOARD,render);
@@ -177,7 +175,6 @@ int main( int argc, char * argv[] )
                                 SDL_ChargementTexture(window,render,texture,&rect);
                                 SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
                                 couleur=BLANCHE;
-                                k=1;
                                 move_initialized=0;
                                 played=0;
                                 display(A,render,&rect,Poi,window,F);
@@ -216,8 +213,8 @@ int main( int argc, char * argv[] )
                                 if(event.button.x<121 && event.button.x>-1 && event.button.y<87 && event.button.y>-1)
                                 {
                                     initialplateau(A);
-                                    k=1;
-                                    move_initialized=1;
+                                    couleur = BLANCHE;
+                                    move_initialized=0;
                                     texture=CreateTexture(BOARD,render);
                                     SDL_ChargementTexture(window,render,texture,&rect);
                                     SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
@@ -278,7 +275,6 @@ int main( int argc, char * argv[] )
 
     SDL_DestroyRenderer(render);
     SDL_DestroyWindow(window);
-    Mix_CloseAudio();
     SDL_Quit();
 
     return EXIT_SUCCESS;
