@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
-
 #include <SDL.h>
-
+#include <SDL_mixer.h>
 #include "moves.h"
 #include "checks.h"
 #include "tools.h"
 #include "graphic.h"
-
+#define TN "images/tour_noire.bmp"
+#define TB "images/tour_blanche.bmp"
 int played;
 int main( int argc, char * argv[] )
 {
@@ -44,7 +44,7 @@ int main( int argc, char * argv[] )
     SDL_Texture **F;
     F = (SDL_Texture**) malloc(10*sizeof(SDL_Texture*));
 
-    if (SDL_Init(SDL_INIT_VIDEO)!=0)
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)!=0)
     {
         SDL_ExitErreur("Initialisation SDL");
     }
@@ -81,9 +81,19 @@ int main( int argc, char * argv[] )
     SDL_SetWindowIcon(window,icon);
     while(program_launched)
     {
+
         SDL_Event event;
         while(SDL_PollEvent(&event))
         {
+            if(start == 0)
+            {
+                // intervalle de l'image qui indique le tour
+                if(couleur == BLANCHE) texture=CreateTexture(TB,render);
+                else texture=CreateTexture(TN,render);
+                SDL_ChargementTexture(window,render,texture,&rect);
+                SDL_AfficherTexture(window,render,texture,&rect,612,315);
+                SDL_RenderPresent(render);
+            }
             switch(event.type)
             {
                 case SDL_MOUSEBUTTONDOWN :
@@ -111,8 +121,8 @@ int main( int argc, char * argv[] )
                                 //pour cree board et initialiser les pieces
                                 initialplateau(A);
                                 k=1;
-                                couleur = BLANCHE;
                                 move_initialized=0;
+                                couleur=BLANCHE;
                                 texture=CreateTexture(BOARD,render);
                                 SDL_ChargementTexture(window,render,texture,&rect);
                                 SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
@@ -143,6 +153,7 @@ int main( int argc, char * argv[] )
                         }
                         else if(start == 0)
                         {
+
                             if(event.button.x<45 && event.button.x>-1 && event.button.y<27 && event.button.y>-1)
                             {
                                 //user clic sur button retour dans le jeu
@@ -172,9 +183,13 @@ int main( int argc, char * argv[] )
                                 SDL_RenderPresent(render);
                                 continue;
                             }
+
+
+                            printf("(%d , %d )",event.button.x,event.button.y);
                             SDL_RenderPresent(render);
                             if(start == 0)
                             {
+
                                 //on prend la position du 1er clic qui va initialiser un mouvement
                                 printf("(%d , %d )\n",event.button.x,event.button.y);
                                 RemplirTab(A,couleur,&Tab);
@@ -238,8 +253,10 @@ int main( int argc, char * argv[] )
             SDL_RenderPresent(render);//mise a jour de rendu
             if(CheckMat(A,&lost_player) == 0)
             {
+
                 int winner = (lost_player == NOIRE) ? BLANCHE : NOIRE; //on recupere la couleur du joueur
                 SDL_Delay(500); // Pour avoir un peu de temps pour voir le roi être mat avant d'afficher l'image de victoire
+
                 switch(winner)
                 {
                     case NOIRE:
@@ -249,6 +266,7 @@ int main( int argc, char * argv[] )
                         win = 1;
                         start = -1;
                         SDL_RenderPresent(render);//mise a jour de rendu
+                        Mix_PlayChannel(-1,WinS,0);
                         break;
                     case BLANCHE:
                         texture=CreateTexture(WHITE_WIN,render);
@@ -266,6 +284,8 @@ int main( int argc, char * argv[] )
 
     SDL_DestroyRenderer(render);
     SDL_DestroyWindow(window);
+    Mix_FreeChunk(Hit);
+    Mix_CloseAudio();
     SDL_Quit();
 
     return EXIT_SUCCESS;
