@@ -7,8 +7,7 @@
 #include "checks.h"
 #include "tools.h"
 #include "graphic.h"
-#define TN "images/tour_noire.bmp"
-#define TB "images/tour_blanche.bmp"
+
 int played;
 int main( int argc, char * argv[] )
 {
@@ -41,6 +40,12 @@ int main( int argc, char * argv[] )
     SDL_Renderer *render = NULL;
     SDL_Texture *texture = NULL;
     SDL_Rect rect;
+    /*******************/
+    SDL_Window *swindow = NULL;
+    SDL_Renderer *srender = NULL;
+    SDL_Texture *stexture = NULL;
+    SDL_Rect srect;
+
     SDL_Texture **F;
     F = (SDL_Texture**) malloc(10*sizeof(SDL_Texture*));
 
@@ -169,6 +174,23 @@ int main( int argc, char * argv[] )
                             {
                                 // user clic sur sauvgarder
                                 save(A,&couleur);
+
+
+                                if ((swindow=SDL_CreateWindow("Save",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,250,120,SDL_WINDOW_SHOWN))==NULL)
+                                {
+                                    SDL_ExitErreur("Creation de la fenetre");
+                                }
+                                if ((srender=SDL_CreateRenderer(swindow,-1,SDL_RENDERER_ACCELERATED))==NULL)
+                                {
+                                    SDL_ExitErreur("Creation du renderer");
+                                }
+                                stexture=CreateTexture(SAVE,srender);
+                                SDL_ChargementTexture(swindow,srender,stexture,&srect);
+                                SDL_AfficherTexture(swindow,srender,stexture,&srect,(250-srect.w)/2,(120-srect.h)/2);
+                                SDL_RenderPresent(srender);
+                                SDL_Delay(400);
+                                SDL_DestroyRenderer(srender);
+                                SDL_DestroyWindow(swindow);
                                 continue;
                             }
                             if(event.button.x<148 && event.button.x>115 && event.button.y<35 && event.button.y>5)

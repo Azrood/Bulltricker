@@ -38,11 +38,11 @@
 #define ICON "images/icon.bmp"
 #define TN "images/tour_noire.bmp"
 #define TB "images/tour_blanche.bmp"
-
+#define SAVE "images/save.bmp"
 #define LARG_FENETRE 648
 #define HAUT_FENETRE 648
 
-typedef struct Point 
+typedef struct Point
 {
     int x;
     int y;
