@@ -36,6 +36,8 @@
 #define BLACK_WIN "images/Black_win.bmp"
 #define WHITE_WIN "images/White_win.bmp"
 #define ICON "images/icon.bmp"
+#define TN "images/tour_noire.bmp"
+#define TB "images/tour_blanche.bmp"
 
 #define LARG_FENETRE 648
 #define HAUT_FENETRE 648
