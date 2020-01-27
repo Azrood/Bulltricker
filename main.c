@@ -195,7 +195,7 @@ int main( int argc, char * argv[] )
                                 {
                                     played=0;
                                     FlushTab(&Tab);
-                                    couleur = (couleur==NOIRE) ? BLANCHE : NOIRE; //determination de la couleur du joueur, si k impair,tour du blanc sinon tour du noir.
+                                    couleur = (couleur == NOIRE) ? BLANCHE : NOIRE; //determination de la couleur du joueur
                                 }
                                 affichage(A);
                                 texture=CreateTexture(BOARD,render);
