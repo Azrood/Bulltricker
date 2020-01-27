@@ -184,7 +184,7 @@ int main( int argc, char * argv[] )
                                 SDL_RenderPresent(render);
                                 continue;
                             }
-                            
+
                             printf("(%d , %d )",event.button.x,event.button.y);
                             SDL_RenderPresent(render);
                             if(start == 0)
@@ -196,12 +196,9 @@ int main( int argc, char * argv[] )
                                 play(A,Tab,moves,playedpiece,event.button,&move_initialized,couleur );
                                 if (played == 1)
                                 {
-                                    if (k%2==1) k=0;
-                                    else k=1; // flag pour changement de couleur
-
                                     played=0;
                                     FlushTab(&Tab);
-                                    couleur = (k%2==1) ? BLANCHE : NOIRE; //determination de la couleur du joueur, si k impair,tour du blanc sinon tour du noir.
+                                    couleur = (couleur==NOIRE) ? BLANCHE : NOIRE; //determination de la couleur du joueur, si k impair,tour du blanc sinon tour du noir.
                                 }
                                 affichage(A);
                                 texture=CreateTexture(BOARD,render);
