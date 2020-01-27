@@ -208,7 +208,6 @@ int main( int argc, char * argv[] )
                                 display(A,render,&rect,Poi,window,F);
                                 continue;
                             }
-
                         }
                         else if(start == -1)
                         {
@@ -248,9 +247,8 @@ int main( int argc, char * argv[] )
                     break;
             }
             SDL_RenderPresent(render);//mise a jour de rendu
-            if(CheckMat(A,&lost_player) == 0)
+            if(CheckMat(A,&lost_player) == 0 && win==0)
             {
-
                 int winner = (lost_player == NOIRE) ? BLANCHE : NOIRE; //on recupere la couleur du joueur
                 SDL_Delay(500); // Pour avoir un peu de temps pour voir le roi être mat avant d'afficher l'image de victoire
 
