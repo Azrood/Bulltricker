@@ -113,6 +113,7 @@ int main( int argc, char * argv[] )
                                 SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
                                 affichage(A);
                                 display(A,render,&rect,Poi,window,F);
+                                continue;
                             }
 
                             if(event.button.x<495 && event.button.x>126 && event.button.y<300 && event.button.y>215)
@@ -127,6 +128,7 @@ int main( int argc, char * argv[] )
                                 SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
                                 display(A,render,&rect,Poi,window,F);
                                 start = 0;
+                                continue;
                             }
                             if(event.button.x<437 && event.button.x>198 && event.button.y<618 && event.button.y>572) // l'user click sur exit
                             {
@@ -139,6 +141,7 @@ int main( int argc, char * argv[] )
                                 SDL_ChargementTexture(window,render,texture,&rect);
                                 SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
                                 credits = 1;
+                                continue;
                             }
                             if(credits == 1 && event.button.x<90 && event.button.x>-1 && event.button.y<90 && event.button.y>-1)
                             {
@@ -147,6 +150,7 @@ int main( int argc, char * argv[] )
                                 SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
                                 credits = 0;
                                 start = 1;
+                                continue;
                             }
                             SDL_RenderPresent(render);
                         }
@@ -160,6 +164,7 @@ int main( int argc, char * argv[] )
                                 SDL_ChargementTexture(window,render,texture,&rect);
                                 SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
                                 start = 1;
+                                continue;
                             }
                             if(event.button.x<89 && event.button.x>57 && event.button.y<33 && event.button.y>1)
                             {
@@ -221,6 +226,7 @@ int main( int argc, char * argv[] )
                                     display(A,render,&rect,Poi,window,F);
                                     start = 0;
                                     win = 0;
+                                    continue;
                                 }
                             }
                         }
