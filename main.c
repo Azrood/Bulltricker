@@ -104,7 +104,7 @@ int main( int argc, char * argv[] )
                             if(event.button.x<520 && event.button.x>150 && event.button.y<410 && event.button.y>325)
                             {
                                 // charger partie
-                                load(A);
+                                load(A,&couleur);
                                 move_initialized=0;
                                 played=0;
                                 start=0;
@@ -169,7 +169,7 @@ int main( int argc, char * argv[] )
                             if(event.button.x<89 && event.button.x>57 && event.button.y<33 && event.button.y>1)
                             {
                                 // user clic sur sauvgarder
-                                save(A);
+                                save(A,&couleur);
                                 continue;
                             }
                             if(event.button.x<148 && event.button.x>115 && event.button.y<35 && event.button.y>5)
