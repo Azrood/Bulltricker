@@ -53,7 +53,7 @@ void SDL_AfficherTexture(SDL_Window * window,SDL_Renderer* render ,SDL_Texture *
         SDL_ExitErreur("Affichage de l'image");
     }
 }
-void display(piece **A,SDL_Renderer* render,SDL_Rect *rect,Point **Poi,SDL_Window *window,SDL_Texture **F)
+void display(piece **A,SDL_Renderer* render,SDL_Rect *rect,Point **Poi,SDL_Window *window,SDL_Texture **F,position *Tab)
 {
     for(int i=0; i<DIM_PLAT ; i++)
     {
@@ -138,4 +138,22 @@ void display(piece **A,SDL_Renderer* render,SDL_Rect *rect,Point **Poi,SDL_Windo
             }
         }
     }
+}
+
+void DisplayCompulsoryPieces(SDL_Renderer* render,position * Tab,Point **Poi)
+{
+    SDL_Rect recta;
+    SDL_SetRenderDrawColor(render,130,240,10,170);
+    SDL_SetRenderDrawBlendMode(render,SDL_BLENDMODE_BLEND);
+    for (int i=0;i<SIZE_TAB && Tab[i].line != 42;i++)
+    {
+        
+        recta.x = Poi[Tab[i].line][Tab[i].column].x;
+        recta.y = Poi[Tab[i].line][Tab[i].column].y;
+        
+        recta.h = (Tab[i].column % 2 == 1) ? 18 : 54;
+        recta.w = (Tab[i].column % 2 == 1) ? 54 : 18;
+        SDL_RenderFillRect(render,&recta);
+    }
+    SDL_RenderPresent(render);
 }
