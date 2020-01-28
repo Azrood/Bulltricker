@@ -15,7 +15,7 @@ int main( int argc, char * argv[] )
     int lost_player; //contient la couleur du joueur qui a perdu
     int move_initialized=0; // si le mouvement est initialisé (1) ou non (0)
     int couleur=BLANCHE; //les blancs commencent
-    int k=1; // 1 : tour du blanc, 0 : tour du joueur noir
+    
 
     // declaration et allocation de mémoire
 
@@ -282,6 +282,7 @@ int main( int argc, char * argv[] )
             {
                 Mix_PlayChannel(-1,WinS,0);
                 int winner = (lost_player == NOIRE) ? BLANCHE : NOIRE; //on recupere la couleur du joueur
+                int winner = (lost_player == NOIRE) ? BLANCHE : NOIRE; //on recupere la couleur du joueur gagnant
                 SDL_Delay(500); // Pour avoir un peu de temps pour voir le roi être mat avant d'afficher l'image de victoire
 
                 switch(winner)
