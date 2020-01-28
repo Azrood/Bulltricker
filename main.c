@@ -119,7 +119,9 @@ int main( int argc, char * argv[] )
                                 SDL_ChargementTexture(window,render,texture,&rect);
                                 SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
                                 affichage(A);
-                                display(A,render,&rect,Poi,window,F);
+                                RemplirTab(A,couleur,&Tab);
+                                display(A,render,&rect,Poi,window,F,Tab);
+                                DisplayCompulsoryPieces(render,Tab,Poi);
                             }
 
                             if(event.button.x<495 && event.button.x>126 && event.button.y<300 && event.button.y>215)
@@ -129,10 +131,11 @@ int main( int argc, char * argv[] )
                                 initialplateau(A);
                                 move_initialized=0;
                                 couleur=BLANCHE;
+                                FlushTab(&Tab);
                                 texture=CreateTexture(BOARD,render);
                                 SDL_ChargementTexture(window,render,texture,&rect);
                                 SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
-                                display(A,render,&rect,Poi,window,F);
+                                display(A,render,&rect,Poi,window,F,Tab);
                                 start = 0;
                             }
                             if(event.button.x<437 && event.button.x>198 && event.button.y<618 && event.button.y>572) // l'user click sur exit
@@ -170,7 +173,7 @@ int main( int argc, char * argv[] )
                             }
                             if(event.button.x<89 && event.button.x>57 && event.button.y<33 && event.button.y>1)
                             {
-                                // user clic sur sauvgarder
+                                // user clic sur sauvegarder
                                 save(A,&couleur);
 
 
@@ -201,20 +204,19 @@ int main( int argc, char * argv[] )
                                 couleur=BLANCHE;
                                 move_initialized=0;
                                 played=0;
-                                display(A,render,&rect,Poi,window,F);
+                                display(A,render,&rect,Poi,window,F,Tab);
                                 SDL_RenderPresent(render);
                                 continue;
                             }
-
-
                             printf("(%d , %d )",event.button.x,event.button.y);
                             SDL_RenderPresent(render);
                             if(start == 0)
                             {
                                 //on prend la position du 1er clic qui va initialiser un mouvement
                                 printf("(%d , %d )\n",event.button.x,event.button.y);
-                                RemplirTab(A,couleur,&Tab);
-                                play(A,Tab,moves,playedpiece,event.button,&move_initialized,couleur ,eat,Hit);
+                                
+                                play(A,Tab,moves,playedpiece,event.button,&move_initialized,couleur,eat,Hit);
+                                
                                 if (played == 1)
                                 {
                                     played=0;
@@ -222,11 +224,12 @@ int main( int argc, char * argv[] )
                                     couleur = (couleur==NOIRE) ? BLANCHE : NOIRE; //determination de la couleur du joueur, si k impair,tour du blanc sinon tour du noir.
                                 }
                                 affichage(A);
+                                RemplirTab(A,couleur,&Tab);
                                 texture=CreateTexture(BOARD,render);
                                 SDL_ChargementTexture(window,render,texture,&rect);
                                 SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
-
-                                display(A,render,&rect,Poi,window,F);
+                                display(A,render,&rect,Poi,window,F,Tab);
+                                DisplayCompulsoryPieces(render,Tab,Poi);
                                 continue;
                             }
 
@@ -238,12 +241,12 @@ int main( int argc, char * argv[] )
                                 if(event.button.x<121 && event.button.x>-1 && event.button.y<87 && event.button.y>-1)
                                 {
                                     initialplateau(A);
-                                    couleur == BLANCHE;
+                                    couleur = BLANCHE;
                                     move_initialized=1;
                                     texture=CreateTexture(BOARD,render);
                                     SDL_ChargementTexture(window,render,texture,&rect);
                                     SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
-                                    display(A,render,&rect,Poi,window,F);
+                                    display(A,render,&rect,Poi,window,F,Tab);
                                     start = 0;
                                     win = 0;
                                 }
@@ -272,7 +275,7 @@ int main( int argc, char * argv[] )
             if(CheckMat(A,&lost_player) == 0 && win==0)
             {
                 Mix_PlayChannel(-1,WinS,0);
-                int winner = (lost_player == NOIRE) ? BLANCHE : NOIRE; //on recupere la couleur du joueur
+                int winner = (lost_player == NOIRE) ? BLANCHE : NOIRE; //on recupere la couleur du joueur gagnant
                 SDL_Delay(500); // Pour avoir un peu de temps pour voir le roi être mat avant d'afficher l'image de victoire
 
                 switch(winner)
