@@ -157,7 +157,7 @@ void affichage(piece **A)
     }
 }
 
-void save(piece **A)
+void save(piece **A,int * couleur)
 {
     FILE *fp=NULL;
     fp = fopen("save.bin","wb");
@@ -171,11 +171,12 @@ void save(piece **A)
                 fwrite(&A[i][j],sizeof(piece),1,fp);
             }
         }
+        fwrite(couleur,sizeof(int),1,fp);
         fclose(fp);
     }
 }
 
-void load(piece **A)
+void load(piece **A,int * couleur)
 {
     FILE *fp=NULL;
     fp = fopen("save.bin","rb");
@@ -189,6 +190,7 @@ void load(piece **A)
                 fread(&A[i][j],sizeof(piece),1,fp);
             }
         }
+        fread(couleur,sizeof(int),1,fp);
         fclose(fp);
     }
 }

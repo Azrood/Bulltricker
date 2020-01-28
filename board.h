@@ -22,7 +22,7 @@ typedef struct piece {
 
 void initialplateau(piece **); // initialisation du plateau de jeu
 void affichage(piece **); // affichage en console du plateau de jeu
-void save(piece **A); // sauvegarde de l'avancement du jeu
-void load(piece **A); // chargement de la sauvegarde
+void save(piece **A,int *); // sauvegarde de l'avancement du jeu
+void load(piece **A,int *); // chargement de la sauvegarde
 
 #endif // BOARD_H_INCLUDED
