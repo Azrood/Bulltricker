@@ -67,8 +67,9 @@ void MoveKing(piece **A,movement moves,piece king,position *Tab)
 }
 
 
-void MovePion(piece **A,movement moves, piece playedpiece, position *Tab)
+void MovePion(piece **A,movement moves, piece playedpiece, position *Tab,Mix_Chunk * eat,Mix_Chunk * Hit)
 {
+    int has_captured=0;
     int i=moves.initialmove.line,j=moves.initialmove.column;
     if (A[i][j].type == playedpiece.type && A[i][j].color == playedpiece.color)
     {
@@ -106,6 +107,7 @@ void MovePion(piece **A,movement moves, piece playedpiece, position *Tab)
                 {
                     if (A[k][j].type != VIDE)
                     {
+                        has_captured=1;
                         A[k][j].color = VIDE;
                         A[k][j].type = VIDE;
                         A[k][j].firstmove = VIDE;
@@ -118,6 +120,7 @@ void MovePion(piece **A,movement moves, piece playedpiece, position *Tab)
                 {
                     if (A[k][j].type != VIDE)
                     {
+                        has_captured=1;
                         A[k][j].color = VIDE;
                         A[k][j].type = VIDE;
                         A[k][j].firstmove = VIDE;
@@ -127,10 +130,13 @@ void MovePion(piece **A,movement moves, piece playedpiece, position *Tab)
         }
         else played=0;
     }
+    if (has_captured==1) Mix_PlayChannel(-1,eat,0);
+    else Mix_PlayChannel(-1,Hit,0);
 }
 
-void MoveDame(piece **A,movement moves, piece playedpiece,position *Tab)
+void MoveDame(piece **A,movement moves, piece playedpiece,position *Tab,Mix_Chunk * eat,Mix_Chunk * Hit)
 {
+    int has_captured=0;
     int i=moves.initialmove.line,j=moves.initialmove.column;
     if (A[i][j].type == playedpiece.type && A[i][j].color == playedpiece.color)
     {
@@ -152,6 +158,7 @@ void MoveDame(piece **A,movement moves, piece playedpiece,position *Tab)
                     {
                         if (A[k][j].type != VIDE)
                         {
+                            has_captured=1;
                             A[k][j].color = VIDE;
                             A[k][j].type = VIDE;
                             A[k][j].firstmove = VIDE;
@@ -161,6 +168,7 @@ void MoveDame(piece **A,movement moves, piece playedpiece,position *Tab)
                     {
                         if (A[i][k].type != VIDE)
                         {
+                            has_captured=1;
                             A[i][k].color = VIDE;
                             A[i][k].type = VIDE;
                             A[i][k].firstmove = VIDE;
@@ -176,6 +184,7 @@ void MoveDame(piece **A,movement moves, piece playedpiece,position *Tab)
                     {
                         if (A[k][j].type != VIDE)
                         {
+                            has_captured=1;
                             A[k][j].color = VIDE;
                             A[k][j].type = VIDE;
                             A[k][j].firstmove = VIDE;
@@ -185,6 +194,7 @@ void MoveDame(piece **A,movement moves, piece playedpiece,position *Tab)
                     {
                         if (A[i][k].type != VIDE)
                         {
+                            has_captured=1;
                             A[i][k].color = VIDE;
                             A[i][k].type = VIDE;
                             A[i][k].firstmove = VIDE;
@@ -196,6 +206,7 @@ void MoveDame(piece **A,movement moves, piece playedpiece,position *Tab)
         else if(isOptionalCapture(A,moves,playedpiece) == 1
                 && CompulsoryCapture(A,Tab,moves)==1)
         {
+            has_captured=1;
             played = 1;
             A[moves.finalmove.line][moves.finalmove.column] = playedpiece;
             A[moves.finalmove.line][moves.finalmove.column].firstmove = 0;
@@ -205,6 +216,8 @@ void MoveDame(piece **A,movement moves, piece playedpiece,position *Tab)
         }
         else played =0;
     }
+    if (has_captured == 1) Mix_PlayChannel(-1,eat,0);
+    else Mix_PlayChannel(-1,Hit,0);
 }
 
 
@@ -281,7 +294,7 @@ int CompulsoryCapture(piece **A,position *Tab,movement moves)
 }
 
 void play(piece **A,position *Tab,movement *moves,piece *playedpiece,
-            SDL_MouseButtonEvent button,int *move_initialized, int couleur)
+            SDL_MouseButtonEvent button,int *move_initialized, int couleur, Mix_Chunk *eat,Mix_Chunk * Hit )
 {
     char positionstr[10];
     //conversion des positions x et y en position A4, BV1 etc
@@ -299,8 +312,8 @@ void play(piece **A,position *Tab,movement *moves,piece *playedpiece,
     {
         *move_initialized = 0;
         moves->finalmove = ConvertirLocation(positionstr);
-        if (playedpiece->type == PION) MovePion(A,*moves,*playedpiece,Tab);
-        if (playedpiece->type == DAME) MoveDame(A,*moves,*playedpiece,Tab);
+        if (playedpiece->type == PION) MovePion(A,*moves,*playedpiece,Tab,eat,Hit);
+        if (playedpiece->type == DAME) MoveDame(A,*moves,*playedpiece,Tab,eat,Hit);
         if (playedpiece->type == ROI) MoveKing(A,*moves,*playedpiece,Tab);
     }
 }

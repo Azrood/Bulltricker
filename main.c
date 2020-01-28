@@ -56,6 +56,7 @@ int main( int argc, char * argv[] )
     Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,2,2048);
     Mix_Chunk *Hit = Mix_LoadWAV("Hit.mp3");
     Mix_Chunk *WinS = Mix_LoadWAV("winmusic.mp3");
+    Mix_Chunk *eat = Mix_LoadWAV("eat.mp3");
     if ((window=SDL_CreateWindow("Bulltricker",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,LARG_FENETRE,HAUT_FENETRE,SDL_WINDOW_SHOWN))==NULL)
     {
         SDL_ExitErreur("Creation de la fenetre");
@@ -218,10 +219,10 @@ int main( int argc, char * argv[] )
                                 //on prend la position du 1er clic qui va initialiser un mouvement
                                 printf("(%d , %d )\n",event.button.x,event.button.y);
                                 RemplirTab(A,couleur,&Tab);
-                                play(A,Tab,moves,playedpiece,event.button,&move_initialized,couleur );
+                                play(A,Tab,moves,playedpiece,event.button,&move_initialized,couleur ,eat,Hit);
                                 if (played == 1)
                                 {
-                                    Mix_PlayChannel(-1,Hit,0);
+                                    
                                     if (k%2==1) k=0;
                                     else k=1; // flag pour changement de couleur
 
@@ -277,9 +278,9 @@ int main( int argc, char * argv[] )
                     break;
             }
             SDL_RenderPresent(render);//mise a jour de rendu
-            if(CheckMat(A,&lost_player) == 0)
+            if(CheckMat(A,&lost_player) == 0 && win==0)
             {
-
+                Mix_PlayChannel(-1,WinS,0);
                 int winner = (lost_player == NOIRE) ? BLANCHE : NOIRE; //on recupere la couleur du joueur
                 SDL_Delay(500); // Pour avoir un peu de temps pour voir le roi être mat avant d'afficher l'image de victoire
 
@@ -304,10 +305,6 @@ int main( int argc, char * argv[] )
                 }
             }
         }
-        if(CheckMat(A,&lost_player) == 0)
-            {
-                Mix_PlayChannel(-1,WinS,0);
-            }
     }
     //------------------ Fermeture ----------------/
 
