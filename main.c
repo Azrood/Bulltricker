@@ -1,10 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
-
 #include <SDL.h>
 #include <SDL_mixer.h>
-
 #include "moves.h"
 #include "checks.h"
 #include "tools.h"
@@ -17,7 +15,6 @@ int main( int argc, char * argv[] )
     int lost_player; //contient la couleur du joueur qui a perdu
     int move_initialized=0; // si le mouvement est initialisé (1) ou non (0)
     int couleur=BLANCHE; //les blancs commencent
-
     // declaration et allocation de mémoire
 
     Point **Poi = (Point **) malloc(DIM_PLAT*sizeof(Point *)); // tableau d'intervalles de pixels
@@ -41,6 +38,12 @@ int main( int argc, char * argv[] )
     SDL_Renderer *render = NULL;
     SDL_Texture *texture = NULL;
     SDL_Rect rect;
+    /*******************/
+    SDL_Window *swindow = NULL;
+    SDL_Renderer *srender = NULL;
+    SDL_Texture *stexture = NULL;
+    SDL_Rect srect;
+
     SDL_Texture **F;
     F = (SDL_Texture**) malloc(10*sizeof(SDL_Texture*));
 
@@ -48,6 +51,10 @@ int main( int argc, char * argv[] )
     {
         SDL_ExitErreur("Initialisation SDL");
     }
+    Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,2,2048);
+    Mix_Chunk *Hit = Mix_LoadWAV("Hit.mp3");
+    Mix_Chunk *WinS = Mix_LoadWAV("winmusic.mp3");
+    Mix_Chunk *eat = Mix_LoadWAV("Jump.wav");
     if ((window=SDL_CreateWindow("Bulltricker",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,LARG_FENETRE,HAUT_FENETRE,SDL_WINDOW_SHOWN))==NULL)
     {
         SDL_ExitErreur("Creation de la fenetre");
@@ -112,8 +119,9 @@ int main( int argc, char * argv[] )
                                 SDL_ChargementTexture(window,render,texture,&rect);
                                 SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
                                 affichage(A);
-                                display(A,render,&rect,Poi,window,F);
-                                continue;
+                                RemplirTab(A,couleur,&Tab);
+                                display(A,render,&rect,Poi,window,F,Tab);
+                                DisplayCompulsoryPieces(render,Tab,Poi);
                             }
 
                             if(event.button.x<495 && event.button.x>126 && event.button.y<300 && event.button.y>215)
@@ -123,12 +131,12 @@ int main( int argc, char * argv[] )
                                 initialplateau(A);
                                 move_initialized=0;
                                 couleur=BLANCHE;
+                                FlushTab(&Tab);
                                 texture=CreateTexture(BOARD,render);
                                 SDL_ChargementTexture(window,render,texture,&rect);
                                 SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
-                                display(A,render,&rect,Poi,window,F);
+                                display(A,render,&rect,Poi,window,F,Tab);
                                 start = 0;
-                                continue;
                             }
                             if(event.button.x<437 && event.button.x>198 && event.button.y<618 && event.button.y>572) // l'user click sur exit
                             {
@@ -141,7 +149,6 @@ int main( int argc, char * argv[] )
                                 SDL_ChargementTexture(window,render,texture,&rect);
                                 SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
                                 credits = 1;
-                                continue;
                             }
                             if(credits == 1 && event.button.x<90 && event.button.x>-1 && event.button.y<90 && event.button.y>-1)
                             {
@@ -150,7 +157,6 @@ int main( int argc, char * argv[] )
                                 SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
                                 credits = 0;
                                 start = 1;
-                                continue;
                             }
                             SDL_RenderPresent(render);
                         }
@@ -164,12 +170,28 @@ int main( int argc, char * argv[] )
                                 SDL_ChargementTexture(window,render,texture,&rect);
                                 SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
                                 start = 1;
-                                continue;
                             }
                             if(event.button.x<89 && event.button.x>57 && event.button.y<33 && event.button.y>1)
                             {
-                                // user clic sur sauvgarder
+                                // user clic sur sauvegarder
                                 save(A,&couleur);
+
+
+                                if ((swindow=SDL_CreateWindow("Save",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,250,120,SDL_WINDOW_SHOWN))==NULL)
+                                {
+                                    SDL_ExitErreur("Creation de la fenetre");
+                                }
+                                if ((srender=SDL_CreateRenderer(swindow,-1,SDL_RENDERER_ACCELERATED))==NULL)
+                                {
+                                    SDL_ExitErreur("Creation du renderer");
+                                }
+                                stexture=CreateTexture(SAVE,srender);
+                                SDL_ChargementTexture(swindow,srender,stexture,&srect);
+                                SDL_AfficherTexture(swindow,srender,stexture,&srect,(250-srect.w)/2,(120-srect.h)/2);
+                                SDL_RenderPresent(srender);
+                                SDL_Delay(400);
+                                SDL_DestroyRenderer(srender);
+                                SDL_DestroyWindow(swindow);
                                 continue;
                             }
                             if(event.button.x<148 && event.button.x>115 && event.button.y<35 && event.button.y>5)
@@ -182,34 +204,35 @@ int main( int argc, char * argv[] )
                                 couleur=BLANCHE;
                                 move_initialized=0;
                                 played=0;
-                                display(A,render,&rect,Poi,window,F);
+                                display(A,render,&rect,Poi,window,F,Tab);
                                 SDL_RenderPresent(render);
                                 continue;
                             }
-
                             printf("(%d , %d )",event.button.x,event.button.y);
                             SDL_RenderPresent(render);
                             if(start == 0)
                             {
-
                                 //on prend la position du 1er clic qui va initialiser un mouvement
                                 printf("(%d , %d )\n",event.button.x,event.button.y);
-                                RemplirTab(A,couleur,&Tab);
-                                play(A,Tab,moves,playedpiece,event.button,&move_initialized,couleur );
+                                
+                                play(A,Tab,moves,playedpiece,event.button,&move_initialized,couleur,eat,Hit);
+                                
                                 if (played == 1)
                                 {
                                     played=0;
                                     FlushTab(&Tab);
-                                    couleur = (couleur == NOIRE) ? BLANCHE : NOIRE; //determination de la couleur du joueur
+                                    couleur = (couleur==NOIRE) ? BLANCHE : NOIRE; //determination de la couleur du joueur, si k impair,tour du blanc sinon tour du noir.
                                 }
                                 affichage(A);
+                                RemplirTab(A,couleur,&Tab);
                                 texture=CreateTexture(BOARD,render);
                                 SDL_ChargementTexture(window,render,texture,&rect);
                                 SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
-
-                                display(A,render,&rect,Poi,window,F);
+                                display(A,render,&rect,Poi,window,F,Tab);
+                                DisplayCompulsoryPieces(render,Tab,Poi);
                                 continue;
                             }
+
                         }
                         else if(start == -1)
                         {
@@ -219,14 +242,13 @@ int main( int argc, char * argv[] )
                                 {
                                     initialplateau(A);
                                     couleur = BLANCHE;
-                                    move_initialized=0;
+                                    move_initialized=1;
                                     texture=CreateTexture(BOARD,render);
                                     SDL_ChargementTexture(window,render,texture,&rect);
                                     SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
-                                    display(A,render,&rect,Poi,window,F);
+                                    display(A,render,&rect,Poi,window,F,Tab);
                                     start = 0;
                                     win = 0;
-                                    continue;
                                 }
                             }
                         }
@@ -252,6 +274,7 @@ int main( int argc, char * argv[] )
             SDL_RenderPresent(render);//mise a jour de rendu
             if(CheckMat(A,&lost_player) == 0 && win==0)
             {
+                Mix_PlayChannel(-1,WinS,0);
                 int winner = (lost_player == NOIRE) ? BLANCHE : NOIRE; //on recupere la couleur du joueur gagnant
                 SDL_Delay(500); // Pour avoir un peu de temps pour voir le roi être mat avant d'afficher l'image de victoire
 
@@ -281,6 +304,8 @@ int main( int argc, char * argv[] )
 
     SDL_DestroyRenderer(render);
     SDL_DestroyWindow(window);
+    Mix_FreeChunk(Hit);
+    Mix_CloseAudio();
     SDL_Quit();
 
     return EXIT_SUCCESS;
