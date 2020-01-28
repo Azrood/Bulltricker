@@ -275,7 +275,6 @@ int main( int argc, char * argv[] )
             if(CheckMat(A,&lost_player) == 0 && win==0)
             {
                 Mix_PlayChannel(-1,WinS,0);
-                int winner = (lost_player == NOIRE) ? BLANCHE : NOIRE; //on recupere la couleur du joueur
                 int winner = (lost_player == NOIRE) ? BLANCHE : NOIRE; //on recupere la couleur du joueur gagnant
                 SDL_Delay(500); // Pour avoir un peu de temps pour voir le roi être mat avant d'afficher l'image de victoire
 
