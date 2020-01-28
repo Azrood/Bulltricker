@@ -127,7 +127,6 @@ int main( int argc, char * argv[] )
                                 //tester si l'user click sur nouvelle partie
                                 //pour cree board et initialiser les pieces
                                 initialplateau(A);
-                                k=1;
                                 move_initialized=0;
                                 couleur=BLANCHE;
                                 texture=CreateTexture(BOARD,render);
@@ -200,7 +199,6 @@ int main( int argc, char * argv[] )
                                 SDL_ChargementTexture(window,render,texture,&rect);
                                 SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
                                 couleur=BLANCHE;
-                                k=1;
                                 move_initialized=0;
                                 played=0;
                                 display(A,render,&rect,Poi,window,F);
@@ -213,20 +211,15 @@ int main( int argc, char * argv[] )
                             SDL_RenderPresent(render);
                             if(start == 0)
                             {
-
                                 //on prend la position du 1er clic qui va initialiser un mouvement
                                 printf("(%d , %d )\n",event.button.x,event.button.y);
                                 RemplirTab(A,couleur,&Tab);
                                 play(A,Tab,moves,playedpiece,event.button,&move_initialized,couleur ,eat,Hit);
                                 if (played == 1)
                                 {
-
-                                    if (k%2==1) k=0;
-                                    else k=1; // flag pour changement de couleur
-
                                     played=0;
                                     FlushTab(&Tab);
-                                    couleur = (k%2==1) ? BLANCHE : NOIRE; //determination de la couleur du joueur, si k impair,tour du blanc sinon tour du noir.
+                                    couleur = (couleur==NOIRE) ? BLANCHE : NOIRE; //determination de la couleur du joueur, si k impair,tour du blanc sinon tour du noir.
                                 }
                                 affichage(A);
                                 texture=CreateTexture(BOARD,render);
@@ -245,7 +238,7 @@ int main( int argc, char * argv[] )
                                 if(event.button.x<121 && event.button.x>-1 && event.button.y<87 && event.button.y>-1)
                                 {
                                     initialplateau(A);
-                                    k=1;
+                                    couleur == BLANCHE;
                                     move_initialized=1;
                                     texture=CreateTexture(BOARD,render);
                                     SDL_ChargementTexture(window,render,texture,&rect);
