@@ -164,7 +164,6 @@ int main( int argc, char * argv[] )
                         }
                         else if(start == 0)
                         {
-
                             if(event.button.x<45 && event.button.x>-1 && event.button.y<27 && event.button.y>-1)
                             {
                                 //user clic sur button retour dans le jeu
@@ -177,8 +176,7 @@ int main( int argc, char * argv[] )
                             {
                                 // user clic sur sauvegarder
                                 save(A,&couleur);
-
-
+                                // creation et ouverture d'une nouvelle fenetre pour verifier que la sauvegarde s'est bien déroulée
                                 if ((swindow=SDL_CreateWindow("Save",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,250,120,SDL_WINDOW_SHOWN))==NULL)
                                 {
                                     SDL_ExitErreur("Creation de la fenetre");
@@ -232,7 +230,6 @@ int main( int argc, char * argv[] )
                                 DisplayCompulsoryPieces(render,Tab,Poi);
                                 continue;
                             }
-
                         }
                         else if(start == -1)
                         {
@@ -277,7 +274,6 @@ int main( int argc, char * argv[] )
                 Mix_PlayChannel(-1,WinS,0);
                 int winner = (lost_player == NOIRE) ? BLANCHE : NOIRE; //on recupere la couleur du joueur gagnant
                 SDL_Delay(500); // Pour avoir un peu de temps pour voir le roi être mat avant d'afficher l'image de victoire
-
                 switch(winner)
                 {
                     case NOIRE:
