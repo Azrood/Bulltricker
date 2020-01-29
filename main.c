@@ -123,7 +123,7 @@ int main( int argc, char * argv[] )
                                 affichage(A);
                                 RemplirTab(A,couleur,&Tab);
                                 display(A,render,&rect,Poi,window,F,Tab);
-                                DisplayCompulsoryPieces(render,Tab,Poi);
+                                DisplayCompulsoryPieces(render,Tab,Poi,A);
                             }
 
                             if(event.button.x<495 && event.button.x>126 && event.button.y<300 && event.button.y>215)
@@ -227,7 +227,7 @@ int main( int argc, char * argv[] )
                                 SDL_ChargementTexture(window,render,texture,&rect);
                                 SDL_AfficherTexture(window,render,texture,&rect,(LARG_FENETRE-rect.w)/2,(HAUT_FENETRE-rect.h)/2);
                                 display(A,render,&rect,Poi,window,F,Tab);
-                                DisplayCompulsoryPieces(render,Tab,Poi);
+                                DisplayCompulsoryPieces(render,Tab,Poi,A);
                                 continue;
                             }
                         }
@@ -271,9 +271,9 @@ int main( int argc, char * argv[] )
             SDL_RenderPresent(render);//mise a jour de rendu
             if(CheckMat(A,&lost_player) == 0 && win==0)
             {
-                Mix_PlayChannel(-1,WinS,0);
                 int winner = (lost_player == NOIRE) ? BLANCHE : NOIRE; //on recupere la couleur du joueur gagnant
                 SDL_Delay(500); // Pour avoir un peu de temps pour voir le roi être mat avant d'afficher l'image de victoire
+                Mix_PlayChannel(-1,WinS,0);
                 switch(winner)
                 {
                     case NOIRE:

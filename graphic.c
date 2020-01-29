@@ -140,20 +140,41 @@ void display(piece **A,SDL_Renderer* render,SDL_Rect *rect,Point **Poi,SDL_Windo
     }
 }
 
-void DisplayCompulsoryPieces(SDL_Renderer* render,position * Tab,Point **Poi)
+void DisplayCompulsoryPieces(SDL_Renderer* render,position * Tab,Point **Poi,piece **A)
 {
     SDL_Rect recta;
+    int a=Tab[0].line,b=Tab[0].column; // ligne et colonne dans A
     SDL_SetRenderDrawColor(render,130,240,10,170);
     SDL_SetRenderDrawBlendMode(render,SDL_BLENDMODE_BLEND);
-    for (int i=0;i<SIZE_TAB && Tab[i].line != 42;i++)
+    if (a!=42 && b!=42)
     {
-        
-        recta.x = Poi[Tab[i].line][Tab[i].column].x;
-        recta.y = Poi[Tab[i].line][Tab[i].column].y;
-        
-        recta.h = (Tab[i].column % 2 == 1) ? 18 : 54;
-        recta.w = (Tab[i].column % 2 == 1) ? 54 : 18;
-        SDL_RenderFillRect(render,&recta);
+        if (A[a][b].type == DAME)
+        {
+            for (int i=0;i<SIZE_TAB && Tab[i].line!=42;i++)
+            {
+                
+                a=Tab[i].line;
+                b=Tab[i].column;
+                recta.x = Poi[Tab[i].line][Tab[i].column].x;
+                recta.y = Poi[Tab[i].line][Tab[i].column].y;
+                recta.h = (Tab[i].column % 2 == 1) ? 18 : 54;
+                recta.w = (Tab[i].column % 2 == 1) ? 54 : 18;
+                if (A[a][b].type != DAME) break;
+                SDL_RenderFillRect(render,&recta);
+            }
+        }
+        else 
+        {
+            for (int i=0;i<SIZE_TAB && Tab[i].line != 42;i++)
+            {
+                recta.x = Poi[Tab[i].line][Tab[i].column].x;
+                recta.y = Poi[Tab[i].line][Tab[i].column].y;
+                
+                recta.h = (Tab[i].column % 2 == 1) ? 18 : 54;
+                recta.w = (Tab[i].column % 2 == 1) ? 54 : 18;
+                SDL_RenderFillRect(render,&recta);
+            }
+        }
     }
     SDL_RenderPresent(render);
 }
