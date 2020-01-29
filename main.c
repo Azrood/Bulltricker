@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
+
 #include <SDL.h>
 #include <SDL_mixer.h>
+
 #include "moves.h"
 #include "checks.h"
 #include "tools.h"
@@ -214,9 +216,7 @@ int main( int argc, char * argv[] )
                             {
                                 //on prend la position du 1er clic qui va initialiser un mouvement
                                 printf("(%d , %d )\n",event.button.x,event.button.y);
-                                
                                 play(A,Tab,moves,playedpiece,event.button,&move_initialized,couleur,eat,Hit);
-                                
                                 if (played == 1)
                                 {
                                     played=0;
