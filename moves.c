@@ -44,7 +44,7 @@ position ConvertirLocation(char positionstr[])
 
 
 
-void MoveKing(piece **A,movement moves,piece king,position *Tab)
+void MoveKing(piece **A,movement moves,piece king,position *Tab,Mix_Chunk * Hit)
 {
 
     int i=moves.finalmove.line,j=moves.finalmove.column;
@@ -64,6 +64,7 @@ void MoveKing(piece **A,movement moves,piece king,position *Tab)
         }
     }
     else played = 0;
+    if (played==1) Mix_PlayChannel(-1,Hit,0);
 }
 
 
@@ -131,7 +132,7 @@ void MovePion(piece **A,movement moves, piece playedpiece, position *Tab,Mix_Chu
         else played=0;
     }
     if (has_captured==1) Mix_PlayChannel(-1,eat,0);
-    else Mix_PlayChannel(-1,Hit,0);
+    else if(played==1) Mix_PlayChannel(-1,Hit,0);
 }
 
 void MoveDame(piece **A,movement moves, piece playedpiece,position *Tab,Mix_Chunk * eat,Mix_Chunk * Hit)
@@ -217,7 +218,7 @@ void MoveDame(piece **A,movement moves, piece playedpiece,position *Tab,Mix_Chun
         else played =0;
     }
     if (has_captured == 1) Mix_PlayChannel(-1,eat,0);
-    else Mix_PlayChannel(-1,Hit,0);
+    else if(played==1) Mix_PlayChannel(-1,Hit,0);
 }
 
 
@@ -314,6 +315,6 @@ void play(piece **A,position *Tab,movement *moves,piece *playedpiece,
         moves->finalmove = ConvertirLocation(positionstr);
         if (playedpiece->type == PION) MovePion(A,*moves,*playedpiece,Tab,eat,Hit);
         if (playedpiece->type == DAME) MoveDame(A,*moves,*playedpiece,Tab,eat,Hit);
-        if (playedpiece->type == ROI) MoveKing(A,*moves,*playedpiece,Tab);
+        if (playedpiece->type == ROI) MoveKing(A,*moves,*playedpiece,Tab,Hit);
     }
 }
