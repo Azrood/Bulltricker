@@ -54,9 +54,9 @@ int main( int argc, char * argv[] )
         SDL_ExitErreur("Initialisation SDL");
     }
     Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,2,2048);
-    Mix_Chunk *Hit = Mix_LoadWAV("Hit.mp3");
-    Mix_Chunk *WinS = Mix_LoadWAV("winmusic.mp3");
-    Mix_Chunk *eat = Mix_LoadWAV("Jump.wav");
+    Mix_Chunk *Hit = Mix_LoadWAV("audio/Hit.mp3");
+    Mix_Chunk *WinS = Mix_LoadWAV("audio/winmusic.mp3");
+    Mix_Chunk *eat = Mix_LoadWAV("audio/Jump.wav");
     if ((window=SDL_CreateWindow("Bulltricker",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,LARG_FENETRE,HAUT_FENETRE,SDL_WINDOW_SHOWN))==NULL)
     {
         SDL_ExitErreur("Creation de la fenetre");

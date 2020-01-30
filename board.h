@@ -16,8 +16,8 @@ typedef struct piece {
     int type; //ROI DAME or PION
     int color; // BLANCHE or NOIRE
     int firstmove; /*initialisé à 1 pour les pions en horizontal
-                0 pour les autres pièces 
-                et devient 0 après le 1er mouvement d'une pièce PION horizontale*/
+                    0 pour les autres pièces 
+                    et devient 0 après le 1er mouvement d'une pièce PION horizontale*/
 }piece;
 
 void initialplateau(piece **); // initialisation du plateau de jeu

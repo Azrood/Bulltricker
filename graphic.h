@@ -52,8 +52,8 @@ SDL_Texture * CreateTexture(const char * ,SDL_Renderer *);
 void SDL_DestroywindowEtrender(SDL_Window *,SDL_Renderer *);
 void SDL_ExitErreur(char * );
 void SDL_ChargementTexture(SDL_Window * ,SDL_Renderer*  ,SDL_Texture * ,SDL_Rect *);
+void SDL_AfficherTexture(SDL_Window * ,SDL_Renderer*  ,SDL_Texture * ,SDL_Rect *,int ,int ); // fonction qui affiche la texture chargée
 
 void DisplayCompulsoryPieces(SDL_Renderer*,position *,Point **,piece **); // fonction qui va colorier les pièces qui ont une capture obligatoire.
-void SDL_AfficherTexture(SDL_Window * ,SDL_Renderer*  ,SDL_Texture * ,SDL_Rect *,int ,int ); // fonction qui affiche la texture chargée
 void display(piece **,SDL_Renderer* ,SDL_Rect *,Point **,SDL_Window *,SDL_Texture **,position *); // fonction qui gère l'affichage du plateau
 #endif

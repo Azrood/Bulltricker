@@ -11,7 +11,7 @@ int played;
 
 position ConvertirLocation(char positionstr[])
 {
-/* Elle retourne une structure Position avec les attributs line et colonne)*/
+    /* Elle retourne une structure Position avec les attributs line et colonne)*/
     //convertis la position string "A2" ou "GV2" en position int i,j
     int param1,param2,param3;
     position location;

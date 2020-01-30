@@ -22,8 +22,6 @@ position ConvertirLocation(char *); // à enlever (maybe) après SDL
 int CompulsoryCapture(piece **,position *,movement); // retourne 1 si la piece à capturer est dans la liste des pieces qui peuvent capturer, 0 sinon.
 // elle sert à vérifier que si on a des pieces qui peuvent capturer, la piece jouée en fait partie
 
-
-
 void MoveKing(piece **,movement, piece,position *,Mix_Chunk *); // fonction pour faire bouger le roi
 void MovePion(piece **, movement, piece, position *,Mix_Chunk *,Mix_Chunk*); // fonction pour faire bouger le pion
 void MoveDame(piece **, movement, piece, position *,Mix_Chunk *,Mix_Chunk*); // fonction pour faire bouger le dame

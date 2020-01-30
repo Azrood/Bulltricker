@@ -149,7 +149,7 @@ void DisplayCompulsoryPieces(SDL_Renderer* render,position * Tab,Point **Poi,pie
     if (a!=42 && b!=42)
     {
         if (A[a][b].type == DAME)
-        {
+        { // colorier les dames puisqu'elles sont prioritaires
             for (int i=0;i<SIZE_TAB && Tab[i].line!=42;i++)
             {
                 
@@ -164,7 +164,7 @@ void DisplayCompulsoryPieces(SDL_Renderer* render,position * Tab,Point **Poi,pie
             }
         }
         else 
-        {
+        { // colorier les pions
             for (int i=0;i<SIZE_TAB && Tab[i].line != 42;i++)
             {
                 recta.x = Poi[Tab[i].line][Tab[i].column].x;

@@ -181,6 +181,7 @@ char * SavoirLocationY(int y)
 
 void InitialiseTableauTexture(SDL_Texture **F,SDL_Renderer *render)
 {
+    // remplissage de tableau avec les textures des pieces
     F[ind_DAMEBH]=CreateTexture(DAMEBH,render);
     F[ind_DAMENH]=CreateTexture(DAMENH,render);
     F[ind_DAMENV]=CreateTexture(DAMENV,render);

@@ -212,11 +212,11 @@ int isLegalMove(piece **A,movement moves, piece playedpiece)
     int i=moves.finalmove.line,j=moves.finalmove.column;
     if(playedpiece.type == PION)
     {
-            /*
-            pion est horizontal cas 1,2,3  | pion est: vertical cas 4,5,6
-            cas 1 sens trigo inverse     cas 3 sens trigo       cas 2 up and jump case king
-            cas 4 sens trigo inverse     cas 6 sens trigo       cas 6 up jump butee
-            */
+        /*
+        pion est horizontal cas 1,2,3  | pion est: vertical cas 4,5,6
+        cas 1 sens trigo inverse     cas 3 sens trigo       cas 2 up and jump case king
+        cas 4 sens trigo inverse     cas 6 sens trigo       cas 6 up jump butee
+        */
         if(isDefaultMove(playedpiece,moves) == 1)
         {
             if(playedpiece.color == NOIRE)
